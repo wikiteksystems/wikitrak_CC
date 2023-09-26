@@ -6,7 +6,7 @@ const initialState = {
     userName: {first: 'M', last: 'S'},
     userRole: 'Admin',
     avatar: null,
-    themeColor: '#F6B89F',
+    themeColor: '#4071C9',
 
     changePassword: false,
     register: {

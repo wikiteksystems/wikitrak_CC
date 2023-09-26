@@ -6,6 +6,8 @@ import { LeftCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Footer, Header } from "../../components";
 import { LiveMapUtils } from "../../utils";
 import { LiveMapActions } from "../../stores/actions";
+import Battery90Icon from '@mui/icons-material/Battery90';
+import NetworkCellIcon from '@mui/icons-material/NetworkCell';
 
 import { Layout, Menu, Input, Button, Checkbox, Popconfirm, Select, ColorPicker, Radio } from 'antd';
 import { matchColor } from "../../utils/constants";
@@ -296,15 +298,15 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
                         mode="inline"
                         style={{ color: 'black', backgroundColor: 'white', flexGrow: 1 }}
                         selectable={false}
-                        items={ searchedMenuList.map((item, index) => ({
+                        items={searchedMenuList.length>0 &&  searchedMenuList.map((item, index) => ({
                             key: index,
                             label: item.type === 'input' ? (
-                                <Input placeholder={item.registration_id} />
+                                 <Input placeholder={item.registration_id} />
                             ) : item.type === 'button' ? (
-                                <Button className="w-full">{item.registration_id}</Button>
+                                     <Button className="w-full">{item.registration_id}</Button>
                             ) : (
                                 <div className="flex justify-between">
-                                    <span className="w-full overflow-hidden" style={{textOverflow: 'ellipsis'}} onClick={ () => handleVehicleItemClick(item) }>{item.registration_id}</span>
+                                    <span className="w-full overflow-hidden" style={{textOverflow: 'ellipsis'}} onClick={ () => handleVehicleItemClick(item) }><NetworkCellIcon sx={{color:"rgba(174, 207, 89, 0.8)"}} /> <Battery90Icon sx={{color:"rgba(174, 207, 89, 0.8)"}} /> {item?.registration_id}</span>
                                     <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'select-one', item.id) } />
                                 </div>
                             )

@@ -137,7 +137,7 @@ const Login = () => {
         <Layout className="main-layout flex h-screen">
             <Navbar />
 
-            <Layout className='content-layout flex flex-row flex-wrap justify-evenly items-center'>
+            <Layout className='content-layout flex flex-row flex-wrap justify-evenly items-center' style={{background:"#B4C7E7"}}>
 
                 <Carousel
                     className='login-carousel'
@@ -148,8 +148,8 @@ const Login = () => {
                     infiniteLoop={true}
                     interval={2000}
                     transitionTime={1000}
-                    width={900}
-                    height={500}
+                    width={600}
+                    height={300}
                 >
                     { loginCarousels.map( item => (
                         <div key={item.title}>
@@ -158,12 +158,10 @@ const Login = () => {
                     )) }
                 </Carousel>
 
-                <div className='flex flex-col justify-evenly items-center h-full' style={{width: 550}}>
-                <div className='flex justify-center w-full'>
-                <Image src='/fotax.png' width={400} height={70} preview={false} />
-                </div>
+                <div className='flex flex-col justify-evenly items-center ' style={{width: 550}}>
+            
 
-                <div className={classNames('login-menu flex flex-col items-center justify-center w-full h-3/4')}>
+                <div className={classNames('login-menu flex flex-col items-center justify-center  h-3/4')}>
                     <Triangle
                         height="200"
                         width="200"
@@ -175,7 +173,6 @@ const Login = () => {
                     />
                     { !loading && formStatus === 'signin' &&
                     <Form form={formSignIn} className='flex flex-col items-center justify-center w-full h-full' onFinish={values => handleFinishForm('sign-in', values)}>
-                        <div className='login-title h-1/3 flex items-center text-white'> Login </div>
                         <div className='h-1/3 w-full flex flex-col items-center justify-evenly'>
                             <Form.Item
                                 name="signinUsername"
@@ -190,7 +187,7 @@ const Login = () => {
                                     className='w-1/2'
                                     rules={[ {required: true, message: 'Please input your password'} ]}
                                 >
-                                    <Input.Password className='login-password w-full text-white' placeholder='Password' iconRender={(visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)} />
+                                    <Input type='password' className='login-password w-full ' placeholder='Password' iconRender={(visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)} />
                                 </Form.Item>
                             </ConfigProvider>
                             <div className='w-1/2 flex items-between justify-between pt-2 px-1'>

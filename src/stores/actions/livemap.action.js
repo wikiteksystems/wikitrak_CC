@@ -14,6 +14,7 @@ export const setVehicle = (vehicle) => {
 export const GET_VEHICLE = '[LIVEMAP PAGE] GET_VEHICLE';
 export const getVehicle = (regId) => {
     const request = axios.get(`${API_VEHICLE_URL}/list/?registration_id=${regId}`);
+    console.log(request);
 
     return dispatch => {
         dispatch(setLoading(true));
@@ -227,7 +228,6 @@ export const getVehicleGroupList = (userId) => {
 
     return dispatch => {
         dispatch(setLoading(true));
-
         request.then(response => {
             const { results }  =  response.data;
             let list = [];

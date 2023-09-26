@@ -1,8 +1,5 @@
 .login-menu {
-    border-top-left-radius: 50px;
-    border-bottom-right-radius: 50px;
-    background-color: #ED7D31;
-    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, .7));
+    background-color: transparent;
 }
 
 .login-title {
@@ -11,11 +8,11 @@
 
 .login-username, .login-password, .forgot-username {
     height: 50px;
-    color: white;
+    color: black;
     font-size: 1.2rem;
     padding-left: 10px;
-    border-left: 4px solid rgb(118, 178, 255);
-    background-color: rgba(0, 0, 0, .3);
+    border: 2px solid #3C6EC7;
+    background-color: #fff;
 }
 
 .login-btn
@@ -25,7 +22,7 @@
  , .forgot-btn-back {
     color: white;
     height: 50px;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: #3C6EC7;
 }
 .login-btn:hover
  , .signup-btn:hover
@@ -36,7 +33,7 @@
 }
 
 .login-signup, .login-forgot {
-    color: white;
+    color: black;
     cursor: pointer;
 }
 .login-signup:hover, .login-forgot:hover {

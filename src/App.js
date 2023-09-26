@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
 import { Redirect, Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import LoadingBar from 'react-top-loading-bar';
 

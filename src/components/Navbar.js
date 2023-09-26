@@ -35,12 +35,12 @@ const Navbar = () => {
                         )
                     }
 
-                    <span className="px-1">FOTAX LITE</span>
+                    <span className="px-1" style={{color:"#fff"}}>WIKITRAK COMMAND CENTER</span>
                 </div>
 
                 { login &&
                 <div className='font-bold text-2xl flex items-center pr-10'>
-                    <span className="px-1">Welcome {getFullName(userName)}</span>
+                 <span className="px-1">Welcome {getFullName(userName)}</span> 
                 </div>
                 }
           
