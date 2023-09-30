@@ -9,20 +9,39 @@ import { LiveMonitorActions } from "../../../stores/actions";
 import { matchColor } from "../../../utils/constants";
 
 import { Layout, Avatar, Menu, Input, Button, Checkbox, Popconfirm, Select, ColorPicker } from 'antd';
+import { liveMonitorApi } from "../../../mocks/liveMonitor";
 const { Sider } = Layout;
 
-const DetailMenu = ({ menuList, menuCollapsed }) => {
+const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { userId, themeColor } = useSelector( ({User}) => User );
     const { lMonitorParamGroups, telematicParams, ivnParams, j1939Params } = useSelector( ({LiveMonitor}) => LiveMonitor );
     const { activeVehicle } = useSelector( ({LiveMap}) => LiveMap );
+    const [telematicData,setTelematicData] = useState([]);
+
+    const fetchTelematic = async () =>{
+            const result = await liveMonitorApi.getTelematicParam();
+            console.log(result);
+            setTelematicData(result?.results);
+    }
+
+    useEffect(() =>{
+         fetchTelematic();
+    },[])
+
+
+    useEffect(() =>{
+        console.log(menuList)
+        console.log(lMonitorParamGroups)
+    },[menuList,lMonitorParamGroups])
 
     const [searchText, setSearchText] = useState('');
     const [searchedMenuList, setSearchedMenuList] = useState([...menuList]);
     const [paramDetailEditable, setParamDetailEditable] = useState(false);
     const [paramDetailVisible, setParamDetailVisible] = useState(false);
     const [selectedParam, setSelectedParam] = useState(null);
+    const [selectedParamVal,setSelectedParamVal] = useState(null)
 
     const [selectedGroupList, setSelectedGroupList] = useState([...lMonitorParamGroups]);
     const [paramGroupVisible, setParamGroupVisible] = useState(false);
@@ -48,7 +67,9 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
         setSelectedGroupList([...lMonitorParamGroups]);
     }, [lMonitorParamGroups])
 
-    const handleCheckboxClick = (e, selectType, selectedId) => {
+    const [selectParamCheck,setSelectParamCheck] = useState([]);
+
+    const handleCheckboxClick = (e, selectType, selectedId,data) => {
         if (selectType === 'select-all') {
             const list = searchedMenuList.map( item => ({
                 ...item,
@@ -58,13 +79,18 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
             setSearchedMenuList(list);
         }
         else if (selectType === 'select-one') {
+        //    console.log(data)
+              
             const list = searchedMenuList.map( item => (
-                selectedId === item.id ? {
+                selectedId === item._id ? {
                     ...item,
                     checked: e.target.checked
                 } : {...item}
             ));
             setSearchedMenuList(list);
+            let a = list.filter((item) => item?.checked)
+            setSelecCheckParam(a)
+
         }
         else if (selectType === 'group-select-one') {
             const list = selectedGroupList.map( item => (
@@ -87,6 +113,7 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
             setSelectedGroupList(list);
         }
     };
+
     const handleParamItemClick = (item) => {
         setParamDetailVisible(true);
         setParamDetailEditable(false);
@@ -131,6 +158,7 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
     }
     
     const handleSelectChange = (value, type) => {
+        console.log(type,'this is type');
         if (type === 'param_type') {
             setSelectedParam({...selectedParam, [type]: value, _id: -1});
         }
@@ -139,7 +167,14 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
         }
         else if (type === 'label') {
             setSelectedParam({...selectedParam, _id: value});
+        } else if(type === 'param'){
+             setSelectedParam({...selectedParam,[type]:value})
         }
+        console.log(selectedParam)
+    }
+
+    const handleSave = () =>{
+
     }
     const handleClick = (type) => {
         if (type === 'add-param') {
@@ -158,21 +193,25 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
         }
         else if (type === 'save-detail') {
             setParamDetailEditable(false);
-
-            let data = {
+       console.log(selectedParam)
+          let data1 = {}
+             data1 = {
                 color: selectedParam.param_group_color || 'ff0000',
                 parameter_type: selectedParam.param_type,
                 status: true,
-                vehicle: activeVehicle.id,
-                parameter_group: selectedParam.param_group_id === undefined ? [] : [selectedParam.param_group_id]
+                vehicle: activeVehicle.id, 
+                parameter_group: selectedParam.param_group_id === undefined ? [] : [selectedParam.param_group_id],
+                telematic_parameter:[selectedParam.param],
+                ivn_parameter: [],
+                j1939_parameter: []
             };
-            for (let i = 0; i < paramTypes.length; i ++) {
-                if (paramTypes[i].label === selectedParam.param_type)
-                    data[paramTypes[i].label.toLocaleLowerCase() + '_parameter'] = [`${selectedParam._id}`]
-                else data[paramTypes[i].label.toLocaleLowerCase() + '_parameter'] = []
-            }
-
-            dispatch(LiveMonitorActions.saveLMonitorParam(data, newParam, newParam ? '' : selectedParam.param_id));
+            // for (let i = 0; i < paramTypes.length; i ++) {
+            //     if (paramTypes[i].label === selectedParam.param_type)
+            //         data1[paramTypes[i].label.toLocaleLowerCase() + '_parameter'] = [`${selectedParam._id}`]
+            //     else data1[paramTypes[i].label.toLocaleLowerCase() + '_parameter'] = []
+            // }
+            console.log(data1)
+            dispatch(LiveMonitorActions.saveLMonitorParam(data1, newParam, newParam ? '' : selectedParam.param_id));
         }
         else if (type === 'delete-param') {
             dispatch(LiveMonitorActions.deleteLMonitorParam(selectedParam.param_id));
@@ -210,8 +249,9 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
     };
 
     const dropdownList = {
-        param_type: paramTypes,
+        param_type:paramTypes,
         param_group_id: lMonitorParamGroups,
+        param:telematicData,
         label: {
             telematic: telematicParams,
             ivn: ivnParams,
@@ -257,8 +297,8 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
                                 </Avatar>,
                             label:
                                 <div className="w-full flex justify-between items-center">
-                                    <span className="w-5/6 overflow-hidden" style={{textOverflow: 'ellipsis'}} onClick={ () => handleParamItemClick(item) }>{item.label}</span>
-                                    <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'select-one', item.id) } />
+                                    <span className="w-5/6 overflow-hidden" style={{textOverflow: 'ellipsis'}} onClick={ () => handleParamItemClick(item) }>{item.label} - {item.param_header}</span>
+                                    <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'select-one', item._id,item) } />
                                 </div>
                             })
                         )}
@@ -316,12 +356,39 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
                                     onChange={ value => handleSelectChange(value, item.keyName) }
                                     dropdownRender={(menu) => paramDetailEditable ? menu : null}
                                 >
-                                    { (item.keyName === 'label' ? dropdownList[item.keyName][selectedParam.param_type.toLowerCase()] : dropdownList[item.keyName])?.map( optionItem => (
-                                        <Select.Option key={optionItem.key} value={optionItem.id}> {optionItem.label} </Select.Option>
-                                    )) }
+                                    {  (item.keyName === 'label' ? dropdownList[item.keyName][selectedParam.param_type.toLowerCase()] : dropdownList[item.keyName])?.map( optionItem => {
+                                         console.log(optionItem);
+                                       return (
+                                        <Select.Option  key={optionItem.key} value={optionItem.id}> {optionItem.label} </Select.Option>
+                                    )
+                                        }
+                                    ) }
                                 </Select>
                                 </>
-                            ) : item.type === 'color' ? (
+                            ) 
+                            
+                            :
+                            item.type === 'dropdown1' ? (
+                                <>  
+                                <Select className={'w-full'}
+                                    placeholder={item.label}
+                                    value={item.keyName === 'label' ? (selectedParam._id === -1 ? undefined: selectedParam._id) : selectedParam[item.keyName]}
+                                    onChange={ value => handleSelectChange(value, item.keyName) }
+                                    dropdownRender={(menu) => paramDetailEditable ? menu : null}
+                                >
+                                    {  (item.keyName === 'label' ? dropdownList[item.keyName][selectedParam.param_type.toLowerCase()] : dropdownList[item.keyName])?.map( optionItem => {
+                                      return optionItem?.params.map((item,index) =>{
+                                        console.log(item);
+                                       return (
+                                        <Select.Option  key={index} value={item.id}> {item.short_name}   </Select.Option>
+                                    )
+                                })
+                                        }
+                                    ) }
+                                </Select>
+                                </>
+                            ) :
+                            item.type === 'color' ? (
                                 <div className="flex justify-between">
                                     {item.label}
                                     <ColorPicker disabled={!paramDetailEditable} value={selectedParam[item.keyName]} onChange={ e => handleColorChange(e, item.keyName) } />

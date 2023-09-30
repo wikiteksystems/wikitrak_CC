@@ -9,6 +9,8 @@ import { DetailMenu } from ".";
 import './LiveMonitor.css';
 
 import { Layout } from "antd";
+import { useState } from "react";
+import LiveContent from "./LiveContent";
 const { Content  } = Layout;
 
 const LiveMonitor = () => {
@@ -18,6 +20,7 @@ const LiveMonitor = () => {
     const { lMonitorParams } = useSelector( ({LiveMonitor}) => LiveMonitor );
     const { activeVehicle: vehicle } = useSelector( ({LiveMap}) => LiveMap );
     const { mainMenuCollapsed, detailMenuCollapsed } = useSelector( ({App}) => App );
+    const [selectCheckParam,setSelecCheckParam] = useState([])
 
     useEffect( () => {
         if (Object.keys(vehicle).length === 0) {
@@ -32,6 +35,10 @@ const LiveMonitor = () => {
         dispatch(LiveMonitorActions.getLMonitorParamGroups(userId));
     }, [dispatch, userId, vehicle]);
 
+useEffect(() =>{
+       console.log(selectCheckParam)
+},[selectCheckParam])
+
     return (
         <Layout className="flex h-screen">
             <Navbar />
@@ -40,14 +47,14 @@ const LiveMonitor = () => {
                 <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
 
                 <Layout style={{ flex: "1 1 auto" }}>
-                    <Header title={'Live Monitor'} />
+                   
 
                     <Content style={{width: '100%', height: '100%'}}>
-
+                     <LiveContent selectCheckParam={selectCheckParam}  />
                     </Content>
                 </Layout>
 
-                <DetailMenu menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} />
+                <DetailMenu menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} />
             </Layout>
 
             <Footer>

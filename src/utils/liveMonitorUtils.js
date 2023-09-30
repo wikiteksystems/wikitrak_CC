@@ -4,17 +4,19 @@ export const paramDetailMenuItems = [
         type: 'dropdown',
         label: 'Parameter Type',
         keyName: 'param_type'
-    }, {
-        key: 1,
-        type: 'dropdown',
-        label: 'Name',
-        keyName: 'label'
-    }, {
+    },  {
         key: 2,
         type: 'dropdown',
         label: 'Group',
         keyName: 'param_group_id'
-    }, {
+    },
+    {
+        key: 2,
+        type: 'dropdown1',
+        label: 'Param Value',
+        keyName: 'param'
+    },   
+    {
         key: 3,
         type: 'color',
         label: 'Color',

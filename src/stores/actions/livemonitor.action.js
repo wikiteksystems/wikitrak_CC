@@ -21,12 +21,15 @@ export const getLMonitorParams = (data, type) => {
             results.forEach( (item) => {
                 item[item.parameter_type.toLowerCase() + '_parameter'].forEach( (param) => {
                     list.push({
-                        id: item.id + '-' + param.id,
-                        _id: param.id,
+                        id: param.id,
+                        _id: item.id,
                         key: i ++,
                         label: item.parameter_type === 'Telematic' ? param.short_name : (item.parameter_type === 'IVN' ? param.pid_description : param.spn),
+               
                         param_type: item.parameter_type,
+                        param_header: param?.header?.device_header,
                         param_id: item.id,
+                        vehicle_reg:item?.vehicle?.vin,
                         param_group_id: item.parameter_group[0]?.id,
                         param_group_name: item.parameter_group[0]?.group_name,
                         param_group_color: item.parameter_group[0]?.color
