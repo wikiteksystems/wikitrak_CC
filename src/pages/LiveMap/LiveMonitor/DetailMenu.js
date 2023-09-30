@@ -22,8 +22,12 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
 
     const fetchTelematic = async () =>{
             const result = await liveMonitorApi.getTelematicParam();
-            console.log(result);
-            setTelematicData(result?.results);
+            let arr = []
+            for(let k of result?.results){
+                  for(let i of k.params)
+                  arr.push(i)
+            }
+            setTelematicData([...arr])
     }
 
     useEffect(() =>{
@@ -376,13 +380,13 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
                                     onChange={ value => handleSelectChange(value, item.keyName) }
                                     dropdownRender={(menu) => paramDetailEditable ? menu : null}
                                 >
-                                    {  (item.keyName === 'label' ? dropdownList[item.keyName][selectedParam.param_type.toLowerCase()] : dropdownList[item.keyName])?.map( optionItem => {
-                                      return optionItem?.params.map((item,index) =>{
+                                    {  (item.keyName === 'label' ? dropdownList[item.keyName][selectedParam.param_type.toLowerCase()] : dropdownList[item.keyName])?.map( (optionItem,index) => {
+                                  
                                         console.log(item);
                                        return (
-                                        <Select.Option  key={index} value={item.id}> {item.short_name}   </Select.Option>
+                                        <Select.Option  key={index} value={optionItem.id}> {optionItem.short_name}   </Select.Option>
                                     )
-                                })
+                             
                                         }
                                     ) }
                                 </Select>
