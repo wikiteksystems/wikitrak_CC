@@ -372,7 +372,8 @@ const handleViewOrientation = (_event, newValue) => {
           ) : (
             <>
                    <Grid container spacing={3}>
-                   {selectCheckParam.map((item, index) => {
+           {selectCheckParam.map((item, index) => {
+
           if (item.param_header === 'LGN' ) {
                      
                        return (
@@ -416,6 +417,145 @@ const handleViewOrientation = (_event, newValue) => {
                      }
                             
                     })}
+
+
+{selectCheckParam.map((item, index) => {
+
+if (item.param_header === 'NRM' ) {
+           
+             return (
+             <>
+             {locationData.length>0 && locationData.map((loginItem, innerIndex) =>(
+              <Grid item xs={12} sm={6} md={4} key={innerIndex} >
+                <CardWrapper
+            
+                >
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      zIndex: '2'
+                    }}
+                  >
+
+                    <Box
+                      pl={2}
+                      py={1}
+                      pr={1}
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Typography>
+                      {item?.label}
+                      </Typography>
+                      <Typography variant='h5'>
+                      {loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]}
+                      </Typography>
+                   
+                      
+                    </Box>
+                  </Box>
+                </CardWrapper>
+              </Grid>
+              ))}
+              </>
+            );
+           }
+                  
+          })}
+
+{selectCheckParam.map((item, index) => {
+
+if (item.param_header === 'EPB' ) {
+           
+             return (
+             <>
+             {emergencyData.length>0 && emergencyData.map((loginItem, innerIndex) =>(
+              <Grid item xs={12} sm={6} md={4} key={innerIndex} >
+                <CardWrapper
+            
+                >
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      zIndex: '2'
+                    }}
+                  >
+
+                    <Box
+                      pl={2}
+                      py={1}
+                      pr={1}
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Typography>
+                      {item?.label}
+                      </Typography>
+                      <Typography variant='h5'>
+                      {loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]}
+                      </Typography>
+                   
+                      
+                    </Box>
+                  </Box>
+                </CardWrapper>
+              </Grid>
+              ))}
+              </>
+            );
+           }
+                  
+          })}
+
+{selectCheckParam.map((item, index) => {
+
+if (item.param_header === 'HBT' ) {
+           
+             return (
+             <>
+             {healthData.length>0 && healthData.map((loginItem, innerIndex) =>(
+              <Grid item xs={12} sm={6} md={4} key={innerIndex} >
+                <CardWrapper
+            
+                >
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      zIndex: '2'
+                    }}
+                  >
+
+                    <Box
+                      pl={2}
+                      py={1}
+                      pr={1}
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Typography>
+                      {item?.label}
+                      </Typography>
+                      <Typography variant='h5'>
+                      {loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]}
+                      </Typography>
+                   
+                      
+                    </Box>
+                  </Box>
+                </CardWrapper>
+              </Grid>
+              ))}
+              </>
+            );
+           }
+                  
+          })}
 
                   </Grid>
               
