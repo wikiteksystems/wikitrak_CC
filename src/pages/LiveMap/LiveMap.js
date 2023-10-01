@@ -36,7 +36,7 @@ const LiveMap = () => {
             imei.push(i?.mac_id);
           }
         }
-        let data = {imei}
+        let data = {imei,type:"one"}
        let result = await locationsApi.getImeiToReg(data);
        console.log(result);
        if(result){

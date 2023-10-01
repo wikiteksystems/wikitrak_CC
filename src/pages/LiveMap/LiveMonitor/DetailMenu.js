@@ -23,10 +23,12 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
     const fetchTelematic = async () =>{
             const result = await liveMonitorApi.getTelematicParam();
             let arr = []
+           
             for(let k of result?.results){
                   for(let i of k.params)
                   arr.push(i)
             }
+        
             setTelematicData([...arr])
     }
 

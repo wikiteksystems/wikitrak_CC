@@ -45,6 +45,15 @@ import { locationsApi } from '../../../mocks/location';
 import { healthsApi } from '../../../mocks/health';
 import { emergencyApi } from '../../../mocks/emergency';
 import { deviceParam } from '../../../constants/deviceConstant';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import moment from "moment"
+import dayjs from "dayjs"
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { Line } from 'react-chartjs-2';
+import ReactApexChart from 'react-apexcharts';
+
 const CardWrapper = styled(Card)(
     ({ theme }) => `
   
@@ -69,7 +78,7 @@ const CardWrapper = styled(Card)(
     `
   );
 
-export default function LiveContent({selectCheckParam}) {
+export default function LiveContent({selectCheckParam,setSelecCheckParam}) {
       //  1. Bydefault and actions apply query,filter,page,limit
       
   const [page, setPage] = useState(0);
@@ -78,6 +87,8 @@ export default function LiveContent({selectCheckParam}) {
   const [filters, setFilters] = useState({});
   const [parameters,setParameters] = useState(["1"]);
   const [paginatedParameters,setPaginatedParameters] = useState({});
+  const [startDateValue, setstartDateValue] = useState(dayjs(new moment().toDate()))
+  const [endDateValue, setendDateValue] = useState(dayjs(new moment().toDate()))
 
   // Redux Setup
   const dispatch = useDispatch();
@@ -87,10 +98,22 @@ export default function LiveContent({selectCheckParam}) {
   const [locationData,setLocationData] = useState([])
   const [healthData,setHealthData] = useState([])
   const [emergencyData,setEmergencyData] = useState([])
+  const [active,setActive] = useState(false)
 
+  const handleChangeActive = (event) =>{
+    setLocationData([]);
+    setLoginData([]);
+    setHealthData([])
+    setEmergencyData([])
+    setActive(event.target.checked)
+    setSelecCheckParam([]);
+    setstartDateValue(dayjs(new moment().toDate()))
+    setendDateValue(dayjs(new moment().toDate()))
+  }
 
+const [chartValue,setChartValue] = useState([]);
 
-  const fetchData = async () =>{
+  const fetchData = async (type) =>{
     console.log(selectCheckParam);
 
 // Specify the key for which you want to remove duplicates
@@ -123,42 +146,125 @@ let imeiNo = "";
       if(filterData.length>0)
       imeiNo=filterData[0]?.imei[0]?.mac_id
    }
+  if(type==='one'){
 for(let k of uniqueArrayOfObjects){
   console.log(k)
      if(k.param_header==="LGN"){
        console.log("login packet")
-       const result = await loginApi.getImeiToReg({imei:[imeiNo]});
+       let data = {imei:[imeiNo],type:"one"}
+       const result = await loginApi.getImeiToReg(data);
        console.log(result)
        if(result.status==="SUCCESS")
        setLoginData(result.data);
      } else if(k.param_header==="NRM"){
       console.log("location packet")
-      const result = await locationsApi.getImeiToReg({imei:[imeiNo]});
+      let data = {imei:[imeiNo],type:"one"}
+      const result = await locationsApi.getImeiToReg(data);
       console.log(result)
       if(result.status==="SUCCESS")
       setLocationData(result.data)
      } else if(k.param_header==="HBT"){
       console.log("health packet")
-      const result = await healthsApi.getImeiToReg({imei:[imeiNo]});
+      let data = {imei:[imeiNo],type:"one"}
+      const result = await healthsApi.getImeiToReg(data);
       console.log(result)
       if(result.status==="SUCCESS")
       setHealthData(result.data)
      } else if(k.param_header==="EPB"){
       console.log("emergency packet")
-      const result = await emergencyApi.getImeiToReg({imei:[imeiNo]});
+      let data = {imei:[imeiNo],type:"one"}
+      const result = await emergencyApi.getImeiToReg(data);
       console.log(result)
       if(result.status==="SUCCESS")
       setEmergencyData(result.data)
      }
 }
+  } else if(type==='group'){
+    console.log(type)
+    let location=[];
+    let health=[];
+    let login=[];
+    let emergency=[];
+    for(let k of uniqueArrayOfObjects){
+      console.log(k)
+      let data = {imei:[imeiNo],type:"group",startDate:startDateValue,endDate:endDateValue,frequency:5}
+      console.log(data);
+         if(k.param_header==="LGN"){
+           console.log("login packet")
+           const result = await loginApi.getImeiToReg(data);
+           console.log(result)
+           if(result.status==="SUCCESS"){
+           login=result.data;
+           setLoginData(result.data);
+           }
+         } else if(k.param_header==="NRM"){
+          console.log("location packet")
+          const result = await locationsApi.getImeiToReg(data);
+          console.log(result)
+          if(result.status==="SUCCESS"){
+          location = result.data
+          setLocationData(result.data)
+          }
+         } else if(k.param_header==="HBT"){
+          console.log("health packet")
+          const result = await healthsApi.getImeiToReg(data);
+          console.log(result)
+          if(result.status==="SUCCESS"){
+          health=result.data
+          setHealthData(result.data)
+          }
+         } else if(k.param_header==="EPB"){
+          console.log("emergency packet")
+          const result = await emergencyApi.getImeiToReg(data);
+          console.log(result)
+          if(result.status==="SUCCESS"){
+          emergency=result.data
+          setEmergencyData(result.data)
+          }
+         }
+    }
+
+    let arr =[]
+    let innerArr = [];
+    console.log(location);
+
+   for(let k of selectCheckParam){
+    innerArr=[]
+       if(k?.param_header==="LGN"){
+            for(let innerK of login){
+              for(let i of innerK?.data){
+               innerArr.push({
+                x: new Date(i?.createdAt).getTime(),
+                y: i[k?.label],
+               })
+              }
+            }
+       } else  if(k?.param_header==="NRM"){
+        for(let innerK of location){
+          for(let i of innerK?.data){
+          console.log(innerK)
+          innerArr.push({
+           x: new Date(i?.createdAt).getTime(),
+           y: i[k?.label],
+          })
+        }
+       }
+        
+       }
+
+       arr.push({data:[...innerArr],label:k?.label});
+   }
+ setChartValue([...arr]);
+ console.log(arr);
+
+  }
 
 
   }
 
   useEffect( () => {
     dispatch(LiveMapActions.getVehicleList(userId));
-    fetchData();
-  
+    fetchData('one');
 }, [dispatch, userId,selectCheckParam]);
 
 
@@ -179,13 +285,74 @@ const [toggleView, setToggleView] = useState('table_view');
 const handleViewOrientation = (_event, newValue) => {
   setToggleView(newValue);
 };
+
+
+// Graph function
+const graphData = (arrayData,key) =>{
+  console.log(arrayData)
+  console.log(key)
+     let chartData = []
+     for(let k of locationData){
+        chartData.push( {
+          x: new Date(k?.latestDocument?.createdAt).getTime(),
+          y: k[key],
+        })
+     }
+
+     console.log(chartData)
+
+    return chartData; 
+}
+
+
+const chartData =[
+  {
+    x: new Date('2023-01-01').getTime(),
+    y: 10,
+  },
+  {
+    x: new Date('2023-01-02').getTime(),
+    y: 20,
+  },
+  {
+    x: new Date('2023-01-03').getTime(),
+    y: 15,
+  },
+  {
+    x: new Date('2023-01-04').getTime(),
+    y: 30,
+  },
+  {
+    x: new Date('2023-01-05').getTime(),
+    y: 25,
+  }
+];
+
+const graphData1 = () =>{
+
+
+
+  return chartData
+}
+
+const chartOptions = {
+  chart: {
+    id: 'line-chart',
+  },
+  xaxis: {
+    type: 'datetime',
+  },
+};
+
+
   return (
-     <Box sx={{color:"#fff"}}>
+     <Box sx={{color:"#fff",display:'flex',flexDirection:"column",gap:"20px",maxHeight:"600px",overflowY:"scroll"}} >
         <Box sx={{background:"#4071C9",padding:"10px 10px",display:"flex",gap:"30px",alignItems:"center",justifyContent:"flex-end"}}>
             <Typography sx={{fontSize:"22px"}}>Telematic Parameters</Typography>
             <Box sx={{display:"flex",alignItems:"center",gap:"5px",justifyContent:"center"}}>
-                <Switch />
-                <Typography sx={{fontSize:'20px'}}>Live</Typography>
+               <Typography sx={{fontSize:'20px'}}>Live</Typography>
+                <Switch checked={active} onChange={(event) => handleChangeActive(event)} />
+                <Typography sx={{fontSize:'20px'}}>History</Typography>
             </Box>
             <ToggleButtonGroup
           sx={{
@@ -203,7 +370,8 @@ const handleViewOrientation = (_event, newValue) => {
           </ToggleButton>
         </ToggleButtonGroup>
         </Box>
-
+  {!active ?
+    <>
       <Box>
      {toggleView === "table_view" &&
       (<Card>
@@ -565,6 +733,58 @@ if (item.param_header === 'HBT' ) {
         </>
       )}
       </Box>
+      </>
+      :
+       <Box sx={{color:"black",display:"flex",flexDirection:"column",gap:"30px"}}>
+        <Box sx={{display:'flex',gap:'30px',alignItems:"cneter",margin:"25px 15px 10px"}}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+         <DatePicker
+            value={startDateValue}
+            label='From Date'
+            onChange={(newValue) => setstartDateValue(newValue.$d)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <DatePicker
+            value={endDateValue}
+            label='End Date'
+            onChange={(newValue) => setendDateValue(newValue.$d)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          </LocalizationProvider>
+          <div  onClick={() => fetchData('group')}  style={{background:"#4071C9", display:"flex",alignItems:"center",justifyContent:"center",height:"40px",width:'40px',borderRadius:"10px"}}>
+          <KeyboardArrowRightIcon  sx={{color:"#fff"}} />
+          
+          </div>
+         </Box>
+       
+<Box sx={{display:'flex',flexDirection:"column",gap:"20px",padding:"20px"}}>
+        {selectCheckParam.length===0?
+          <Card>No Result</Card>
+        :
+    chartData.length>0 && chartValue.map((item,index) => (   
+       <Card key={index} sx={{margin:"20px",padding:"10px"}}>
+          <h2>{item.label}</h2>
+      <ReactApexChart
+        options={chartOptions}
+        series={[
+          {
+            name: item.label,
+            data: item.data,
+          },
+        ]}
+        type="line"
+        height={130}
+      />
+   </Card>
+     ))
+}
+</Box>
+
+             
+
+          
+       </Box>
+     }
 
      </Box>
   )
