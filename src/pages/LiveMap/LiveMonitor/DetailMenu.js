@@ -76,6 +76,7 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
     const [selectParamCheck,setSelectParamCheck] = useState([]);
 
     const handleCheckboxClick = (e, selectType, selectedId,data) => {
+console.log(data)
         if (selectType === 'select-all') {
             const list = searchedMenuList.map( item => ({
                 ...item,
@@ -84,20 +85,37 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
 
             setSearchedMenuList(list);
         }
-        else if (selectType === 'select-one') {
-        //    console.log(data)
+        else if (selectType === 'select-one-param-in-group') {
+           console.log(data)
               
-            const list = searchedMenuList.map( item => (
+            const list = paramsInGroup.map( item => (
                 selectedId === item._id ? {
                     ...item,
                     checked: e.target.checked
                 } : {...item}
             ));
-            setSearchedMenuList(list);
+            
+ 
+            setParamsInGroup(list);
             let a = list.filter((item) => item?.checked)
             setSelecCheckParam(a)
 
-        }
+        } else if (selectType === 'select-one') {
+            console.log(data)
+               
+             const list = searchedMenuList.map( item => (
+                 selectedId === item._id ? {
+                     ...item,
+                     checked: e.target.checked
+                 } : {...item}
+             ));
+             
+             setSearchedMenuList(list);
+             
+             let a = list.filter((item) => item?.checked)
+             setSelecCheckParam(a)
+ 
+         } 
         else if (selectType === 'group-select-one') {
             const list = selectedGroupList.map( item => (
                 selectedId === item.id ? {
@@ -132,6 +150,7 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
         dispatch(LiveMonitorActions.getJ1939Params());
     };
     const handleVehicleGroupItemClick = (item) => {
+        console.log(item);
         setParamGroupDetailVisible(true);
         setParamGroupDetailEditable(false);
         setSelectedParamGroup(item);
@@ -141,14 +160,18 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
             type: 'params-in-group',
             label: <div style={{fontWeight: 500}}> The parameters in this group </div>
         }];
-        menuList.forEach( param => {
-            param.param_group_id === item.id &&
-            list.push({
-                type: 'params-in-group',
-                label: param.label
-            });
-        });
-        setParamsInGroup(list);
+    menuList.map( param => (
+                item.id === param.param_group_id &&
+                list.push( {
+                    ...param,                    
+                    type: 'params-in-group',
+                } 
+                )
+                
+       ) );
+
+        
+        setParamsInGroup([...list]);
     };
     const handleInputChange = (e, type) => {
         setSelectedParam({...selectedParam, [type]: e.target.value})
@@ -299,7 +322,7 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
                             key: index,
                             icon: 
                                 <Avatar style={{color: 'white', backgroundColor: item.param_type === 'Telematic' ? '#87d068' : ( item.param_type === 'IVN' ? '#fda3df' : '#16a7ff' ) }}>
-                                    {item.param_type.charAt(0) === 'I' ? 'V' : item.param_type.charAt(0)}
+                                    {item.param_type?.charAt(0) === 'I' ? 'V' : item.param_type?.charAt(0)}
                                 </Avatar>,
                             label:
                                 <div className="w-full flex justify-between items-center">
@@ -439,7 +462,9 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
                         mode="inline"
                         style={{ color: 'black', backgroundColor: 'white', flexGrow: 1 }}
                         selectable={false}
-                        items={ (paramGroupDetailVisible ? [...LiveMonitorUtils.groupDetailMenuItems, ...paramsInGroup] : selectedGroupList).map((item, index) => ({
+                        items={ (paramGroupDetailVisible ? [...LiveMonitorUtils.groupDetailMenuItems, ...paramsInGroup] : selectedGroupList).map((item, index) =>{
+                            console.log(item)
+                            return ({
                             key: index,
                             label: item.type === 'input' ? (
                                 <Input 
@@ -466,14 +491,17 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
                                     <ColorPicker disabled={!paramGroupDetailEditable} value={selectedParamGroup[item.keyName]} onChange={ e => handleColorChange(e, 'group-' + item.keyName) } />
                                 </div>
                             ) : item.type === 'params-in-group' ? (
-                                item.label
+                                <div className="flex justify-between">
+                                    <span className="w-full overflow-hidden" style={{textOverflow: 'ellipsis'}}  >{item.label} </span>
+                                    <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'select-one-param-in-group', item._id,item) }/>
+                                </div>
                             ) : (
                                 <div className="flex justify-between">
                                     <span className="w-full overflow-hidden" style={{textOverflow: 'ellipsis'}} onClick={ () => handleVehicleGroupItemClick(item) }>{item.group_name}</span>
                                     <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'group-select-one', item.id) } />
                                 </div>
                             )
-                        })) }
+                        })}) }
                     />
                 </>
             </> }

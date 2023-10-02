@@ -10,7 +10,6 @@ import {
     Grid,
     Slide,
     Divider,
-    Tooltip,
     IconButton,
     InputAdornment,
     Table,
@@ -51,8 +50,17 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from "moment"
 import dayjs from "dayjs"
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { Line } from 'react-chartjs-2';
+// import { Line } from 'react-chartjs-2';
 import ReactApexChart from 'react-apexcharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend
+} from "recharts";
 
 const CardWrapper = styled(Card)(
     ({ theme }) => `
@@ -234,7 +242,7 @@ for(let k of uniqueArrayOfObjects){
             for(let innerK of login){
               for(let i of innerK?.data){
                innerArr.push({
-                x: new Date(i?.createdAt).getTime(),
+                x: dayjs(i?.createdAt).format('DD-MM'),
                 y: i[k?.label],
                })
               }
@@ -242,7 +250,7 @@ for(let k of uniqueArrayOfObjects){
        } else  if(k?.param_header==="NRM"){
         for(let innerK of location){
           for(let i of innerK?.data){
-          console.log(innerK)
+          console.log(i)
           innerArr.push({
            x: new Date(i?.createdAt).getTime(),
            y: i[k?.label],
@@ -254,6 +262,7 @@ for(let k of uniqueArrayOfObjects){
 
        arr.push({data:[...innerArr],label:k?.label});
    }
+ arr.sort((a, b) => a.date - b.date);
  setChartValue([...arr]);
  console.log(arr);
 
@@ -294,7 +303,7 @@ const graphData = (arrayData,key) =>{
      let chartData = []
      for(let k of locationData){
         chartData.push( {
-          x: new Date(k?.latestDocument?.createdAt).getTime(),
+          x: dayjs(new Date(k?.latestDocument?.createdAt)).format("DD-MM-YY"),
           y: k[key],
         })
      }
@@ -334,13 +343,44 @@ const graphData1 = () =>{
 
   return chartData
 }
-
 const chartOptions = {
   chart: {
-    id: 'line-chart',
+    type: 'line',
+    foreColor: '#333',
+    stacked: false,
+    animations: {
+      enabled: true,
+      easing: 'easeinout',
+      speed: 800,
+      animateGradually: {
+        enabled: true,
+        delay: 150,
+      },
+      dynamicAnimation: {
+        enabled: true,
+        speed: 350,
+      },
+    },
+    background: {
+      opacity: 0, // Set the opacity of the background to 0
+    },
+  },
+  stroke: {
+    show: true,
+    colors: "black",
+    width: 2,
   },
   xaxis: {
     type: 'datetime',
+  },
+  fill: {
+    type: 'gradient', // You can also use 'solid' for a solid color fill
+    gradient: {
+      shade: 'light', // 'light' or 'dark' for gradient shading
+      shadeIntensity: 0.4, // 0.1 to 1 (controls the intensity of the shading)
+      opacityFrom: 0.7,
+      opacityTo: 0.7,
+    },
   },
 };
 
@@ -761,7 +801,8 @@ if (item.param_header === 'HBT' ) {
         {selectCheckParam.length===0?
           <Card>No Result</Card>
         :
-    chartData.length>0 && chartValue.map((item,index) => (   
+    chartValue.length>0 && chartValue.map((item,index) =>{
+    return  (   
        <Card key={index} sx={{margin:"20px",padding:"10px"}}>
           <h2>{item.label}</h2>
       <ReactApexChart
@@ -769,14 +810,23 @@ if (item.param_header === 'HBT' ) {
         series={[
           {
             name: item.label,
-            data: item.data,
-          },
+            data: [...item.data]
+        }
         ]}
-        type="line"
-        height={130}
+        type="area"
+        height={300}
       />
+    {/* <LineChart width={1000} height={250} data={item.data}
+  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+  <CartesianGrid strokeDasharray="3 3" />
+  <XAxis dataKey="date" />
+  <YAxis />
+  <Tooltip />
+  <Legend />
+  <Line type="monotone" dataKey="value" name='Data' stroke="#8884d8" />
+</LineChart> */}
    </Card>
-     ))
+     )})
 }
 </Box>
 
