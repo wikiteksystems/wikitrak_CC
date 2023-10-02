@@ -132,7 +132,9 @@ console.log(data)
                     checked: e.target.checked
                 } : {...item}
             ));
-
+            let a = paramList.filter((item) => item?.checked)
+            console.log(a)
+            setSelecCheckParam(a)
             setSearchedMenuList(paramList);
             setSelectedGroupList(list);
         }
