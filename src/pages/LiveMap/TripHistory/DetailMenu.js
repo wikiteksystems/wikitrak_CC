@@ -5,17 +5,20 @@ import { LeftCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Footer, Header } from "../../../components";
 import { matchColor } from "../../../utils/constants";
 import ShutterSpeedIcon from '@mui/icons-material/ShutterSpeed';
+import WifiTetheringErrorIcon from '@mui/icons-material/WifiTetheringError';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { Layout, Avatar, Menu, Input, Button, Checkbox, Popconfirm, Select, ColorPicker, Typography } from 'antd';
 import moment from "moment";
 import dayjs from "dayjs"
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { TextField } from "@mui/material";
+import { TextField,Tooltip } from "@mui/material";
 const { Sider } = Layout;
 
 
-const DetailMenu = ({ fetchTripHis,tripHis,vehicle,menuList, menuCollapsed,setSelecCheckParam }) => {
+
+const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,setSpeed, speed, fetchTripHis,tripHis,vehicle,menuList, menuCollapsed,setSelecCheckParam }) => {
     const history = useHistory();
     const { themeColor } = useSelector( ({User}) => User );
     const [searchedMenuList, setSearchedMenuList] = useState([...tripHis]);
@@ -115,8 +118,21 @@ const DetailMenu = ({ fetchTripHis,tripHis,vehicle,menuList, menuCollapsed,setSe
                 
 
                 <Footer style={{background: matchColor(themeColor), height: 40}} classes={'justify-evenly'}>
-               <ShutterSpeedIcon />
-                  
+              <Tooltip title="Harsh Braking">
+                <div onClick={() => setHarshBreak(!harshBreak)}>
+               <ShutterSpeedIcon  sx={{cursor:'pointer'}} />
+               </div>
+               </Tooltip>
+               <Tooltip title="Over Acceleration">
+               <div onClick={() => setAcceleration(!acceleration)}>
+               <WifiTetheringErrorIcon sx={{cursor:'pointer'}} />
+               </div>
+               </Tooltip>
+               <Tooltip title="Over Speeding">
+               <div onClick={() => setSpeed(!speed)}>
+                <DirectionsCarIcon sx={{cursor:'pointer'}} />  
+                </div>
+                </Tooltip>
                 </Footer>
             </div>
         </Sider>

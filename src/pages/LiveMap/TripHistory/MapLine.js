@@ -11,7 +11,7 @@ const containerStyle = {
   height: '100%'
 };
 
-export default function MapLine({item,distance,setDistance}) {
+export default function MapLine({aniActive,item,distance,setDistance}) {
     
       const [selectedMarker, setSelectedMarker] = useState(null);
     
@@ -67,6 +67,7 @@ export default function MapLine({item,distance,setDistance}) {
 
 
       useEffect(() => {
+        if(aniActive){
         const interval = setInterval(() => {
           if (pathIndex < path.length) {
             setPathIndex(pathIndex + 1);
@@ -75,7 +76,8 @@ export default function MapLine({item,distance,setDistance}) {
           }
         }, 100); // Adjust the interval to control the drawing speed (e.g., 100ms for slower motion)
         return () => clearInterval(interval);
-      }, [path, pathIndex]);
+    }
+      }, [path, pathIndex,aniActive]);
     
 
 

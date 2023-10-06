@@ -22,6 +22,9 @@ const TripHistory = () => {
     const { mainMenuCollapsed, detailMenuCollapsed } = useSelector( ({App}) => App );
     const [selectCheckParam,setSelecCheckParam] = useState([]);
     const [tripHis,setTripHis] = useState([]);
+    const [harshBreak,setHarshBreak] = useState(false)
+    const [acceleration,setAcceleration] = useState(false)
+    const [speed,setSpeed] = useState(false)
 
     const fetchTripHis = async (startDate,endDate) =>{
         if(vehicle?.imei.length>0&&startDate&&endDate){
@@ -68,11 +71,11 @@ useEffect(() =>{
 
                     <Content style={{width: '100%', height: '100%'}}>
                        
-                     <LiveContent selectCheckParam={selectCheckParam} setSelecCheckParam={setSelecCheckParam} />
+                     <LiveContent harshBreak={harshBreak} acceleration={acceleration} speed={speed} selectCheckParam={selectCheckParam} setSelecCheckParam={setSelecCheckParam} />
                     </Content>
                 </Layout>
 
-                <DetailMenu fetchTripHis={fetchTripHis} tripHis={tripHis}   vehicle={vehicle} menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} />
+                <DetailMenu setHarshBreak={setHarshBreak} harshBreak={harshBreak} setAcceleration={setAcceleration} acceleration={acceleration} setSpeed={setSpeed} speed={speed} fetchTripHis={fetchTripHis} tripHis={tripHis}   vehicle={vehicle} menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} />
             </Layout>
 
             <Footer>
