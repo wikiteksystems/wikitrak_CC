@@ -813,7 +813,7 @@ if (item.param_header === 'HBT' ) {
             data: [...item.data]
         }
         ]}
-        type="area"
+        type="line"
         height={300}
       />
     {/* <LineChart width={1000} height={250} data={item.data}

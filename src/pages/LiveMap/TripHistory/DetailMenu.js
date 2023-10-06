@@ -1,0 +1,115 @@
+import React, {useState, useEffect} from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { LeftCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Footer, Header } from "../../../components";
+import { matchColor } from "../../../utils/constants";
+import ShutterSpeedIcon from '@mui/icons-material/ShutterSpeed';
+import { Layout, Avatar, Menu, Input, Button, Checkbox, Popconfirm, Select, ColorPicker, Typography } from 'antd';
+import moment from "moment";
+import dayjs from "dayjs"
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TextField } from "@mui/material";
+const { Sider } = Layout;
+
+
+const DetailMenu = ({ tripHis,vehicle,menuList, menuCollapsed,setSelecCheckParam }) => {
+    const history = useHistory();
+    const { themeColor } = useSelector( ({User}) => User );
+    const [searchedMenuList, setSearchedMenuList] = useState([...tripHis]);
+    const [startDateValue, setstartDateValue] = useState(dayjs(new moment().toDate()))
+    const [endDateValue, setendDateValue] = useState(dayjs(new moment().toDate()))
+
+    useEffect(() =>{
+      setSearchedMenuList([...tripHis])
+    },[tripHis])
+
+    const handleCheckboxClick = (e, selectType, index) => {
+      if (selectType === 'select-one') {
+               
+             const list = searchedMenuList.map( (item,innerIndex) => (
+                 index === innerIndex ? {
+                     ...item,
+                     checked: e.target.checked
+                 } : {...item}
+             ));
+             
+             setSearchedMenuList(list);
+             
+             let a = list.filter((item) => item?.checked)
+             setSelecCheckParam(a)
+ 
+         } 
+
+    };
+
+    return (
+        <Sider
+            style={{background: 'white', borderLeft: '1px solid black'}}
+            breakpoint="lg"
+            collapsedWidth={0}
+            trigger={null}
+            collapsible collapsed={menuCollapsed}
+            width={300}
+        >
+            <div className="detail-menu flex flex-col justify-between h-full">
+     
+               
+                <>
+                    <div className="flex justify-between items-center" style={{background: matchColor(themeColor),padding:"10px 5px",marginBottom:"20px"}}>
+                        <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ () => history.goBack() } />
+                        <p style={{fontSize:"20px",fontWeight:"600"}}>Select Trip {vehicle?.registration_id}</p>
+                       
+                    </div>
+                    <div className="flex items-center ">
+       <LocalizationProvider dateAdapter={AdapterDayjs}>
+         <DatePicker
+            value={startDateValue}
+            label='From Date'
+            onChange={(newValue) => setstartDateValue(newValue.$d)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <DatePicker
+            value={endDateValue}
+            label='End Date'
+            onChange={(newValue) => setendDateValue(newValue.$d)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          </LocalizationProvider>
+                    </div>
+
+                    <Menu
+                        className="overflow-hidden overflow-y-auto"
+                        theme="light"
+                        mode="inline"
+                        style={{ color: 'black', backgroundColor: 'white', flexGrow: 1 }}
+                        selectable={false}
+                        items={ searchedMenuList.map((item, index) => {
+                            console.log(item)
+                            return ({
+                            key: index,
+                            label:
+                                <div className="w-full flex justify-between items-center">
+                                    <span className="w-5/6 overflow-hidden" style={{textOverflow: 'ellipsis'}} >{item?.data[0]?.lat}, {item?.data[0]?.lng} to {item?.data[item?.data.length-1]?.lat}, {item?.data[item?.data.length-1]?.lng}</span>
+                                    <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'select-one', index) } />
+                                </div>
+                            })
+                        }
+                        )}
+                    />
+                </>
+                
+                
+
+                <Footer style={{background: matchColor(themeColor), height: 40}} classes={'justify-evenly'}>
+               <ShutterSpeedIcon />
+                  
+                </Footer>
+            </div>
+        </Sider>
+    );
+};
+
+export default DetailMenu;
