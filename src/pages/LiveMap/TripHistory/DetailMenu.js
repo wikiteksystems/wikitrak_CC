@@ -15,15 +15,26 @@ import { TextField } from "@mui/material";
 const { Sider } = Layout;
 
 
-const DetailMenu = ({ tripHis,vehicle,menuList, menuCollapsed,setSelecCheckParam }) => {
+const DetailMenu = ({ fetchTripHis,tripHis,vehicle,menuList, menuCollapsed,setSelecCheckParam }) => {
     const history = useHistory();
     const { themeColor } = useSelector( ({User}) => User );
     const [searchedMenuList, setSearchedMenuList] = useState([...tripHis]);
     const [startDateValue, setstartDateValue] = useState(dayjs(new moment().toDate()))
     const [endDateValue, setendDateValue] = useState(dayjs(new moment().toDate()))
 
+    const handleTrip = (newValue) =>{
+        console.log(newValue)
+        setendDateValue(newValue.$d);
+        fetchTripHis(startDateValue,newValue.$d);
+    }
+    
     useEffect(() =>{
-      setSearchedMenuList([...tripHis])
+        
+        fetchTripHis(startDateValue,endDateValue);
+    },[endDateValue])
+    
+    useEffect(() =>{
+       setSearchedMenuList([...tripHis])
     },[tripHis])
 
     const handleCheckboxClick = (e, selectType, index) => {
@@ -74,7 +85,7 @@ const DetailMenu = ({ tripHis,vehicle,menuList, menuCollapsed,setSelecCheckParam
           <DatePicker
             value={endDateValue}
             label='End Date'
-            onChange={(newValue) => setendDateValue(newValue.$d)}
+            onChange={(newValue) =>  setendDateValue(newValue.$d)}
             renderInput={(params) => <TextField {...params} />}
           />
           </LocalizationProvider>

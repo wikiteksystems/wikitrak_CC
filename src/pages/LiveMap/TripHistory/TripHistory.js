@@ -23,18 +23,20 @@ const TripHistory = () => {
     const [selectCheckParam,setSelecCheckParam] = useState([]);
     const [tripHis,setTripHis] = useState([]);
 
-    const fetchTripHis = async () =>{
-        if(vehicle?.imei.length>0){
-            let data = {imei:vehicle?.imei[0]?.mac_id}
+    const fetchTripHis = async (startDate,endDate) =>{
+        if(vehicle?.imei.length>0&&startDate&&endDate){
+            let data = {imei:vehicle?.imei[0]?.mac_id,startDate,endDate}
             let result = await locationsApi.getTripHistory(data);
-              if(result.status === "SUCCESS")
+              if(result.status === "SUCCESS"){
                setTripHis([...result?.data[0]?.documents])
+               console.log(result)
+              }
          }
     }
 
-    useEffect(() =>{
-          fetchTripHis();
-    },[vehicle])
+    // useEffect(() =>{
+    //       fetchTripHis();
+    // },[vehicle])
 
     useEffect( () => {
         if (Object.keys(vehicle).length === 0) {
@@ -70,7 +72,7 @@ useEffect(() =>{
                     </Content>
                 </Layout>
 
-                <DetailMenu tripHis={tripHis} vehicle={vehicle} menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} />
+                <DetailMenu fetchTripHis={fetchTripHis} tripHis={tripHis}   vehicle={vehicle} menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} />
             </Layout>
 
             <Footer>

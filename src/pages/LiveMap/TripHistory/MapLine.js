@@ -28,6 +28,9 @@ export default function MapLine({item,distance,setDistance}) {
     
 
       const [directions, setDirections] = useState(null);
+      const [map, setMap] = useState(null);
+      const [path, setPath] = useState([]);
+  const [pathIndex, setPathIndex] = useState(0);
     
 
    
@@ -49,6 +52,8 @@ export default function MapLine({item,distance,setDistance}) {
           (result, status) => {
             if (status === 'OK') {
               setDirections(result);
+              const routePath = result.routes[0].overview_path;
+              setPath(routePath);
               const route = result.routes[0].legs[0];
               const distanceInMeters = route.distance.value;
               console.log(distanceInMeters)
@@ -60,18 +65,41 @@ export default function MapLine({item,distance,setDistance}) {
         );
       }, [item]);
 
+
+      useEffect(() => {
+        const interval = setInterval(() => {
+          if (pathIndex < path.length) {
+            setPathIndex(pathIndex + 1);
+          } else {
+            clearInterval(interval);
+          }
+        }, 100); // Adjust the interval to control the drawing speed (e.g., 100ms for slower motion)
+        return () => clearInterval(interval);
+      }, [path, pathIndex]);
+    
+
+
   return (
     <div>
 
 
 
 {directions && (
+    <>
         <DirectionsRenderer
           directions={directions}
-          options={{
-            suppressMarkers: true, // Hide the default start and end markers
-          }}
+          options={{ suppressMarkers: true }}
+          
         />
+        <Polyline
+        path={path.slice(0, pathIndex)}
+        options={{
+          strokeColor: '#0000FF', // Color of the line
+          strokeOpacity: 1, // Opacity of the line
+          strokeWeight: 4, // Thickness of the line
+        }}
+      />
+      </>
       )}
 {/* 
         {selectedMarker === item?.latestDocument?._id &&  <InfoWindow
