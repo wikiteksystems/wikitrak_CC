@@ -145,7 +145,7 @@ const startblinking = (data) =>{
               fillColor: getColor(item?.latestDocument?.registrationNumber),
               fillOpacity: 2,
               strokeWeight: 1,
-              rotation: calculateAngleFromEast(item?.latestDocument?.lat, item?.latestDocument?.lng),
+              rotation: item?.latestDocument?.heading,
               scale: 1,
             }
           }

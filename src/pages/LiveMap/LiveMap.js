@@ -53,6 +53,8 @@ const LiveMap = () => {
     console.log(vehicleGroupList)
     },[vehicleList,vehicleGroupList])
 
+
+
     return (
         <Layout className="flex h-screen">
             <Navbar />
@@ -69,7 +71,7 @@ const LiveMap = () => {
                     </Content>
                 </Layout>
 
-                <DetailMenu menuList={vehicleList} menuCollapsed={detailMenuCollapsed} />
+                <DetailMenu menuList={vehicleList} menuCollapsed={detailMenuCollapsed} locationData={locationData} />
             </Layout>
 
             <Footer>

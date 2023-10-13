@@ -11,9 +11,10 @@ import NetworkCellIcon from '@mui/icons-material/NetworkCell';
 
 import { Layout, Menu, Input, Button, Checkbox, Popconfirm, Select, ColorPicker, Radio } from 'antd';
 import { matchColor } from "../../utils/constants";
+import Battery from "../../components/Battery/Battery";
 const { Sider } = Layout;
 
-const DetailMenu = ({ menuList, menuCollapsed }) => {
+const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
     const dispatch = useDispatch();
     const { userId, userName, themeColor } = useSelector( ({User}) => User );
     const { oemList, variantList, modelList, subModelList, vehicleGroupList, segmentList, activeVehicle } = useSelector( ({LiveMap}) => LiveMap );
@@ -267,6 +268,12 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
         vehicle_group: vehicleGroupList,
         segment: segmentList
     };
+
+    const getBatteryValue = (item) =>{
+            console.log(item)
+
+            return 8;
+    }
     
 
     return (
@@ -305,8 +312,9 @@ const DetailMenu = ({ menuList, menuCollapsed }) => {
                             ) : item.type === 'button' ? (
                                      <Button className="w-full">{item.registration_id}</Button>
                             ) : (
-                                <div className="flex justify-between">
-                                    <span className="w-full overflow-hidden" style={{textOverflow: 'ellipsis'}} onClick={ () => handleVehicleItemClick(item) }><NetworkCellIcon sx={{color:"rgba(174, 207, 89, 0.8)"}} /> <Battery90Icon sx={{color:"rgba(174, 207, 89, 0.8)"}} /> {item?.registration_id}</span>
+                                <div className="flex justify-between" style={{gap:"20px",alignItems:"center"}}>
+                                    <Battery value={locationData[index]?.latestDocument?.internalBatteryVoltage} />
+                                    <span className="w-full overflow-hidden" style={{textOverflow: 'ellipsis'}} onClick={ () => handleVehicleItemClick(item) }>  {item?.registration_id}</span>
                                     <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'select-one', item.id) } />
                                 </div>
                             )

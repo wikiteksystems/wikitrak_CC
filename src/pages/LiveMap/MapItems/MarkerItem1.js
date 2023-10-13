@@ -1,6 +1,24 @@
 
 
 const MarkerItem1 = ({item}) =>{
+
+  function intTo4BitBinary(value) {
+    if (value >= 0 && value <= 15) {
+      return value.toString(2).padStart(4, '0');
+    } else {
+      return 0;
+    }
+  }
+
+  
+function intTo2BitBinary(value) {
+  if (value >= 0 && value <= 3) {
+    return value.toString(2).padStart(2, '0');
+  } else {
+    return 'Invalid input. Value must be between 0 and 3.';
+  }
+}
+
     return ( 
      <div style={{display:"flex",flexDirection:"column",gap:"20px",padding:"10px 0px"}} >
 
@@ -40,14 +58,22 @@ const MarkerItem1 = ({item}) =>{
 
         <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>
           <h2 style={{color:"black",fontWeight:"600"}}>DIG IN St :</h2>
-          <p>{item?.latestDocument?.digitalInputStatus}</p>
+          <p>{intTo4BitBinary(item?.latestDocument?.digitalInputStatus)}</p>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>
+          <h2 style={{color:"black",fontWeight:"600"}}>DIG OUT St :</h2>
+          <p>{intTo2BitBinary(item?.latestDocument?.digitaloutputStatus)}</p>
         </div>
 
         <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>
           <h2 style={{color:"black",fontWeight:"600"}}>ANA IN St :</h2>
-          <p>{item?.latestDocument?.digitaloutputStatus}</p>
+          <p>{item?.latestDocument?.analogInput1}</p>
         </div>
      
+        <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>
+          <h2 style={{color:"black",fontWeight:"600"}}>ANA IN St :</h2>
+          <p>{item?.latestDocument?.analogInput2}</p>
+        </div>
 
     </div>
     )

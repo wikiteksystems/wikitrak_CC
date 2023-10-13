@@ -28,6 +28,7 @@ export const getLMonitorParams = (data, type) => {
                
                         param_type: item.parameter_type,
                         param_header: param?.header?.device_header,
+                        unit: param?.unit,
                         param_id: item.id,
                         vehicle_reg:item?.vehicle?.vin,
                         param_group_id: item.parameter_group[0]?.id,

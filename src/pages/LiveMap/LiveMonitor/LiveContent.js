@@ -97,6 +97,7 @@ export default function LiveContent({selectCheckParam,setSelecCheckParam}) {
   const [paginatedParameters,setPaginatedParameters] = useState({});
   const [startDateValue, setstartDateValue] = useState(dayjs(new moment().toDate()))
   const [endDateValue, setendDateValue] = useState(dayjs(new moment().toDate()))
+  const [frequency,setFrequency] = useState(5);
 
   // Redux Setup
   const dispatch = useDispatch();
@@ -195,7 +196,7 @@ for(let k of uniqueArrayOfObjects){
     let emergency=[];
     for(let k of uniqueArrayOfObjects){
       console.log(k)
-      let data = {imei:[imeiNo],type:"group",startDate:startDateValue,endDate:endDateValue,frequency:5}
+      let data = {imei:[imeiNo],type:"group",startDate:startDateValue,endDate:endDateValue,frequency:frequency}
       console.log(data);
          if(k.param_header==="LGN"){
            console.log("login packet")
@@ -445,12 +446,12 @@ const chartOptions = {
           {loginData.length>0 && loginData.map((loginItem, innerIndex) => {
             console.log(loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')],'this is login Item',item?.label)
             return (
-              <TableRow hover key={innerIndex}>
+              <TableRow hover key={innerIndex} sx={{backgroundColor:`#${item?.param_group_color}`}}>
                 <TableCell>
                   <Typography>{item?.label}</Typography>
                 </TableCell>
                 <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Typography>{loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]}</Typography>
+                  <Typography>{loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]} {item?.unit}</Typography>
                 </TableCell>
               </TableRow>
             );
@@ -466,18 +467,18 @@ const chartOptions = {
     console.log(item);
     if (item.param_header === 'NRM' ) {
       // Use a React.Fragment to enclose multiple JSX elements
-      console.log(true);
+    
       return (
         <React.Fragment key={index}>
           {locationData.length>0 && locationData.map((loginItem, innerIndex) => {
-            console.log(loginItem,'this is login Item')
+          
             return (
-              <TableRow hover key={innerIndex}>
+              <TableRow hover key={innerIndex} sx={{backgroundColor:`#${item?.param_group_color}`}}>
                 <TableCell>
                   <Typography>{item?.label}</Typography>
                 </TableCell>
                 <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Typography>{loginItem?.latestDocument[item?.label]}</Typography>
+                  <Typography>{loginItem?.latestDocument[item?.label]}  {item?.unit}</Typography>
                 </TableCell>
               </TableRow>
             );
@@ -499,12 +500,12 @@ const chartOptions = {
           {emergencyData.length>0 && emergencyData.map((loginItem, innerIndex) => {
             console.log(loginItem,'this is login Item')
             return (
-              <TableRow hover key={innerIndex}>
+              <TableRow hover key={innerIndex} sx={{backgroundColor:`#${item?.param_group_color}`}}>
                 <TableCell>
                   <Typography>{item?.label}</Typography>
                 </TableCell>
                 <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Typography>{loginItem?.latestDocument[item?.label]}</Typography>
+                  <Typography>{loginItem?.latestDocument[item?.label]} {item?.unit}</Typography>
                 </TableCell>
               </TableRow>
             );
@@ -526,12 +527,12 @@ const chartOptions = {
           {healthData.length>0 && healthData.map((loginItem, innerIndex) => {
             console.log(loginItem,'this is login Item')
             return (
-              <TableRow hover key={innerIndex}>
+              <TableRow hover key={innerIndex} sx={{backgroundColor:`#${item?.param_group_color}`}}>
                 <TableCell>
                   <Typography>{item?.label}</Typography>
                 </TableCell>
                 <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Typography>{loginItem?.latestDocument[item?.label]}</Typography>
+                  <Typography>{loginItem?.latestDocument[item?.label]}  {item?.unit}</Typography>
                 </TableCell>
               </TableRow>
             );
@@ -594,7 +595,8 @@ const chartOptions = {
                             <Box
                               sx={{
                                 position: 'relative',
-                                zIndex: '2'
+                                zIndex: '2',
+                               backgroundColor:`#${item?.param_group_color}`
                               }}
                             >
 
@@ -613,7 +615,9 @@ const chartOptions = {
                                 <Typography variant='h5'>
                                 {loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]}
                                 </Typography>
-                             
+                                <Typography>
+                                {item?.unit}
+                                </Typography>
                                 
                               </Box>
                             </Box>
@@ -641,7 +645,8 @@ if (item.param_header === 'NRM' ) {
                   <Box
                     sx={{
                       position: 'relative',
-                      zIndex: '2'
+                      zIndex: '2',
+                      backgroundColor:`#${item?.param_group_color}`
                     }}
                   >
 
@@ -660,7 +665,9 @@ if (item.param_header === 'NRM' ) {
                       <Typography variant='h5'>
                       {loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]}
                       </Typography>
-                   
+                      <Typography>
+                       {item?.unit}
+                       </Typography>
                       
                     </Box>
                   </Box>
@@ -687,7 +694,8 @@ if (item.param_header === 'EPB' ) {
                   <Box
                     sx={{
                       position: 'relative',
-                      zIndex: '2'
+                      zIndex: '2',
+                      backgroundColor:`#${item?.param_group_color}`
                     }}
                   >
 
@@ -706,7 +714,9 @@ if (item.param_header === 'EPB' ) {
                       <Typography variant='h5'>
                       {loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]}
                       </Typography>
-                   
+                      <Typography>
+                       {item?.unit}
+                       </Typography>          
                       
                     </Box>
                   </Box>
@@ -733,7 +743,8 @@ if (item.param_header === 'HBT' ) {
                   <Box
                     sx={{
                       position: 'relative',
-                      zIndex: '2'
+                      zIndex: '2',
+                      backgroundColor:`#${item?.param_group_color}`
                     }}
                   >
 
@@ -752,7 +763,9 @@ if (item.param_header === 'HBT' ) {
                       <Typography variant='h5'>
                       {loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]}
                       </Typography>
-                   
+                      <Typography>
+                       {item?.unit}
+                       </Typography>
                       
                     </Box>
                   </Box>
@@ -791,7 +804,15 @@ if (item.param_header === 'HBT' ) {
             renderInput={(params) => <TextField {...params} />}
           />
           </LocalizationProvider>
-          <div  onClick={() => fetchData('group')}  style={{background:"#4071C9", display:"flex",alignItems:"center",justifyContent:"center",height:"40px",width:'40px',borderRadius:"10px"}}>
+                       <TextField
+                           label='Frequency'
+                           name="frequency"
+                           onChange={(e) => setFrequency(e.target.value) }
+                           type="number"
+                           value={frequency}
+                           variant="outlined"
+                         />
+          <div  onClick={() => fetchData('group')}  style={{background:"#4071C9", display:"flex",alignItems:"center",justifyContent:"center",height:"40px",width:'40px',borderRadius:"10px",cursor:"pointer"}}>
           <KeyboardArrowRightIcon  sx={{color:"#fff"}} />
           
           </div>
