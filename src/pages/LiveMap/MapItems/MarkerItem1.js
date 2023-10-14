@@ -57,12 +57,29 @@ function intTo2BitBinary(value) {
         </div>
 
         <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>
-          <h2 style={{color:"black",fontWeight:"600"}}>DIG IN St :</h2>
-          <p>{intTo4BitBinary(item?.latestDocument?.digitalInputStatus)}</p>
+          <h2 style={{color:"black",fontWeight:"600"}}>DIG IN St 1 :</h2>
+          <p>{intTo4BitBinary(item?.latestDocument?.digitalInputStatus).slice(0,1)}</p>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>
-          <h2 style={{color:"black",fontWeight:"600"}}>DIG OUT St :</h2>
-          <p>{intTo2BitBinary(item?.latestDocument?.digitaloutputStatus)}</p>
+          <h2 style={{color:"black",fontWeight:"600"}}>DIG IN St 2 :</h2>
+          <p>{intTo4BitBinary(item?.latestDocument?.digitalInputStatus).slice(1,2)}</p>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>
+          <h2 style={{color:"black",fontWeight:"600"}}>DIG IN St 3 :</h2>
+          <p>{intTo4BitBinary(item?.latestDocument?.digitalInputStatus).slice(2,3)}</p>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>
+          <h2 style={{color:"black",fontWeight:"600"}}>DIG IN St 4 :</h2>
+          <p>{intTo4BitBinary(item?.latestDocument?.digitalInputStatus).slice(3,4)}</p>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>
+          <h2 style={{color:"black",fontWeight:"600"}}>DIG OUT St 1 :</h2>
+          <p>{intTo2BitBinary(item?.latestDocument?.digitaloutputStatus).slice(0,1)}</p>
+        </div>
+
+        <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>
+          <h2 style={{color:"black",fontWeight:"600"}}>DIG OUT St 2 :</h2>
+          <p>{intTo2BitBinary(item?.latestDocument?.digitaloutputStatus).slice(1,2)}</p>
         </div>
 
         <div style={{display:"flex",alignItems:"center",gap:"40px",justifyContent:"space-between",borderBottom:"1px solid rgba(0,0,0,0.3)",paddingBottom:"10px"}}>

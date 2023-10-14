@@ -12,6 +12,7 @@ import NetworkCellIcon from '@mui/icons-material/NetworkCell';
 import { Layout, Menu, Input, Button, Checkbox, Popconfirm, Select, ColorPicker, Radio } from 'antd';
 import { matchColor } from "../../utils/constants";
 import Battery from "../../components/Battery/Battery";
+import NetworkStrength from "../../components/NetworkStrength/NetworkStrength";
 const { Sider } = Layout;
 
 const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
@@ -313,7 +314,8 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
                                      <Button className="w-full">{item.registration_id}</Button>
                             ) : (
                                 <div className="flex justify-between" style={{gap:"20px",alignItems:"center"}}>
-                                    <Battery value={locationData[index]?.latestDocument?.internalBatteryVoltage} />
+                                    <NetworkStrength locationData={locationData} item={item}  />
+                                    <Battery locationData={locationData} item={item} />
                                     <span className="w-full overflow-hidden" style={{textOverflow: 'ellipsis'}} onClick={ () => handleVehicleItemClick(item) }>  {item?.registration_id}</span>
                                     <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'select-one', item.id) } />
                                 </div>

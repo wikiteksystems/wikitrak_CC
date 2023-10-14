@@ -1,9 +1,8 @@
 .battery-container {
-    width: 20px;
-    height: 30px;
+    width: 16px;
+    height: 25px;
     background: #333;
     border: 2px solid #000;
-    border-radius: 10px;
     position: relative;
     overflow: hidden;
   }
