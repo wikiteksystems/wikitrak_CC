@@ -25,8 +25,9 @@ const Navbar = () => {
 
     return (
         <div className='shadow-md w-full top-0 left-0' style={{borderBottom: '1px solid black'}}>
-           <div className={classNames(`md:flex items-center py-4 md:px-2 px-7`, login ? 'justify-between' : 'justify-center')} style={{backgroundColor: themeColor}}>
+           <div className={classNames(`md:flex items-center py-4 md:px-2 px-7`, login ? 'justify-between' : 'justify-center  flex-col md:flex-row' )} style={{backgroundColor: themeColor}}>
                 <div className='font-bold text-2xl flex justify-between items-center'>
+                <div className='md:flex hidden'>
                     { login && (
                         mainMenuCollapsed ?
                             <RightCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ handleMainMenuCollapse } />
@@ -34,19 +35,31 @@ const Navbar = () => {
                             <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ handleMainMenuCollapse } />
                         )
                     }
+                    </div>
 
-                    <span className="px-1" style={{color:"#fff"}}>WIKITRAK COMMAND CENTER</span>
+                    <span className="px-1 text-center" style={{color:"#fff"}}>WIKITRAK COMMAND CENTER</span>
                 </div>
 
                 { login &&
-                <div className='font-bold text-2xl flex items-center pr-10'>
-                 <span className="px-1">Welcome {getFullName(userName)}</span> 
+              <div className='font-bold text-2xl flex items-center justify-center w-full '>
+                 <span className="px-1 text-center">Welcome {getFullName(userName)}</span> 
                 </div>
                 }
           
                 { login &&
-                <div className='flex justify-center items-center'>
-                    <Menu as="div" className="relative ml-3 mr-5">
+                <div className='flex md:justify-center justify-between items-center'>
+                       <div className='flex md:hidden'>
+                    { login && (
+                        mainMenuCollapsed ?
+                            <RightCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ handleMainMenuCollapse } />
+                            :
+                            <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ handleMainMenuCollapse } />
+                        )
+                    }
+                    </div>
+
+                    <div className='flex px-3 gap-2 md:gap-0'>
+                    <Menu as="div" className="relative md:ml-3 md:mr-5">
                         <div>
                             <Menu.Button className="flex justify-center items-center">
                                 <MenuOutlined className="w-6 h-5" style={{fontSize: 20}}/>
@@ -92,8 +105,11 @@ const Navbar = () => {
                     :
                     <RightCircleOutlined className='' style={{fontSize: 20}} onClick={ handleDetailMenuCollapse } />
                     }
+                    </div>
                 </div>
                 }
+
+
            </div>
         </div>
     );

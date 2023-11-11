@@ -2,9 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import "./battery.css"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBatteryFull } from '@fortawesome/free-solid-svg-icons';
-import Battery0BarIcon from '@mui/icons-material/Battery0Bar';
+
 
 const Battery = ({ locationData, item}) => {
   const [fillColorPer,setFillColorPer] = useState(0);

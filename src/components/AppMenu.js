@@ -12,10 +12,13 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
     const { themeColor, avatar, userName, userRole } = useSelector( ({User}) => User );
 
     return (
+
+        <div  className="absolute md:relative z-30 md:z-0">
         <Sider 
-            style={{background: themeColor, borderRight: '1px solid black'}}
-            breakpoint="lg"
-            collapsedWidth={50}
+        className="md:h-[570px] h-[620px]"
+               style={{background:'#B9BDC2',borderRight:'1px solid black'}}
+            breakpoint="md"
+            collapsedWidth={0}
             trigger={null}
             collapsible collapsed={menuCollapsed}
             width={300}
@@ -58,6 +61,7 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
                 <Footer children={'App Version: 1.0.0'} style={{borderTop: 'none'}} /> }
             </div>
         </Sider>
+        </div>
     );
 };
 

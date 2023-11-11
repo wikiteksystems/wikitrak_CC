@@ -389,11 +389,11 @@ const chartOptions = {
   return (
      <Box sx={{color:"#fff",display:'flex',flexDirection:"column",gap:"20px",maxHeight:"600px",overflowY:"scroll"}} >
         <Box sx={{background:"#4071C9",padding:"10px 10px",display:"flex",gap:"30px",alignItems:"center",justifyContent:"flex-end"}}>
-            <Typography sx={{fontSize:"22px"}}>Telematic Parameters</Typography>
+            <Typography sx={{fontSize:{xs:'14px',sm:'18px',md:'22px'}}}>Telematic Parameters</Typography>
             <Box sx={{display:"flex",alignItems:"center",gap:"5px",justifyContent:"center"}}>
-               <Typography sx={{fontSize:'20px'}}>Live</Typography>
-                <Switch checked={active} onChange={(event) => handleChangeActive(event)} />
-                <Typography sx={{fontSize:'20px'}}>History</Typography>
+               <Typography sx={{fontSize:{xs:'14px',sm:'18px',md:'20px'}}}>Live</Typography>
+                <Switch size='small' checked={active} onChange={(event) => handleChangeActive(event)} />
+                <Typography sx={{fontSize:{xs:'14px',sm:'18px',md:'20px'}}}>History</Typography>
             </Box>
             <ToggleButtonGroup
           sx={{
@@ -404,10 +404,10 @@ const chartOptions = {
           onChange={handleViewOrientation}
         >
           <ToggleButton disableRipple value="table_view">
-            <TableRowsTwoToneIcon sx={{color:"#fff"}} />
+            <TableRowsTwoToneIcon sx={{color:"#fff",fontSize:{xs:'16px',sm:'18px',md:'20px'}}} />
           </ToggleButton>
           <ToggleButton disableRipple value="grid_view">
-            <GridViewTwoToneIcon sx={{color:"#fff"}} />
+            <GridViewTwoToneIcon sx={{color:"#fff",fontSize:{xs:'16px',sm:'18px',md:'20px'}}} />
           </ToggleButton>
         </ToggleButtonGroup>
         </Box>
@@ -436,7 +436,7 @@ const chartOptions = {
                 <Table>
                
                 <TableBody>
-  {selectCheckParam.map((item, index) => {
+  {selectCheckParam && selectCheckParam.map((item, index) => {
     console.log(item);
     if (item.param_header === 'LGN' ) {
       // Use a React.Fragment to enclose multiple JSX elements
