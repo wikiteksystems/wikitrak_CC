@@ -59,13 +59,13 @@ const PageContent = () => {
     };
 
     return (
-        <div className='w-full h-full flex flex-col items-center'>
+        <div className='w-full h-auto flex flex-col items-center'>
             <div className="user-info w-full h-[200px] flex items-center justify-center p-2">
-                <div className='w-1/2 flex justify-center items-center'>
+                <div className='md:w-1/2 flex justify-center items-center w-full'>
                     { avatar === null ?
-                    <Avatar size={150} style={{background: '#fda3df', fontSize: 50}}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
+                    <Avatar size={100} style={{background: '#fda3df', fontSize: 50}}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
                     :
-                    <Avatar size={150} src={avatar} />
+                    <Avatar size={100} src={avatar} />
                     }
                     <div className='w-1/2 h-full flex flex-col justify-center m-10 ml-5' style={{fontSize: 18}}>
                         <div> Name: { getFullName(userName) } </div>
@@ -73,9 +73,9 @@ const PageContent = () => {
                         <div> Vehicle Count: { vehicleCount } </div>
                     </div>
                 </div>
-                <div className='w-1/2 pl-3'>
+                <div className='md:w-1/2 pl-3 w-full flex justify-center'>
                     <Popconfirm
-                        placement="right"
+                        placement="bottom"
                         open={confirmVisible}
                         icon={<LockOutlined style={{ color: '#4096ff' }} />}
                         title={'Please type password to change.'}
@@ -100,11 +100,11 @@ const PageContent = () => {
                         okText="Change"
                         cancelText="Cancel"
                     >
-                        <Button className='text-white' style={{background: themeColor, width: 220, height: 50}} onClick={() => setConfirmVisible(!confirmVisible)}> Change Password </Button>
+                        <Button className='text-white' sx={{background: themeColor, width: 220, height: 50}} onClick={() => setConfirmVisible(!confirmVisible)}> Change Password </Button>
                     </Popconfirm>
                 </div>
             </div>
-            <div className="w-full h-3/4 flex flex-wrap items-center justify-evenly overflow-hidden overflow-y-auto p-5 pt-0">
+            <div className="w-full  h-auto flex flex-wrap items-center justify-evenly  p-5 pt-0">
                 { vehicleList.map( (vehicle, index) =>
                     <div key={index} className="vehicle-item m-3">
                         <VehicleItem vehicle={vehicle} />

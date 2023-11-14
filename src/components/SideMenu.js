@@ -12,7 +12,7 @@ const SideMenu = ({ title, items, theme, menuCollapsed, activeMenu, handleItemSe
     const { themeColor } = useSelector( ({User}) => User );
 
     return (
-        <div  className="absolute md:relative z-30 md:z-0">
+        <div  className="absolute md:relative z-30 md:z-0 right-0">
         <Sider 
         className="md:h-[570px] h-[620px]"
             style={{background: 'white', borderLeft: '1px solid black',right:'0px'}}
@@ -20,7 +20,7 @@ const SideMenu = ({ title, items, theme, menuCollapsed, activeMenu, handleItemSe
             collapsedWidth={0}
             trigger={null}
             collapsible collapsed={menuCollapsed}
-            width={300}
+            width={250}
         >
             <div className="flex flex-col justify-between h-full">
                 <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>

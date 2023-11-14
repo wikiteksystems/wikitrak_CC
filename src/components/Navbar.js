@@ -48,7 +48,7 @@ const Navbar = () => {
           
                 { login &&
                 <div className='flex md:justify-center justify-between items-center'>
-                       <div className='flex md:hidden'>
+                       <div className='hidden'>
                     { login && (
                         mainMenuCollapsed ?
                             <RightCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ handleMainMenuCollapse } />
@@ -58,7 +58,7 @@ const Navbar = () => {
                     }
                     </div>
 
-                    <div className='flex px-3 gap-2 md:gap-0'>
+                    <div className='md:flex px-3 gap-2 md:gap-0 hidden'>
                     <Menu as="div" className="relative md:ml-3 md:mr-5">
                         <div>
                             <Menu.Button className="flex justify-center items-center">

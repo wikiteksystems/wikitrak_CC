@@ -299,7 +299,7 @@ console.log(data)
             collapsedWidth={0}
             trigger={null}
             collapsible collapsed={menuCollapsed}
-            width={300}
+            width={250}
         >
             <div className="detail-menu flex flex-col justify-between h-full">
             { !paramGroupVisible ? 

@@ -11,6 +11,13 @@ import './LiveMonitor.css';
 import { Layout } from "antd";
 import { useState } from "react";
 import LiveContent from "./LiveContent";
+import { AppBar, IconButton, Toolbar } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
+import Home from '@mui/icons-material/Home';
+import { Box, styled } from "@mui/system";
+import PlayArrowOutlined from '@mui/icons-material/PlayArrowOutlined';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import Fab from '@mui/material/Fab';
 const { Content  } = Layout;
 
 const LiveMonitor = () => {
@@ -39,6 +46,24 @@ useEffect(() =>{
        console.log(selectCheckParam)
 },[selectCheckParam])
 
+
+const StyledFab = styled(Fab)({
+    position: 'absolute',
+    zIndex: 1,
+    top: -30,
+    left: 0,
+    right: 0,
+    margin: '0 auto',
+  });
+
+
+  const handleMainMenuCollapse = () => {
+      dispatch(AppActions.setMainMenuCollapsed(!mainMenuCollapsed));
+  };
+  const handleDetailMenuCollapse = () => {
+      dispatch(AppActions.setDetailMenuCollapsed(!detailMenuCollapsed));
+  };
+
     return (
         <Layout className="flex h-screen">
             <Navbar />
@@ -57,9 +82,28 @@ useEffect(() =>{
                 <DetailMenu menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} />
             </Layout>
 
+            <div className="hidden md:block">
             <Footer>
                 Powered By &nbsp; <b><i>autopeepal</i></b>
             </Footer>
+              </div>
+
+              <div className="block md:hidden">
+              <AppBar position="fixed"  sx={{ top: 'auto', bottom: 0,background:'#B9BDC2' }}>
+        <Toolbar>
+          <IconButton color="inherit" aria-label="open drawer">
+            <MenuIcon onClick={ handleMainMenuCollapse }/>
+          </IconButton>
+          <StyledFab color="secondary" aria-label="add">
+           <Home/>
+          </StyledFab>
+          <Box sx={{ flexGrow: 1 }} />
+          <IconButton color="inherit">
+             <PlayArrowOutlined sx={{fontSize:'35px'}} onClick={ handleDetailMenuCollapse }/>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      </div>
         </Layout>
     );
 }

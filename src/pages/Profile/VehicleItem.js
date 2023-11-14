@@ -8,7 +8,7 @@ const VehicleItem = ({ vehicle }) => {
     const mac_id = imei.length ? imei[0].mac_id : '';
 
     return (
-        <div className='w-full h-full flex items-center justify-bewteen p-3' style={{border: '1px solid' + themeColor, borderRadius: 10}}>
+        <div className='w-full h-full flex md:flex-row flex-col items-center justify-bewteen p-3' style={{border: '1px solid' + themeColor, borderRadius: 10}}>
             <div style={{width: 150}}>
                 { picture === null ?
                 <Avatar size={120} style={{background: themeColor, fontSize: 40}}> { registration_id[0].toUpperCase() } </Avatar>

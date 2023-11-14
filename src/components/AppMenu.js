@@ -21,16 +21,16 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
             collapsedWidth={0}
             trigger={null}
             collapsible collapsed={menuCollapsed}
-            width={300}
+            width={250}
         >
             <div className="flex flex-col justify-between h-full">
                 <div className="flex flex-col">
                 { !menuCollapsed &&
                 <div className="w-full flex flex-col items-center py-5">
                     { avatar === null ?
-                    <Avatar size={150} style={{background: '#16a7ff', fontSize: 60}}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
+                    <Avatar size={100} style={{background: '#16a7ff', fontSize: 60}}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
                     :
-                    <Avatar size={150} src={avatar} />
+                    <Avatar size={100} src={avatar} />
                     }
                     <div className="font-bold" style={{fontSize: 20}}> {getFullName(userName)} </div>
                     <div style={{fontSize: 20}}> {userRole} </div>

@@ -2,8 +2,8 @@ import { AppActions as Actions } from '../actions';
 
 const initialState = {
     loading: false,
-    mainMenuCollapsed: false,
-    detailMenuCollapsed: false
+    mainMenuCollapsed: true,
+    detailMenuCollapsed: true,
 };
 
 export const appReducer = (state = initialState, action) => {
