@@ -388,7 +388,7 @@ const chartOptions = {
 
   return (
      <Box sx={{color:"#fff",display:'flex',flexDirection:"column",gap:"20px",maxHeight:"600px",overflowY:"scroll"}} >
-        <Box sx={{background:"#4071C9",padding:"10px 10px",display:"flex",gap:"30px",alignItems:"center",justifyContent:"flex-end"}}>
+        <Box sx={{background:"#4071C9",padding:"10px 10px",display:"flex",gap:"30px",alignItems:"center",justifyContent:"center"}}>
             <Typography sx={{fontSize:{xs:'14px',sm:'18px',md:'22px'}}}>Telematic Parameters</Typography>
             <Box sx={{display:"flex",alignItems:"center",gap:"5px",justifyContent:"center"}}>
                <Typography sx={{fontSize:{xs:'14px',sm:'18px',md:'20px'}}}>Live</Typography>

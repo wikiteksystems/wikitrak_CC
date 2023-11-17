@@ -7,7 +7,7 @@ import { Layout, Menu, Avatar } from 'antd';
 import { Footer } from ".";
 const { Sider } = Layout;
 
-const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
+const AppMenu2 = ({ activePage, menuList, menuCollapsed }) => {
     const dispatch = useDispatch();
     const { themeColor, avatar, userName, userRole } = useSelector( ({User}) => User );
 
@@ -18,7 +18,7 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
         className="h-screen"
                style={{background:'#B9BDC2',borderRight:'1px solid black'}}
             breakpoint="md"
-            collapsedWidth={50}
+            collapsedWidth={0}
             trigger={null}
             collapsible collapsed={menuCollapsed}
             width={250}
@@ -73,4 +73,4 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
     );
 };
 
-export default AppMenu;
+export default AppMenu2;

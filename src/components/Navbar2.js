@@ -11,7 +11,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const Navbar = () => {
+const Navbar2 = () => {
     const dispatch = useDispatch();
     const { login, themeColor, userName } = useSelector( ({User}) => User );
     const { mainMenuCollapsed, detailMenuCollapsed } = useSelector( ({App}) => App );
@@ -37,7 +37,7 @@ const Navbar = () => {
                     }
                     </div>
 
-                    <div className='text-[24px] text-white w-full flex justify-center'>Live Map</div>
+                    <div className='text-[24px] text-white w-full flex justify-center'>FOTA Campaign</div>
 
                     <div className='md:flex px-3 gap-2 md:gap-0 hidden'>
                  
@@ -57,4 +57,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default Navbar2;

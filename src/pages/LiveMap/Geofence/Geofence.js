@@ -18,6 +18,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Fab from '@mui/material/Fab';
 
 import { Button, Switch, Layout, message } from "antd";
+import AppMenu2 from "../../../components/Appmneu2";
 const { Content  } = Layout;
 
 const Geofence = () => {
@@ -120,7 +121,13 @@ const Geofence = () => {
             <Navbar />
 
             <Layout>
-                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
+            <div className="md:block hidden">
+                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                </div>
+
+                <div className="md:hidden block">
+                <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                </div>
 
                 <Layout style={{ flex: "1 1 auto" }}>
                     <Header title={'Live Map'} />

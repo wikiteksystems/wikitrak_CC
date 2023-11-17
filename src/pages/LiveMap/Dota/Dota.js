@@ -15,6 +15,7 @@ import { Box, styled } from "@mui/system";
 import PlayArrowOutlined from '@mui/icons-material/PlayArrowOutlined';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Fab from '@mui/material/Fab';
+import AppMenu2 from '../../../components/Appmneu2';
 const { Content  } = Layout;
 
 const Dota = () => {
@@ -70,10 +71,16 @@ const Dota = () => {
 
     return (
         <Layout className="flex h-screen">
-            <Navbar />
+           
 
             <Layout>
-                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
+            <div className="md:block hidden">
+                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                </div>
+
+                <div className="md:hidden block">
+                <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                </div>
 
                 <Layout style={{ flex: "1 1 auto" }}>
                     <Header title={DotaUtils.MenuItems[activeMenu].label} />
@@ -110,7 +117,7 @@ const Dota = () => {
                 /> }
             </Layout>
 
-            <div className="hidden md:block">
+            <div className="hidden">
             <Footer>
                 Powered By &nbsp; <b><i>autopeepal</i></b>
             </Footer>

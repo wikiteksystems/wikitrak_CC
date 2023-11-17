@@ -16,6 +16,7 @@ import PlayArrowOutlined from '@mui/icons-material/PlayArrowOutlined';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Fab from '@mui/material/Fab';
 import { AppActions } from "../../../stores/actions";
+import AppMenu2 from "../../../components/Appmneu2";
 const { Content  } = Layout;
 
 const DC = () => {
@@ -89,9 +90,15 @@ const DC = () => {
       };
  return(
     <Layout className="flex h-screen">
-        <Navbar/>
+       
         <Layout>
-            <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+        <div className="md:block hidden">
+                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                </div>
+
+                <div className="md:hidden block">
+                <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                </div>
             <Layout style={{flex: "1 1 auto"}}>
                 <Header title={'Telematics Configuration'}/>
                 <Content style={{width: '100%'   }}>

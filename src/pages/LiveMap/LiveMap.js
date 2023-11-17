@@ -19,6 +19,7 @@ import PlayArrowOutlined from '@mui/icons-material/PlayArrowOutlined';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Fab from '@mui/material/Fab';
 import { AppActions, UserActions } from '../../stores/actions';
+import AppMenu2 from "../../components/Appmneu2";
 
 const { Content  } = Layout;
 
@@ -81,15 +82,21 @@ const LiveMap = () => {
 
     return (
         <Layout className="flex h-screen">
-            <Navbar />
+           
 
             <Layout>
-                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
+            <div className="md:block hidden">
+                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                </div>
 
-                <Layout style={{ flex: "1 1 auto" }}>
-                    <Header title={'Live Map'} />
+                <div className="md:hidden block">
+                <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                </div>
 
-                    <Content style={{width: '100%', height: '100%'}}>
+                <Layout style={{ flex: "1 1 auto" }} className="h-screen">
+                       <Navbar />
+
+                    <Content style={{width: '100%', height: '100%'}} className="h-screen">
                         <MapSection  locationData={locationData} vehicleGroupList={vehicleGroupList} vehicleList={vehicleList} />
                         {/* <Map2 users={locationData} /> */}
                     </Content>
@@ -98,7 +105,7 @@ const LiveMap = () => {
                 <DetailMenu menuList={vehicleList} menuCollapsed={detailMenuCollapsed} locationData={locationData} />
             </Layout>
 
-            <div className="hidden md:block">
+            <div className="hidden">
             <Footer>
                 Powered By &nbsp; <b><i>autopeepal</i></b>
             </Footer>

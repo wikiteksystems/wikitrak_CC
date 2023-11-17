@@ -62,7 +62,7 @@ const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,
     return (
         <div  className="absolute md:relative z-30 md:z-0 right-0">
         <Sider 
-        className="md:h-[570px] h-[620px]"
+        className="h-screen"
             style={{background: 'white', borderLeft: '1px solid black',right:'0px'}}
             breakpoint="lg"
             collapsedWidth={0}

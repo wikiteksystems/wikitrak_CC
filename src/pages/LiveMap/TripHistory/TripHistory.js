@@ -18,6 +18,7 @@ import { Box, styled } from "@mui/system";
 import PlayArrowOutlined from '@mui/icons-material/PlayArrowOutlined';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Fab from '@mui/material/Fab';
+import AppMenu2 from "../../../components/Appmneu2";
 const { Content  } = Layout;
 
 const TripHistory = () => {
@@ -85,15 +86,21 @@ const StyledFab = styled(Fab)({
 
     return (
         <Layout className="flex h-screen">
-            <Navbar />
+            {/* <Navbar /> */}
 
-            <Layout>
-                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
+            <Layout className="h-screen">
+            <div className="md:block hidden">
+                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                </div>
 
-                <Layout style={{ flex: "1 1 auto" }}>
+                <div className="md:hidden block">
+                <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                </div>
+
+                <Layout style={{ flex: "1 1 auto" }} className="h-screen">
                    
 
-                    <Content style={{width: '100%', height: '100%'}}>
+                    <Content style={{width: '100%', height: '100%'}} className="h-screen">
                        
                      <LiveContent harshBreak={harshBreak} acceleration={acceleration} speed={speed} selectCheckParam={selectCheckParam} setSelecCheckParam={setSelecCheckParam} />
                     </Content>
@@ -102,7 +109,7 @@ const StyledFab = styled(Fab)({
                 <DetailMenu setHarshBreak={setHarshBreak} harshBreak={harshBreak} setAcceleration={setAcceleration} acceleration={acceleration} setSpeed={setSpeed} speed={speed} fetchTripHis={fetchTripHis} tripHis={tripHis}   vehicle={vehicle} menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} />
             </Layout>
 
-            <div className="hidden md:block">
+            <div className="hidden">
             <Footer>
                 Powered By &nbsp; <b><i>autopeepal</i></b>
             </Footer>
