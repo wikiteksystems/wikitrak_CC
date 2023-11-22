@@ -462,7 +462,7 @@ const handleDetailMenuCollapse = () => {
                 align="center"
               >
             {/* We couldn't find any users matching your search criteria */}
-            Select Parameter.
+            Select The Parameter.
               </Typography>
             </>
           ) : (
@@ -610,7 +610,8 @@ const handleDetailMenuCollapse = () => {
                 color="text.secondary"
                 align="center"
               >
-            We couldn't find any users matching your search criteria
+            {/* We couldn't find any users matching your search criteria */}
+            Select The Parameter
               </Typography>
             </>
           ) : (
