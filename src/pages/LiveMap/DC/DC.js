@@ -100,7 +100,8 @@ const DC = () => {
                 <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
                 </div>
             <Layout style={{flex: "1 1 auto"}}>
-                <Header title={'Telematics Configuration'}/>
+                {/* <Header title={'Telematics Configuration'}/> */}
+                    <Header title={"Device Firmware Update"} showText={false} style={{justifyContent: "space-between"}} />
                 <Content style={{width: '100%'   }}>
                     <DCContent
                         activeMenu={activeMenu}
@@ -133,7 +134,7 @@ const DC = () => {
                 // handleItemSelect={handleMenuSelect}
             /> }
         </Layout>
-        <div className="hidden md:block">
+        <div className="hidden">
             <Footer>
                 Powered By &nbsp; <b><i>autopeepal</i></b>
             </Footer>

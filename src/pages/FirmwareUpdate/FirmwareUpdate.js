@@ -20,13 +20,13 @@ const FirmwareUpdate = () => {
 
     return (
         <Layout className="flex h-screen">
-            <Navbar />
+            {/* <Navbar /> */}
 
             <Layout>
                 <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
 
                 <Layout style={{ flex: "1 1 auto" }}>
-                    <Header title={'Device Firmware Update'} />
+                    <Header title={"Device Firmware Update"} showText={false} style={{justifyContent: "space-between"}} />
 
                     <Content style={{width: '100%', height: '100%'}}>
                         <PageContent vehicle={activeVehicle} />
@@ -34,9 +34,9 @@ const FirmwareUpdate = () => {
                 </Layout>
             </Layout>
 
-            <Footer>
+            {/* <Footer>
                 Powered By &nbsp; <b><i>autopeepal</i></b>
-            </Footer>
+            </Footer> */}
         </Layout>
     );
 }

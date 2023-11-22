@@ -118,7 +118,7 @@ const Geofence = () => {
 
     return (
         <Layout className="flex h-screen">
-            <Navbar />
+            {/* <Navbar /> */}
 
             <Layout>
             <div className="md:block hidden">
@@ -130,7 +130,8 @@ const Geofence = () => {
                 </div>
 
                 <Layout style={{ flex: "1 1 auto" }}>
-                    <Header title={'Live Map'} />
+                    {/* <Header title={'Live Map'} /> */}
+                    <Header title={"Geofence"} showText={false} style={{justifyContent: "space-between"}} />
 
                     <Content style={{width: '100%', height: '100%'}}>
                         <MapSection
@@ -169,7 +170,7 @@ const Geofence = () => {
                     footerVisible={editable || circleSelected}
                     footerStyle={{padding: '0', height: '50%'}}
                     footerChildren={
-                        <div className="w-full h-full flex flex-col items-center justify-between">
+                        <div className="w-full h-full flex flex-col items-center justify-between text-white">
                             <div className="w-full h-1/3 flex flex-col justify-center">
                                 <p className=' font-bold' style={{fontSize: 20}}> Add / Edit {geofence.geofence} </p>
                             </div>
@@ -213,7 +214,7 @@ const Geofence = () => {
                 />
             </Layout>
 
-            <div className="hidden md:block">
+            <div className="hidden ">
             <Footer>
                 Powered By &nbsp; <b><i>autopeepal</i></b>
             </Footer>

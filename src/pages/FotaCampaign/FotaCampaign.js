@@ -85,7 +85,8 @@ const FotaCampaign = () => {
       };
     return (
         <Layout className="flex h-screen">
-            <Navbar2 />
+            {/* <Navbar2 /> */}
+            {/* <Header title={"FOTA Campaign"} showText={false} style={{justifyContent: "space-between"}} /> */}
 
             <Layout>
             <div className="md:block hidden">
@@ -97,6 +98,7 @@ const FotaCampaign = () => {
                 </div>
 
                 <Layout style={{ flex: "1 1 auto" }} className='h-screen'>
+            <Navbar2 />
                    
 
                     <Content style={{width: '100%'}} className='h-screen'>

@@ -6,7 +6,7 @@ const initialState = {
     userName: {first: 'M', last: 'S'},
     userRole: 'Admin',
     avatar: null,
-    themeColor: '#4071C9',
+    themeColor: '#0F4C75',
 
     changePassword: false,
     register: {
@@ -39,7 +39,7 @@ export const userReducer = (state = initialState, action) => {
                 },
                 userRole: role,
                 avatar: avatar,
-                themeColor: color
+                themeColor: "#0F4C75"
             };
         case Actions.LOGOUT_USER:
             return {
@@ -49,7 +49,7 @@ export const userReducer = (state = initialState, action) => {
                 userName: {first: 'M', last: 'S'},
                 userRole: 'Admin',
                 avatar: null,
-                themeColor: '#F6B89F'
+                themeColor: '#0F4C75'
             };
         case Actions.REGISTER_USER:
         case Actions.FORGOT_PASSWORD:

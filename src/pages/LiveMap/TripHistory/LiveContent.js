@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 
-const {GMAP_API_KEY} = require("../../../utils/constants")
+const {GMAP_API_KEY, ThemeColor} = require("../../../utils/constants")
 
 const filters = {
   harshBreak:"HB",
@@ -98,11 +98,11 @@ const startblinking = (data) =>{
 
   return isLoaded ? (
     <Box>
-      <Typography style={{textAlign:"center",fontSize:"22px",padding:"10px",background:"#4071C9",color:"#fff",fontWeight:"600"}}>Trip History</Typography>
+      {/* <Typography style={{textAlign:"center",fontSize:"22px",padding:"10px",background:"#4071C9",color:"#fff",fontWeight:"600"}}>Trip History</Typography> */}
       <Box sx={{display:"flex",justifyContent:"flex-end",marginRight:"100px",padding:"10px"}}>
     
     
-      <Button aria-describedby={id} variant="contained" onClick={handleClick}>
+      <Button aria-describedby={id} style={{background:ThemeColor.light_color_2, color:'black'}} onClick={handleClick}>
         Playback
       </Button>
       <Popover
@@ -115,7 +115,7 @@ const startblinking = (data) =>{
           horizontal: 'left',
         }}
       >
-        <Box sx={{ background:"#4071C9",padding:"5px 30px",color:"#fff",fontWeight:"600"}}>Trip Playback</Box>
+        <Box sx={{ background:ThemeColor.light_color_2,padding:"5px 30px",color:"#fff",fontWeight:"600"}}>Trip Playback</Box>
         <Box sx={{padding:"15px", display:"flex",justifyContent:"center"}}>
         { !aniActive ? <div onClick={() => setAniActive(!aniActive)}>
           <PlayCircleIcon  sx={{fontSize:"40px",cursor:"pointer"}} />

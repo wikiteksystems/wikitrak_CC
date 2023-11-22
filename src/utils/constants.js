@@ -81,3 +81,9 @@ export const REGISTER_MSG = {
     EMAIL_EXIST: 'email already registered',
     MOBILE_EXIST: 'mobile already registered'
 }
+export const ThemeColor  = {
+    light_color_1:"#0F4C75",
+    light_color_2:"#3282B8",
+
+
+}

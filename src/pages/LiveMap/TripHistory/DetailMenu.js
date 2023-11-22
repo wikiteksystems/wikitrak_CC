@@ -68,13 +68,13 @@ const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,
             collapsedWidth={0}
             trigger={null}
             collapsible collapsed={menuCollapsed}
-            width={250}
+            width={300}
         >
             <div className="detail-menu flex flex-col justify-between h-full">
      
                
                 <>
-                    <div className="flex justify-between items-center" style={{background: matchColor(themeColor),padding:"10px 5px",marginBottom:"20px"}}>
+                    <div className="flex justify-between items-center" style={{background: matchColor(themeColor),padding:"17px 5px",marginBottom:"20px", color:"white"}}>
                         <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ () => history.goBack() } />
                         <p style={{fontSize:"20px",fontWeight:"600"}}>Select Trip {vehicle?.registration_id}</p>
                        
@@ -122,17 +122,17 @@ const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,
                 <Footer style={{background: matchColor(themeColor), height: 40}} classes={'justify-evenly'}>
               <Tooltip title="Harsh Braking">
                 <div onClick={() => setHarshBreak(!harshBreak)}>
-               <ShutterSpeedIcon  sx={{cursor:'pointer'}} />
+               <ShutterSpeedIcon  sx={{cursor:'pointer', color:"white"}} />
                </div>
                </Tooltip>
                <Tooltip title="Over Acceleration">
                <div onClick={() => setAcceleration(!acceleration)}>
-               <WifiTetheringErrorIcon sx={{cursor:'pointer'}} />
+               <WifiTetheringErrorIcon sx={{cursor:'pointer', color:"white"}} />
                </div>
                </Tooltip>
                <Tooltip title="Over Speeding">
                <div onClick={() => setSpeed(!speed)}>
-                <DirectionsCarIcon sx={{cursor:'pointer'}} />  
+                <DirectionsCarIcon sx={{cursor:'pointer', color:"white"}} />  
                 </div>
                 </Tooltip>
                 </Footer>

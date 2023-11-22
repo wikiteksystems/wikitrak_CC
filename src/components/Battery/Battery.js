@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import "./battery.css"
+import { ThemeColor } from '../../utils/constants';
 
 
 const Battery = ({ locationData, item}) => {
@@ -16,7 +17,7 @@ const Battery = ({ locationData, item}) => {
 
 
   // Define the fill color based on your desired logic
-  const fillColor = `#1AE600`;
+  const fillColor = ThemeColor.light_color_2;
 
   return (
     <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>

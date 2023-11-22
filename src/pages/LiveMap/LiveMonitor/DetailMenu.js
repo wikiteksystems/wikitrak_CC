@@ -307,7 +307,7 @@ console.log(data)
                 { !menuCollapsed && !paramDetailVisible && 
                 <>
                     <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
-                        <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ () => history.goBack() } />
+                        <LeftCircleOutlined className='px-2' style={{fontSize: 20, color:"white"}} onClick={ () => history.goBack() } />
                         <Header title={'Select Parameters'} style={{paddingInline: 0}} />
                         <PlusCircleOutlined className='pr-2' style={{fontSize: 20}} onClick={ () => handleClick('add-param') } />
                     </div>

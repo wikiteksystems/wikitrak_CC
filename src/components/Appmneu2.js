@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import { UserActions } from '../stores/actions';
-import { getFullName } from "../utils/constants";
+import { ThemeColor, getFullName } from "../utils/constants";
 import { Layout, Menu, Avatar } from 'antd';
 import { Footer } from ".";
 const { Sider } = Layout;
@@ -31,7 +31,7 @@ const AppMenu2 = ({ activePage, menuList, menuCollapsed }) => {
                 { !menuCollapsed &&
                 <div className="w-full flex flex-col items-center py-5">
                     { avatar === null ?
-                    <Avatar size={100} style={{background: '#16a7ff', fontSize: 60}}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
+                    <Avatar size={100} style={{background: ThemeColor.light_color_1, fontSize: 60}}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
                     :
                     <Avatar size={100} src={avatar} />
                     }
@@ -61,7 +61,7 @@ const AppMenu2 = ({ activePage, menuList, menuCollapsed }) => {
                 </div>
 
                 { !menuCollapsed &&
-                  <Footer style={{padding:'20px 0px',display:'flex',flexDirection:'column'}}>
+                  <Footer style={{padding:'20px 0px',display:'flex',flexDirection:'column', color:"white"}}>
                     <div>App Version: 1.0.0</div>
                     <div>
                 Powered By &nbsp; <b><i>autopeepal</i></b>

@@ -21,10 +21,14 @@ const SideMenu = ({ title, items, theme, menuCollapsed, activeMenu, handleItemSe
             trigger={null}
             collapsible collapsed={menuCollapsed}
             width={250}
+            height= {100}
         >
             <div className="flex flex-col justify-between h-full">
+
+                
+
                 <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
-                    <LeftCircleOutlined className='absolute px-2' style={{fontSize: 20}} onClick={ () => history.goBack() } />
+                    <LeftCircleOutlined className='absolute px-2' style={{fontSize: 20, color:'white'}} onClick={ () => history.goBack() } />
                     <Header title={title} classes={'w-full justify-center'} style={{...headerStyle}} />
                 </div>
 

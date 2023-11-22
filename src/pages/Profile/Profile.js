@@ -43,13 +43,14 @@ const Profile = () => {
 
     return (
         <Layout className="flex h-auto md:h-screen">
-            <Navbar />
+            {/* <Navbar /> */}
 
             <Layout>
                 <AppMenu activePage={3} menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
 
                 <Layout style={{ flex: "1 1 auto" }}>
-                    <Header title={'User Profile'} />
+                    {/* <Header title={'User Profile'} /> */}
+                    <Header title={'User Profile'} showText={false} style={{justifyContent: "space-between"}} />
 
                     <Content style={{width: '100%', height: '100%'}}>
                         <PageContent />
@@ -57,7 +58,7 @@ const Profile = () => {
                 </Layout>
             </Layout>
 
-            <div className="hidden md:block">
+            <div className="hidden">
             <Footer>
                 Powered By &nbsp; <b><i>autopeepal</i></b>
             </Footer>

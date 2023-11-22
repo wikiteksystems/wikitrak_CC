@@ -84,12 +84,7 @@ export const vehicleDetailMenuItems_addin = [
         type: 'link',
         label: 'Live Monitor',
         link: '/livemap/live_monitor'
-    }, {
-        key: 16,
-        type: 'link',
-        label: 'ECU Diagnostics',
-        link: '/livemap/dota'
-    }, {
+    },{
         key: 17,
         type: 'link',
         label: 'Device Firmware Update',

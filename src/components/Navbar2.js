@@ -33,7 +33,7 @@ const Navbar2 = () => {
                 { login &&
                 <div className='flex md:justify-between justify-between items-center w-full'>
                        <div className='hidden md:block'>
-                    { login && <MenuOutlined  style={{fontSize: 20}}  onClick={ handleMainMenuCollapse }/>
+                    { login && <MenuOutlined  style={{fontSize: 20, color:"white"}}  onClick={ handleMainMenuCollapse }/>
                     }
                     </div>
 
@@ -43,9 +43,9 @@ const Navbar2 = () => {
                  
 
                     { detailMenuCollapsed ?
-                    <LeftCircleOutlined className='' style={{fontSize: 20}} onClick={ handleDetailMenuCollapse } />
+                    <LeftCircleOutlined className='' style={{fontSize: 20, color:"white"}} onClick={ handleDetailMenuCollapse } />
                     :
-                    <RightCircleOutlined className='' style={{fontSize: 20}} onClick={ handleDetailMenuCollapse } />
+                    <RightCircleOutlined className='' style={{fontSize: 20, color:"white"}} onClick={ handleDetailMenuCollapse } />
                     }
                     </div>
                 </div>

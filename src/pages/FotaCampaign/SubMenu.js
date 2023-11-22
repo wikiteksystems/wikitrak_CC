@@ -120,7 +120,7 @@ const SubMenu = ({ title, items, campaign, menuCollapsed, headerStyle, handleBac
         >
             <div className="flex flex-col justify-between h-full">
                 <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
-                    <LeftCircleOutlined className='absolute px-2' style={{fontSize: 20}} onClick={ () =>handleBack() } />
+                    <LeftCircleOutlined className='absolute px-2' style={{fontSize: 20, color:"white"}} onClick={ () =>handleBack() } />
                     <Header title={title} classes={'w-full justify-center'} style={{...headerStyle}} />
                 </div>
                 <div className="flex items-center m-1">

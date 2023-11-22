@@ -25,7 +25,7 @@ const Navbar = () => {
 
     return (
         <div className='shadow-md w-full top-0 left-0' style={{borderBottom: '1px solid black'}}>
-           <div className={classNames(`md:flex items-center py-4 md:px-2 px-7`, login ? 'justify-between' : 'justify-center  flex-col md:flex-row' )} style={{backgroundColor: themeColor}}>
+           <div className={classNames(`md:flex items-center py-4 md:px-2 px-7`, login ? 'justify-between' : 'justify-center  flex-col md:flex-row' )} style={{backgroundColor: "#0F4C75"}}>
              
 
              
@@ -33,7 +33,7 @@ const Navbar = () => {
                 { login &&
                 <div className='flex md:justify-between justify-between items-center w-full'>
                        <div className='hidden md:block'>
-                    { login && <MenuOutlined  style={{fontSize: 20}}  onClick={ handleMainMenuCollapse }/>
+                    { login && <MenuOutlined  style={{fontSize: 20, color:'white'}}  onClick={ handleMainMenuCollapse }/>
                     }
                     </div>
 
@@ -43,9 +43,9 @@ const Navbar = () => {
                  
 
                     { detailMenuCollapsed ?
-                    <LeftCircleOutlined className='' style={{fontSize: 20}} onClick={ handleDetailMenuCollapse } />
+                    <LeftCircleOutlined className='' style={{fontSize: 25, color:"white"}} onClick={ handleDetailMenuCollapse } />
                     :
-                    <RightCircleOutlined className='' style={{fontSize: 20}} onClick={ handleDetailMenuCollapse } />
+                    <RightCircleOutlined className='' style={{fontSize: 25, color:"white"}} onClick={ handleDetailMenuCollapse } />
                     }
                     </div>
                 </div>

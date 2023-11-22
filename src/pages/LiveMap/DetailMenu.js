@@ -286,16 +286,16 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
             collapsedWidth={0}
             trigger={null}
             collapsible collapsed={menuCollapsed}
-            width={250}
+            width={300}
         >
             <div className="detail-menu flex flex-col justify-between h-full">
             { !vehicleGroupVisible ? 
             <>
                 { !menuCollapsed && !vehicleDetailVisible && 
                 <>
-                    <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
+                    <div className="flex justify-between items-center" style={{backgroundColor: "#0F4C75", paddingBottom:"5px"}}>
                         <Header title={'Vehicle List'} classes='w-full' style={{fontSize: 20}} />
-                        <PlusCircleOutlined className='cursor-pointer' style={{fontSize: 18, position: 'absolute', right: 10}} onClick={ () => handleClick('add-vehicle') } />
+                        <PlusCircleOutlined className='cursor-pointer' style={{fontSize: 25, color:'white',position: 'absolute', right: 10}} onClick={ () => handleClick('add-vehicle') } />
                     </div>
                     <div className="flex items-center m-1">
                         <Input className='w-5/6' placeholder={'Search'} style={{marginRight: 8}} value={searchText} onChange={e => setSearchText(e.target.value)} />
@@ -329,14 +329,14 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
                 
                 { !menuCollapsed && vehicleDetailVisible &&
                 <>
-                    <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
-                        <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ () => handleClick('vehicle_list') }/>
-                        <Header title={'Vehicle Detail'} style={{fontSize: 19, paddingInline: 0}} />
+                    <div className="flex justify-between items-center" style={{backgroundColor: "#0F4C75", paddingBottom:"5px"}}>
+                        <LeftCircleOutlined className='px-2' style={{fontSize: 20, color:'white'}} onClick={ () => handleClick('vehicle_list') }/>
+                        <Header title={'Vehicle Detail'} style={{fontSize: 19, paddingInline: 0,  }} />
                         <div className="h-full flex items-center cursor-pointer pr-2" onClick={ () => handleClick(vehicleDetailEditable ? 'save-detail' : 'edit-detail') }>
                             { vehicleDetailEditable ?
-                            <Icon icon="akar-icons:save" width="22" height="22" />
+                            <Icon icon="akar-icons:save" width="22" height="22" color="white"/>
                             :
-                            <Icon icon="fa:edit" width="22" height="22" /> }
+                            <Icon icon="fa:edit" width="22" height="22" color="white" /> }
                         </div>
                     </div>
 
@@ -435,7 +435,7 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
             :
             <>
                 <>
-                    <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
+                    <div className="flex justify-between items-center" style={{backgroundColor: "#0F4C75", paddingBottom:"5px"}}>
                     { !vehicleGroupDetailVisible ?
                     <>
                         <Header title={'Vehicle Group List'} classes={'w-full'} style={{fontSize: 20}} />
@@ -501,10 +501,10 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
 
                 <Footer style={{background: matchColor(themeColor), height: 40}} classes={'justify-evenly'}>
                     <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={ () => handleClick('vehicle_list') } style={!vehicleGroupVisible ? {filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2} : {}}>
-                        <Icon icon="ic:round-directions-car" width="25" height="25" />
+                        <Icon icon="ic:round-directions-car" width="25" height="25" color="white" />
                     </Button>
                     <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={ () => handleClick('vehicle_group') } style={vehicleGroupVisible ? {filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2} : {}}>
-                        <Icon icon="mdi:car-multiple" width="25" hegith="25" />
+                        <Icon icon="mdi:car-multiple" width="25" hegith="25" color="white" />
                     </Button>
                 </Footer>
             </div>

@@ -101,6 +101,7 @@ const StyledFab = styled(Fab)({
                    
 
                     <Content style={{width: '100%', height: '100%'}} className="h-screen">
+                    <Header title={"Trip History"} showText={false} style={{justifyContent: "space-between"}} />
                        
                      <LiveContent harshBreak={harshBreak} acceleration={acceleration} speed={speed} selectCheckParam={selectCheckParam} setSelecCheckParam={setSelecCheckParam} />
                     </Content>
