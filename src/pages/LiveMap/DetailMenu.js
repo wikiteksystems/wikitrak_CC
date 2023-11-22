@@ -341,10 +341,11 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
                     </div>
 
                     <Menu
-                        className="overflow-hidden overflow-y-auto"
+                        className="overflow-hidden overflow-y-auto md:flex-grow"
                         theme="light"
                         mode="inline"
-                        style={{ color: 'black', backgroundColor: 'white', flexGrow: 1 }}
+                        
+                        style={{ color: 'black', backgroundColor: 'white',  }}
                         selectable={false}
                         items={ (newVehicle ? 
                             LiveMapUtils.vehicleDetailMenuItems 

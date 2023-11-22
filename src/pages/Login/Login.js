@@ -9,10 +9,11 @@ import classNames from 'classnames';
 
 import { Navbar, Footer } from '../../components';
 import { UserActions } from '../../stores/actions';
-import { PASSWORD_MSG, REGISTER_MSG, loginCarousels } from '../../utils/constants';
+import { PASSWORD_MSG, REGISTER_MSG, ThemeColor, loginCarousels } from '../../utils/constants';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './Login.css';
+import HeaderBar from '../../components/Header';
 
 const Login = () => {
     const history = useHistory();
@@ -135,9 +136,10 @@ const Login = () => {
 
     return (
         <Layout className="main-layout flex h-screen">
-            <Navbar />
+            {/* <Navbar /> */}
+            <HeaderBar title={"WIKITRACK COMMAND CENTER"} showText={true} style={{justifyContent: "center", letterSpacing:"1.5px", wordSpacing:"10px", fontWeight:"900"}} />
 
-            <Layout className='content-layout flex flex-row flex-wrap justify-evenly items-center' style={{background:"#B4C7E7"}}>
+            <Layout className='content-layout flex flex-row flex-wrap justify-evenly items-center' style={{background:ThemeColor.light_color_2}}>
 
                 <Carousel
                     className='login-carousel'
@@ -176,7 +178,7 @@ const Login = () => {
                         <div className='h-1/3 w-full flex flex-col items-center justify-evenly'>
                             <Form.Item
                                 name="signinUsername"
-                                className='w-1/2 mb-10'
+                                className='  mb-10'
                                 rules={[ {required: true, message: 'Please input your mobile number'} ]}
                             >
                                 <Input className='login-username w-full' type='text' placeholder='Mobile Number' />
@@ -184,19 +186,19 @@ const Login = () => {
                             <ConfigProvider theme={{ token: { colorText: 'white', colorBgContainer: 'rgba(0, 0, 0, .0)'} }}>
                                 <Form.Item
                                     name="signinPassword"
-                                    className='w-1/2'
+                                    className=''
                                     rules={[ {required: true, message: 'Please input your password'} ]}
                                 >
                                     <Input type='password' className='login-password w-full ' placeholder='Password' iconRender={(visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)} />
                                 </Form.Item>
                             </ConfigProvider>
-                            <div className='w-1/2 flex items-between justify-between pt-2 px-1'>
-                                <div className='login-signup' onClick={ () => setFormStatus('signup') }> Sign up </div>
-                                <div className='login-forgot' onClick={ () => setFormStatus('forgot-pwd') }> Forgot password? </div>
+                            <div className='  flex items-between justify-evenly pt-2 px-1 gap-10'>
+                                <div className='login-signup'style={{color:"white"}} onClick={ () => setFormStatus('signup') }> Sign up </div>
+                                <div className='login-forgot' style={{color:"white"}} onClick={ () => setFormStatus('forgot-pwd') }> Forgot password? </div>
                             </div>
                         </div>
                         <div className='h-1/3 flex items-center'>
-                            <Button className='login-btn px-10' htmlType='submit'> Sign in </Button>
+                            <Button className='login-btn px-10 mt-10' style={{background:ThemeColor.light_color_1}} htmlType='submit'> Sign in </Button>
                         </div>
                     </Form>
                     }
@@ -276,8 +278,8 @@ const Login = () => {
                             </ConfigProvider>
                         </div>
                         <div className='w-2/3 h-1/4 flex items-center justify-evenly'>
-                            <Button className='signup-btn-back px-10' type='button' onClick={ () => {setFormStatus('signin'); formSignUp.resetFields()} }> Back </Button>
-                            <Button className='signup-btn px-10' type='button' htmlType='submit' onClick={() => setRegBtnClick(regBtnClick + 1)} > Sign up </Button>
+                            <Button className='signup-btn-back px-10' type='button'  style={{background:ThemeColor.light_color_1}} onClick={ () => {setFormStatus('signin'); formSignUp.resetFields()} }> Back </Button>
+                            <Button className='signup-btn px-10' type='button' htmlType='submit' style={{background:ThemeColor.light_color_1}} onClick={() => setRegBtnClick(regBtnClick + 1)} > Sign up </Button>
                         </div>
                     </Form>
                     }
@@ -305,8 +307,8 @@ const Login = () => {
                             </Form.Item>
                         </div>
                         <div className='w-2/3 h-1/3 flex items-center justify-evenly'>
-                            <Button className='forgot-btn-back px-10' type='button' onClick={ () => {setFormStatus('signin'); formForgot.resetFields()} }> Back </Button>
-                            <Button className='forgot-btn px-10' type='button' htmlType='submit' onClick={() => setForgotBtnClick(forgotBtnClick + 1)}> Reset </Button>
+                            <Button className='forgot-btn-back px-10' type='button' style={{background:ThemeColor.light_color_1}} onClick={ () => {setFormStatus('signin'); formForgot.resetFields()} }> Back </Button>
+                            <Button className='forgot-btn px-10 ' type='button' htmlType='submit'style={{background:ThemeColor.light_color_1}} onClick={() => setForgotBtnClick(forgotBtnClick + 1)}> Reset </Button>
                         </div>
                     </Form>
                     }
@@ -347,12 +349,12 @@ const Login = () => {
                                 </Form.Item>
                             </div>
                             <div className='w-1/2 h-1/3 text-white flex justify-center'>
-                                <div className='login-signup' onClick={ handleResendOTP }> Resend OTP </div>
+                                <div className='login-signup text-white' style={{color:"white"}} onClick={ handleResendOTP }> Resend OTP </div>
                             </div>
                         </div>
                         <div className='w-2/3 h-1/3 flex items-center justify-evenly'>
-                            <Button className='forgot-btn-back px-10' type='button' onClick={ () => {setFormStatus('signin'); formVerify.resetFields()} }> Back </Button>
-                            <Button className='forgot-btn px-10' type='button' htmlType='submit'> Submit </Button>
+                            <Button className='forgot-btn-back px-10' type='button' style={{background:ThemeColor.light_color_1}} onClick={ () => {setFormStatus('signin'); formVerify.resetFields()} }> Back </Button>
+                            <Button className='forgot-btn px-10' type='button' htmlType='submit' style={{background:ThemeColor.light_color_1}}> Submit </Button>
                         </div>
                     </Form>
                     }
@@ -408,8 +410,8 @@ const Login = () => {
                             </ConfigProvider>
                         </div>
                         <div className='w-1/2 h-1/3 flex items-center justify-evenly'>
-                            <Button className='forgot-btn-back px-10' type='button' onClick={ () => {setFormStatus('signin'); formReset.resetFields()} }> Back </Button>
-                            <Button className='forgot-btn px-10' type='button' htmlType='submit'> Submit </Button>
+                            <Button className='forgot-btn-back px-10' type='button' style={{background:ThemeColor.light_color_1}} onClick={ () => {setFormStatus('signin'); formReset.resetFields()} }> Back </Button>
+                            <Button className='forgot-btn px-10' type='button' htmlType='submit' style={{background:ThemeColor.light_color_1}}> Submit </Button>
                         </div>
                     </Form>
                     }

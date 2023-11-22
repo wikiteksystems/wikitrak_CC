@@ -5,6 +5,7 @@ import { UserActions } from '../stores/actions';
 import { ThemeColor, getFullName } from "../utils/constants";
 import { Layout, Menu, Avatar } from 'antd';
 import { Footer } from ".";
+import  "./menu.css"
 const { Sider } = Layout;
 
 const AppMenu2 = ({ activePage, menuList, menuCollapsed }) => {
@@ -16,7 +17,7 @@ const AppMenu2 = ({ activePage, menuList, menuCollapsed }) => {
         <div  className="absolute md:relative z-30 md:z-0">
         <Sider 
         className="h-screen"
-               style={{background:'#B9BDC2',borderRight:'1px solid black'}}
+               style={{background:ThemeColor.light_color_2,borderRight:'1px solid black'}}
             breakpoint="md"
             collapsedWidth={0}
             trigger={null}
@@ -26,7 +27,10 @@ const AppMenu2 = ({ activePage, menuList, menuCollapsed }) => {
             <div className="flex flex-col justify-between h-full">
                 <div className="flex flex-col">
                 { !menuCollapsed &&
-                    <div className="text-[24px] font-medium w-full flex flex-col items-center py-5">WIKITRACK</div>
+                    <div  style={{backgroundColor: "#0F4C75", padding:"15px 0 15px 15px", color:"white", letterSpacing:"2px"}}>
+
+                    <span style={{fontSize: 25}} className="font-bold">WIKITRACK</span>
+                            </div>
                 }
                 { !menuCollapsed &&
                 <div className="w-full flex flex-col items-center py-5">
@@ -43,7 +47,7 @@ const AppMenu2 = ({ activePage, menuList, menuCollapsed }) => {
                     theme="dark"
                     mode="inline"
                     defaultSelectedKeys={[ activePage ? activePage.toString() : '0' ]}
-                    style={{ color: 'black', background: themeColor }}
+                    style={{ color: 'black', background: ThemeColor.light_color_2 }}
                     items={ menuList.map((item, index) => ({
                         key: index,
                         icon: item.icon,

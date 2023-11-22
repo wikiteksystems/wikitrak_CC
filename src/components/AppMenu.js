@@ -5,6 +5,8 @@ import { UserActions } from '../stores/actions';
 import { ThemeColor, getFullName } from "../utils/constants";
 import { Layout, Menu, Avatar } from 'antd';
 import { Footer } from ".";
+import  "./menu.css"
+
 const { Sider } = Layout;
 
 const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
