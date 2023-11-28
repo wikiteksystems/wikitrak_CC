@@ -252,6 +252,38 @@ export const getVehicleGroupList = (userId) => {
     };
 }
 
+export const GET_FORECAST = '[LIVEMAP PAGE] GET_FORECAST';
+
+export const getForecast = () => {
+  const apiUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=18.579306&lon=73.982346&appid=175e97b3a049140934d438044156c3d3';
+
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+
+    try {
+      const response = await fetch(apiUrl);
+      
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data)
+
+      dispatch({
+        type: GET_FORECAST,
+        payload: data,
+      });
+
+      dispatch(setLoading(false));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      dispatch(setLoading(false));
+    }
+  };
+};
+
+  
 
 export const SAVE_VEHICLE = '[LIVEMAP PAGE] SAVE_VEHICLE';
 export const saveVehicle = (isNew, data, vehicle_id) => {

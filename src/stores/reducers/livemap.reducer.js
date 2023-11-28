@@ -20,6 +20,7 @@ const initialState = {
             name: 'Group3'
         }, 
     ],
+    weatherForecast:[]
 };
 
 export const liveMapReducer = (state = initialState, action) => {
@@ -63,6 +64,11 @@ export const liveMapReducer = (state = initialState, action) => {
             return {
                 ...state,
                 vehicleGroupList: action.payload,
+            };
+        case Actions.GET_FORECAST:
+            return {
+                ...state,
+                weatherForecast: action.payload,
             };
         default:
             return state;

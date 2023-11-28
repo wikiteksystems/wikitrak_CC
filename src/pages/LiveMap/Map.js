@@ -6,6 +6,7 @@ import { CarOutlined } from '@ant-design/icons';
 import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import MarkerItem1 from './MapItems/MarkerItem1';
 import moment from 'moment';
+import WeatherForecast from './WeatherForecast';
 const {GMAP_API_KEY} = require("../../utils/constants")
 
 const containerStyle = {
@@ -13,6 +14,7 @@ const containerStyle = {
   height: '100%'
 };
 function Map({locationData,vehicleGroupList,vehicleList }) {
+  console.log(locationData, "our location data")
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: GMAP_API_KEY
@@ -127,6 +129,7 @@ const startblinking = (data) =>{
       }}
     >
 
+      <WeatherForecast center={center} locationData={locationData} />
  
       {locationData.length>0 && locationData.map((item, index) => (
         <Marker
@@ -167,6 +170,7 @@ const startblinking = (data) =>{
            
          <MarkerItem1 item={item} />
           </InfoWindow>
+
 }
 
 

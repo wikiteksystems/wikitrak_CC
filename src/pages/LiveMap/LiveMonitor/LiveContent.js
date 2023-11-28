@@ -61,10 +61,6 @@ import {
   Tooltip,
   Legend
 } from "recharts";
-import { LeftCircleOutlined, MenuOutlined, RightCircleOutlined } from '@ant-design/icons';
-
-import { AppActions, UserActions } from "../../../stores/actions"
-import { ThemeColor } from '../../../utils/constants';
 
 const CardWrapper = styled(Card)(
     ({ theme }) => `
@@ -112,9 +108,6 @@ export default function LiveContent({selectCheckParam,setSelecCheckParam}) {
   const [healthData,setHealthData] = useState([])
   const [emergencyData,setEmergencyData] = useState([])
   const [active,setActive] = useState(false)
-
-  const { login, themeColor, userName } = useSelector( ({User}) => User );
-  const { mainMenuCollapsed, detailMenuCollapsed } = useSelector( ({App}) => App );
 
   const handleChangeActive = (event) =>{
     setLocationData([]);
@@ -392,29 +385,11 @@ const chartOptions = {
   },
 };
 
-const handleMainMenuCollapse = () => {
-  dispatch(AppActions.setMainMenuCollapsed(!mainMenuCollapsed));
-};
-const handleDetailMenuCollapse = () => {
-  dispatch(AppActions.setDetailMenuCollapsed(!detailMenuCollapsed));
-};
 
   return (
      <Box sx={{color:"#fff",display:'flex',flexDirection:"column",gap:"20px",maxHeight:"600px",overflowY:"scroll"}} >
-        <Box sx={{background:ThemeColor.light_color_1,padding:"10px 10px",display:"flex",gap:"30px",alignItems:"center",justifyContent:"end"}}>
-        <div className='hidden md:flex  font-bold text-2xl  justify-between items-center flex-auto'>
-                    { login && (
-                        
-                        <MenuOutlined className="w-6 h-5" style={{fontSize: 20}} onClick={ handleMainMenuCollapse }/>
-                        )
-                    }
-
-                    
-                </div>
-
-
-
-            <Typography sx={{fontSize:{xs:'14px',sm:'18px',md:'22px', flex:"auto"}}}>Telematic Parameters</Typography>
+        <Box sx={{background:"#4071C9",padding:"10px 10px",display:"flex",gap:"30px",alignItems:"center",justifyContent:"center"}}>
+            <Typography sx={{fontSize:{xs:'14px',sm:'18px',md:'22px'}}}>Telematic Parameters</Typography>
             <Box sx={{display:"flex",alignItems:"center",gap:"5px",justifyContent:"center"}}>
                <Typography sx={{fontSize:{xs:'14px',sm:'18px',md:'20px'}}}>Live</Typography>
                 <Switch size='small' checked={active} onChange={(event) => handleChangeActive(event)} />
@@ -435,15 +410,6 @@ const handleDetailMenuCollapse = () => {
             <GridViewTwoToneIcon sx={{color:"#fff",fontSize:{xs:'16px',sm:'18px',md:'20px'}}} />
           </ToggleButton>
         </ToggleButtonGroup>
-        <div className='hidden md:flex    justify-center items-center'>
-                     
-
-                     { detailMenuCollapsed ?
-                     <LeftCircleOutlined className='' style={{fontSize: 30}} onClick={ handleDetailMenuCollapse } />
-                     :
-                     <RightCircleOutlined className='' style={{fontSize: 30}} onClick={ handleDetailMenuCollapse } />
-                     }
-                 </div>
         </Box>
   {!active ?
     <>
@@ -461,8 +427,7 @@ const handleDetailMenuCollapse = () => {
                 color="text.secondary"
                 align="center"
               >
-            {/* We couldn't find any users matching your search criteria */}
-            Select The Parameter.
+                Please Select Parameter
               </Typography>
             </>
           ) : (
@@ -610,8 +575,7 @@ const handleDetailMenuCollapse = () => {
                 color="text.secondary"
                 align="center"
               >
-            {/* We couldn't find any users matching your search criteria */}
-            Select The Parameter
+            We couldn't find any users matching your search criteria
               </Typography>
             </>
           ) : (
@@ -824,8 +788,8 @@ if (item.param_header === 'HBT' ) {
       </Box>
       </>
       :
-       <Box sx={{color:"black",display:"flex",flexDirection:"column",gap:"30px", }}>
-        <Box sx={{display:'flex',gap:'30px',alignItems:"cneter",margin:"25px 15px 10px",justifyContent:"flex-end"}}>
+       <Box sx={{color:"black",display:"flex",flexDirection:"column",gap:"30px"}}>
+        <Box sx={{display:'flex',gap:'30px',alignItems:"cneter",margin:"25px 15px 10px"}}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
          <DatePicker
             value={startDateValue}
@@ -848,15 +812,16 @@ if (item.param_header === 'HBT' ) {
                            value={frequency}
                            variant="outlined"
                          />
-          <div  onClick={() => fetchData('group')}  style={{background:ThemeColor.light_color_2, display:"flex",alignItems:"center",justifyContent:"center",height:"40px",width:'40px',borderRadius:"10px",cursor:"pointer"}}>
+          <div  onClick={() => fetchData('group')}  style={{background:"#4071C9", display:"flex",alignItems:"center",justifyContent:"center",height:"40px",width:'40px',borderRadius:"10px",cursor:"pointer"}}>
           <KeyboardArrowRightIcon  sx={{color:"#fff"}} />
           
           </div>
          </Box>
        
 <Box sx={{display:'flex',flexDirection:"column",gap:"20px",padding:"20px"}}>
-        {selectCheckParam.length===0 &&
-        
+        {selectCheckParam.length===0?
+          <Card>No Result</Card>
+        :
     chartValue.length>0 && chartValue.map((item,index) =>{
     return  (   
        <Card key={index} sx={{margin:"20px",padding:"10px"}}>
