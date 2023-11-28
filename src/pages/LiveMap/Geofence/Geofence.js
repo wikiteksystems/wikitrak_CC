@@ -52,16 +52,30 @@ const Geofence = () => {
         setGeofence({...geofences[activeMenu]});
     }, [geofences, activeMenu]);
 
-    useEffect( () => {
-        if (geofences.length === 0) return;
+    useEffect(() => {
+         
+        if (geofences.length > 0 && geofences[activeMenu] && geofence && geofence.center) {
+            console.log("My geofence", geofence);
+            const { center, radius, type, status } = geofence;
 
-        const { center, radius, type, status } = geofence;
-        const { center: orgCenter, radius: orgRadius, type: orgType, status: orgStatus } = geofences[activeMenu];
+            const { center: orgCenter, radius: orgRadius, type: orgType, status: orgStatus } = geofences[activeMenu];
 
-        if (center.lat !== orgCenter.lat || center.lng !== orgCenter.lng || radius !== orgRadius || type !== orgType || status !== orgStatus)
-            setModified(true)
-        else setModified(false);
-    }, [geofence, geofences, activeMenu]);
+            if (
+                center.lat !== orgCenter.lat ||
+                center.lng !== orgCenter.lng ||
+                radius !== orgRadius ||
+                type !== orgType ||
+                status !== orgStatus
+            ) {
+                setModified(true);
+            } else {
+                setModified(false);
+            }
+        } else {
+            return;
+        }
+    
+}, [geofence, geofences, activeMenu]);
 
     const handleMenuSelect = ({key}) =>{
         const menu = parseInt(key);
