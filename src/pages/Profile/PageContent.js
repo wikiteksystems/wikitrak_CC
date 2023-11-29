@@ -67,7 +67,7 @@ const PageContent = () => {
                     :
                     <Avatar size={100} src={avatar} />
                     }
-                    <div className='w-1/2 h-full flex flex-col justify-center m-10 ml-5' style={{fontSize: 18}}>
+                    <div className='w-1/2 h-full flex flex-col justify-center m-10 ' style={{fontSize: 18}}>
                         <div> Name: { getFullName(userName) } </div>
                         <div> Role: { userRole } </div>
                         <div> Vehicle Count: { vehicleCount } </div>
@@ -104,7 +104,7 @@ const PageContent = () => {
                     </Popconfirm>
                 </div>
             </div>
-            <div className="w-full  h-auto flex flex-wrap items-center justify-evenly  p-5 pt-0">
+            <div className="w-full  h-auto flex  items-center justify-center  p-5 pt-0">
                 { vehicleList.map( (vehicle, index) =>
                     <div key={index} className="vehicle-item m-3">
                         <VehicleItem vehicle={vehicle} />

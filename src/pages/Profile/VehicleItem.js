@@ -15,7 +15,7 @@ const VehicleItem = ({ vehicle }) => {
             <div style={{width: 120}}>
             {/* <CarOutlined /> */}
                 { picture === null ?
-                <CarOutlined size={120} style={{background: ThemeColor.light_color_2, fontSize: 60, color:"white", padding:"20px", borderRadius:"50%"}}> { registration_id[0].toUpperCase() } </CarOutlined>
+                <CarOutlined size={120} style={{background: ThemeColor.light_color_2, fontSize: 60, color:"white", padding:"20px", borderRadius:"50%", marginRight:"10px"}}> { registration_id[0].toUpperCase() } </CarOutlined>
                 :
                 <Avatar size={120} src={picture} />
                 }
