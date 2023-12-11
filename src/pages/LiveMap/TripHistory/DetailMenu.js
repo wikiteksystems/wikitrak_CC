@@ -12,7 +12,8 @@ import moment from "moment";
 import dayjs from "dayjs"
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { TextField,Tooltip } from "@mui/material";
 const { Sider } = Layout;
 
@@ -24,6 +25,10 @@ const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,
     const [searchedMenuList, setSearchedMenuList] = useState([...tripHis]);
     const [startDateValue, setstartDateValue] = useState(dayjs(new moment().toDate()))
     const [endDateValue, setendDateValue] = useState(dayjs(new moment().toDate()))
+    const [value, setValue] = useState([
+        dayjs(new moment().toDate()),
+        dayjs(new moment().toDate()),
+      ]);
 
     const handleTrip = (newValue) =>{
         console.log(newValue)
@@ -31,10 +36,9 @@ const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,
         fetchTripHis(startDateValue,newValue.$d);
     }
     
-    useEffect(() =>{
-        
-        fetchTripHis(startDateValue,endDateValue);
-    },[endDateValue])
+    useEffect(() =>{   
+        fetchTripHis(value[0]?.$d,value[1]?.$d);
+    },[value])
     
     useEffect(() =>{
        setSearchedMenuList([...tripHis])
@@ -80,7 +84,7 @@ const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,
                        
                     </div>
                     <div className="flex items-center ">
-       <LocalizationProvider dateAdapter={AdapterDayjs}>
+       {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
          <DatePicker
             value={startDateValue}
             label='From Date'
@@ -93,7 +97,17 @@ const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,
             onChange={(newValue) =>  setendDateValue(newValue.$d)}
             renderInput={(params) => <TextField {...params} />}
           />
-          </LocalizationProvider>
+          </LocalizationProvider> */}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={['DateRangePicker', 'DateRangePicker']}>
+        <DemoItem  component="DateRangePicker">
+          <DateRangePicker
+            value={value}
+            onChange={(newValue) => setValue(newValue)}
+          />
+        </DemoItem>
+      </DemoContainer>
+    </LocalizationProvider>
                     </div>
 
                     <Menu

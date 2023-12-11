@@ -47,7 +47,8 @@ import { emergencyApi } from '../../../mocks/emergency';
 import { deviceParam } from '../../../constants/deviceConstant';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import moment from "moment"
 import dayjs from "dayjs"
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -102,6 +103,10 @@ export default function LiveContent({selectCheckParam,setSelecCheckParam}) {
   const [paginatedParameters,setPaginatedParameters] = useState({});
   const [startDateValue, setstartDateValue] = useState(dayjs(new moment().toDate()))
   const [endDateValue, setendDateValue] = useState(dayjs(new moment().toDate()))
+  const [value, setValue] = useState([
+  dayjs(new moment().toDate()),
+  dayjs(new moment().toDate()),
+]);
   const [frequency,setFrequency] = useState(5);
 
   // Redux Setup
@@ -307,6 +312,11 @@ const handleViewOrientation = (_event, newValue) => {
   setToggleView(newValue);
 };
 
+const handleChangeDate = (newValue) =>{
+  setstartDateValue(newValue[0].$d) 
+   setendDateValue(newValue[1].$d) 
+    setValue(newValue)
+}
 
 // Graph function
 const graphData = (arrayData,key) =>{
@@ -826,7 +836,7 @@ if (item.param_header === 'HBT' ) {
       :
        <Box sx={{color:"black",display:"flex",flexDirection:"column",gap:"30px",  flex:"auto"}}>
         <Box sx={{display:'flex',gap:'30px',alignItems:"cneter",margin:"25px 15px 10px", justifyContent:"right",}}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
          <DatePicker
             value={startDateValue}
             label='From Date'
@@ -839,7 +849,18 @@ if (item.param_header === 'HBT' ) {
             onChange={(newValue) => setendDateValue(newValue.$d)}
             renderInput={(params) => <TextField {...params} />}
           />
-          </LocalizationProvider>
+          </LocalizationProvider> */}
+
+<LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={['DateRangePicker', 'DateRangePicker']}>
+        <DemoItem  component="DateRangePicker">
+          <DateRangePicker
+            value={value}
+            onChange={(newValue) => handleChangeDate(newValue)}
+          />
+        </DemoItem>
+      </DemoContainer>
+    </LocalizationProvider>
                        <TextField
                            label='Frequency'
                            name="frequency"
