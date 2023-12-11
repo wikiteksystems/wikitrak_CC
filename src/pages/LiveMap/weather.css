@@ -1,0 +1,13 @@
+.icon {
+    
+    stroke-width: 2;
+    transition: fill 0.3s ease;
+    transform-origin: center; 
+    fill: #22092C;
+  }
+  
+  .icon:hover {
+    fill: #22092C;
+    transform: scale(1.2); /* Increase the size by 20% on hover */
+  }
+  
