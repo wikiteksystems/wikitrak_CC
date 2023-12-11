@@ -20,6 +20,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Fab from '@mui/material/Fab';
 import AppMenu2 from "../../../components/Appmneu2";
 import LocationOnSharpIcon from '@mui/icons-material/LocationOnSharp';
+import axios from "axios";
 
 const { Content  } = Layout;
 
@@ -69,6 +70,34 @@ useEffect(() =>{
        console.log(selectCheckParam)
 },[selectCheckParam])
 
+const [startAddress,setStartAddress] = useState()
+const [endAddress,setEndAddress] = useState()
+
+const getStartAddress = async (lat,lng) =>{
+  try{
+  let result = await axios(`${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`)
+  console.log(result?.data)
+    setStartAddress(result.data?.data)
+  } catch(err){
+    console.log(err)
+  }
+}
+
+const getEndAddress = async (lat,lng) =>{
+    try{
+    let result = await axios(`${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`)
+    console.log(result?.data)
+      setEndAddress(result.data?.data)
+    } catch(err){
+      console.log(err)
+    }
+  }
+
+useEffect(() =>{
+    getStartAddress(tripHis[0]?.data[0]?.lat,tripHis[0]?.data[0]?.lng)
+    getEndAddress(tripHis[0]?.data[tripHis[0]?.data.length-1]?.lat,tripHis[0]?.data[tripHis[0]?.data.length-1]?.lng)
+},[tripHis])
+
 const StyledFab = styled(Fab)({
     position: 'absolute',
     zIndex: 1,
@@ -109,7 +138,7 @@ const StyledFab = styled(Fab)({
                     </Content>
                 </Layout>
 
-                <DetailMenu setHarshBreak={setHarshBreak} harshBreak={harshBreak} setAcceleration={setAcceleration} acceleration={acceleration} setSpeed={setSpeed} speed={speed} fetchTripHis={fetchTripHis} tripHis={tripHis}   vehicle={vehicle} menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} />
+                <DetailMenu setHarshBreak={setHarshBreak} harshBreak={harshBreak} setAcceleration={setAcceleration} acceleration={acceleration} setSpeed={setSpeed} speed={speed} fetchTripHis={fetchTripHis} tripHis={tripHis}   vehicle={vehicle} menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} startAddress={startAddress} endAddress={endAddress} />
             </Layout>
 
             <div className="hidden">

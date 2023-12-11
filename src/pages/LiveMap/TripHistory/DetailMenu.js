@@ -18,7 +18,7 @@ const { Sider } = Layout;
 
 
 
-const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,setSpeed, speed, fetchTripHis,tripHis,vehicle,menuList, menuCollapsed,setSelecCheckParam }) => {
+const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,setSpeed, speed, fetchTripHis,tripHis,vehicle,menuList, menuCollapsed,setSelecCheckParam,startAddress,endAddress }) => {
     const history = useHistory();
     const { themeColor } = useSelector( ({User}) => User );
     const [searchedMenuList, setSearchedMenuList] = useState([...tripHis]);
@@ -108,7 +108,7 @@ const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,
                             key: index,
                             label:
                                 <div className="w-full flex justify-between items-center">
-                                    <span className="w-5/6 overflow-hidden" style={{textOverflow: 'ellipsis'}} >{item?.data[0]?.lat}, {item?.data[0]?.lng} to {item?.data[item?.data.length-1]?.lat}, {item?.data[item?.data.length-1]?.lng}</span>
+                                    <span className="w-5/6 overflow-hidden" style={{textOverflow: 'ellipsis'}} >{startAddress?.locality},{startAddress?.city}  to {endAddress?.locality}, {startAddress?.city}</span>
                                     <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'select-one', index) } />
                                 </div>
                             })

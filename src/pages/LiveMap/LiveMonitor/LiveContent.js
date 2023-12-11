@@ -41,6 +41,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { LiveMapActions } from '../../../stores/actions';
 import { loginApi } from '../../../mocks/login';
 import { locationsApi } from '../../../mocks/location';
+import LineCharts from './LineCharts';
 import { healthsApi } from '../../../mocks/health';
 import { emergencyApi } from '../../../mocks/emergency';
 import { deviceParam } from '../../../constants/deviceConstant';
@@ -244,24 +245,27 @@ for(let k of uniqueArrayOfObjects){
     let innerArr = [];
     console.log(location);
 
+    let ab = "imei";
+
    for(let k of selectCheckParam){
+    console.log(k?.label);
     innerArr=[]
        if(k?.param_header==="LGN"){
+        
             for(let innerK of login){
               for(let i of innerK?.data){
                innerArr.push({
-                x: dayjs(i?.createdAt).format('DD-MM'),
-                y: i[k?.label],
+                time: dayjs(i?.createdAt).format('YYYY-MM-DD'),
+                value: i[k?.label],
                })
               }
             }
        } else  if(k?.param_header==="NRM"){
         for(let innerK of location){
           for(let i of innerK?.data){
-          console.log(i)
           innerArr.push({
-           x: new Date(i?.createdAt).getTime(),
-           y: i[k?.label],
+           time: dayjs(i?.createdAt).format('YYYY-MM-DD'),
+           value: i[k?.label],
           })
         }
        }
@@ -858,7 +862,7 @@ if (item.param_header === 'HBT' ) {
     return  (   
        <Card key={index} sx={{margin:"20px",padding:"10px"}}>
           <h2>{item.label}</h2>
-      <ReactApexChart
+      {/* <ReactApexChart
         options={chartOptions}
         series={[
           {
@@ -868,7 +872,8 @@ if (item.param_header === 'HBT' ) {
         ]}
         type="line"
         height={300}
-      />
+      /> */}
+      <LineCharts data={item.data} />
     {/* <LineChart width={1000} height={250} data={item.data}
   margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
   <CartesianGrid strokeDasharray="3 3" />
