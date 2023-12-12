@@ -1,0 +1,15 @@
+.icon-animation{
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-2px);
+  }
+  70% {
+    transform: translateY(-7px);
+  }
+}
