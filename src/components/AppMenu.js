@@ -40,8 +40,8 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
                     :
                     <Avatar size={100} src={avatar} />
                     }
-                    <div className="font-bold" style={{fontSize: 20}}> {getFullName(userName)} </div>
-                    <div style={{fontSize: 20}}> {userRole} </div>
+                    <div className="font-bold" style={{fontSize: 20, color:"white"}}> {`${userName.first.charAt(0).toUpperCase() + userName.first.slice(1)} ${userName.last.charAt(0).toUpperCase() + userName.last.slice(1)}`} </div>
+                    <div style={{fontSize: 20, color:"white"}}> {userRole.charAt(0).toUpperCase() + userRole.slice(1)}  </div>
                 </div> }
 
                 <Menu

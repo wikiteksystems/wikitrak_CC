@@ -164,7 +164,6 @@ const startblinking = (data) =>{
               lng: parseFloat(item?.latestDocument?.lng),
             }}
             onCloseClick={() => setSelectedMarker(null)}
-            options={{ maxWidth: 200 }}
             visible={selectedMarker === item.id}
           >
            

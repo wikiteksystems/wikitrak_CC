@@ -6,7 +6,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Menu, Tooltip } from 'antd';
 
 import { GMAP_API_KEY } from '../../../utils/constants';
-import '../Map.css';
+import '../Map.css'; 
 import { mapContextMenuItems } from '../../../utils/liveMapUtils';
 
 const MapContainer = ({ google, location, zoomLevel, editable, geofence, setGeofence, setCircleSelected, geofenceType }) => {

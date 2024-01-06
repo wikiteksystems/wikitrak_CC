@@ -308,8 +308,8 @@ console.log(data)
                 <>
                     <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
                         <LeftCircleOutlined className='px-2' style={{fontSize: 20, color:"white"}} onClick={ () => history.goBack() } />
-                        <Header title={'Select Parameters'} style={{paddingInline: 0}} />
-                        <PlusCircleOutlined className='pr-2' style={{fontSize: 20}} onClick={ () => handleClick('add-param') } />
+                        <Header title={'Select Parameters'} style={{paddingInline: 0, fontSize: 18}} />
+                        <PlusCircleOutlined className='pr-2' style={{fontSize: 20, color:'white'}} onClick={ () => handleClick('add-param') } />
                     </div>
                     <div className="flex items-center m-1">
                         <Input className='w-5/6' placeholder={'Search'} style={{marginRight: 8}} value={searchText} onChange={e => setSearchText(e.target.value)} />

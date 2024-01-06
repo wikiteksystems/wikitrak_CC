@@ -217,7 +217,7 @@ const Geofence = () => {
                             <div className="w-full h-1/3 flex flex-col justify-center items-center">
                                 <Button
                                     className="w-1/2 text-white"
-                                    style={{background: matchColor(themeColor), border: '1px solid ' + matchColor(themeColor)}}
+                                    style={{background: ThemeColor.light_color_2, border: '1px solid ' + ThemeColor.light_color_2, color: 'white'}}
                                     hidden={!editable && circleSelected}
                                     onClick={handleSubmit}
                                     disabled={!modified}

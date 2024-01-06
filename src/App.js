@@ -4,7 +4,7 @@ import { Redirect, Switch, Route, BrowserRouter as Router } from "react-router-d
 import LoadingBar from 'react-top-loading-bar';
 
 import { RouteGuard, history } from './routes';
-import { Login, LiveMap, Dota, Geofence, LiveMonitor, FirmwareUpdate, Profile, FotaCampaign, DC } from './pages';
+import { Login, LiveMap, Dota, Geofence, LiveMonitor, FirmwareUpdate, Profile, FotaCampaign, DC, Dashboard } from './pages';
 import { setAuthToken } from './utils';
 
 import { NotificationContainer } from 'react-notifications';
@@ -15,21 +15,21 @@ import TripHistory from './pages/LiveMap/TripHistory/TripHistory';
 
 function App() {
     const dispatch = useDispatch();
-    const {login, themeColor} = useSelector( ({User}) => User );
-    const {loading} = useSelector( ({App}) => App );
+    const { login, themeColor } = useSelector(({ User }) => User);
+    const { loading } = useSelector(({ App }) => App);
     const loaderRef = useRef(null);
 
-    useEffect( () => {
+    useEffect(() => {
         if (loading)
             loaderRef.current.continuousStart();
         else loaderRef.current.complete();
     }, [loading]);
 
-    useEffect( () => {
+    useEffect(() => {
         const token = JSON.parse(localStorage.getItem("token"));
         if (token) {
             setAuthToken(token.access);
-            dispatch( UserActions.loginUserByToken(token) )
+            dispatch(UserActions.loginUserByToken(token))
         }
     }, [dispatch, login, themeColor]);
 
@@ -44,9 +44,10 @@ function App() {
                 loaderSpeed={1500}
             />
 
-            <div style={{filter: loading ? 'blur(2px)':'none', transition: 'filter 0.2s'}}>
+            <div style={{ filter: loading ? 'blur(2px)' : 'none', transition: 'filter 0.2s' }}>
                 <Router history={history}>
                     <Switch>
+                        <RouteGuard path="/dashboard" component={Dashboard} />
                         <RouteGuard path="/livemap/firmware_update" component={FirmwareUpdate} />
                         <RouteGuard path="/livemap/live_monitor" component={LiveMonitor} />
                         <RouteGuard path="/livemap/trip_history" component={TripHistory} />
@@ -57,7 +58,7 @@ function App() {
                         <RouteGuard path="/fota_campaign" component={FotaCampaign} />
                         <RouteGuard path="/profile" component={Profile} />
                         <Route path="/login" component={Login} />
-                        <Route exact path='/' render={ () => <Redirect to='/login' />} />
+                        <Route exact path='/' render={() => <Redirect to='/login' />} />
                         <Redirect to="/login" />
                     </Switch>
                 </Router>
