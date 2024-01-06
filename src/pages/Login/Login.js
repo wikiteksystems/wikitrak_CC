@@ -43,7 +43,8 @@ const Login = () => {
     useEffect( () => {
         if (login) {
             dispatch(UserActions.clearMsg());
-            history.push('/livemap');
+            // history.push('/livemap');
+            history.push('/dashboard');
         }
         else
             history.push('/login');

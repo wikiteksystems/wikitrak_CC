@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react';
+
 import './constants.css'
 
 export const GMAP_API_KEY = process.env.REACT_APP_GMAP_API_KEY;
@@ -30,12 +31,33 @@ export const loginCarousels = [
     }
 ];
 
+// {************************************************************************************************
+//     key: 0,
+//     label: 'Live Map',
+//     icon: (
+//         <div className="icon-animation">
+//             <Icon icon="fa6-solid:map-location-dot" width={30} height={30} color='#fff' />
+//         </div>
+//     ),
+//     link: '/livemap'
+// } For Animation class**************
+
 export const AppMenuList = [
+    {
+       
+        label: 'Dashboard',
+        icon: (
+            <div >
+                <Icon icon="ri:dashboard-fill" width={30} height={30} color='#fff' />
+            </div>
+        ),
+        link: '/dashboard'
+    },
     {
         key: 0,
         label: 'Live Map',
         icon: (
-            <div className="icon-animation">
+            <div >
                 <Icon icon="fa6-solid:map-location-dot" width={30} height={30} color='#fff' />
             </div>
         ),
@@ -43,15 +65,15 @@ export const AppMenuList = [
     }, {
         key: 1,
         label: 'Reports',
-        icon: 
-                <Icon icon="mdi:report-line-shimmer" width={30} height={30} color='#fff' />,
-            
+        icon:
+            <Icon icon="mdi:report-line-shimmer" width={30} height={30} color='#fff' />,
+
         link: '/reports'
     }, {
         key: 3,
         label: 'Profile',
         icon: (
-            <div className="icon-animation">
+            <div >
                 <Icon icon="basil:user-solid" width={30} height={30} color='#fff' />
             </div>
         ),
@@ -59,9 +81,9 @@ export const AppMenuList = [
     }, {
         key: 4,
         label: 'Log Out',
-        icon: 
-                <Icon icon="ant-design:logout-outlined" width={30} height={30} color='#fff' />,
-            
+        icon:
+            <Icon icon="ant-design:logout-outlined" width={30} height={30} color='#fff' />,
+
         link: '/logout'
     }
 ];

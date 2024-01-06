@@ -418,135 +418,101 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
 
   return (
     <Box sx={{ color: "#fff", display: 'flex', flexDirection: "column", gap: "20px", maxHeight: "600px", overflowY: "scroll" }} >
-      <Box sx={{ background: ThemeColor.light_color_1, padding: "10px 10px", display: "flex", gap: "30px", alignItems: "center", justifyContent: "space-between" }}>
-        <div className='hidden md:flex  font-bold text-2xl  justify-between items-center' style={{ flex: "auto" }}>
+      <Box sx={{ background: ThemeColor.light_color_1, padding: "10px 10px", display: "flex", gap: "30px", alignItems: "center",textAlign: "center", justifyContent: "space-between" }}>
+        <div className='hidden md:flex  font-bold text-2xl  justify-between items-center'>
           {login && (
-
             <MenuOutlined className="w-6 h-5" style={{ fontSize: 20, }} onClick={handleMainMenuCollapse} />
           )
           }
-
-
         </div>
-        <Typography sx={{ fontSize: { xs: '14px', sm: '18px', md: '22px' }}}>Telematic Parameter</Typography>
+        <Typography sx={{ fontSize: { xs: '14px', sm: '18px', md: '22px',  justifyContent: "center", textAlign: "center", flex: "auto" } }}>Telematic Parameter</Typography>
 
         <div className='hidden md:flex    justify-center items-center'>
           {detailMenuCollapsed ? (
             <LeftCircleOutlined className='' style={{ fontSize: 30 }} onClick={handleDetailMenuCollapse} />
           ) : (
             <RightCircleOutlined className='' style={{ fontSize: 30 }} onClick={handleDetailMenuCollapse} />
-  )}
+          )}
         </div>
       </Box>
-
-
-
-
-
-
-      
-
-
-
-
-
-
 
 
 
 
 
       <div className='d-flex' style={{ display: 'flex' }}>
-      {/* Your first Box content */}
-      <Box sx={{ padding: "5px 5px", display: "flex", gap: '10px', alignItems: "center" }}>
-        <div style={{ display: 'flex', alignItems: 'center', margin: "3px 0px 0px 10px" }}>
-          <Typography sx={{ fontSize: { xs: '14px', sm: '18px', md: '20px' }, color: 'black', marginRight: '5px' }}>Live</Typography>
-          <Switch size='small' checked={active} onChange={(event) => handleChangeActive(event)} />
-          <Typography sx={{ fontSize: { xs: '14px', sm: '18px', md: '20px', color: 'black', marginRight: '5px'} }}>History</Typography>
-        </div>
-    
-        <div style={{ display: 'flex', alignItems: "center", gap: '10px'}}>
-          <ToggleButtonGroup
-            sx={{
-              mt: { xs: 2, sm: 0 }
-            }}
-            value={toggleView}
-            exclusive
-            onChange={handleViewOrientation}
-          >
-            <ToggleButton disableRipple value="table_view">
-              <TableRowsTwoToneIcon sx={{ fontSize: { xs: '16px', sm: '18px', md: '20px' }, color: 'black' }} />
-            </ToggleButton>
-            <ToggleButton disableRipple value="grid_view">
-              <GridViewTwoToneIcon sx={{ color: "#fff", fontSize: { xs: '16px', sm: '18px', md: '20px' }, color: 'white', background: "black" }} />
-            </ToggleButton>
-          </ToggleButtonGroup>
-          <Button style={{ border: "1px solid black", padding: "5px", margin: "5px" }} onClick={() => fetchData('one')}>
-            <RefreshIcon style={{ color: "black" }} />
-          </Button>
-        </div>
-      </Box>
-    
-      {/* Your second Box content */}
-      {active && (
-      <Box sx={{ display: 'flex', gap: '10px', alignItems: "center", margin: "15px 0px 5px", justifyContent: "flex-end" }}>
-      
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            value={startDateValue}
-            label='From Date'
-            onChange={(newValue) => setstartDateValue(newValue.$d)}
-            renderInput={(params) => <TextField {...params} />}
-          />
-          <DatePicker
-            value={endDateValue}
-            label='End Date'
-            onChange={(newValue) => setendDateValue(newValue.$d)}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
-        
-        <TextField
-          label='Frequency'
-          name="frequency"
-          onChange={(e) => setFrequency(e.target.value)}
-          type="number"
-          value={frequency}
-          variant="outlined"
-        />
-        <div onClick={() => fetchData('group')} style={{ background: "#4071C9", display: "flex", alignItems: "center", justifyContent: "center", height: "40px", width: '40px', borderRadius: "10px", cursor: "pointer" }}>
-          <KeyboardArrowRightIcon sx={{ color: "#fff" }} />
-        </div>
-        
-      </Box>
-      )}
-    </div>
-    
+        {/* Your first Box content */}
+        <Box sx={{ padding: "5px 5px", display: "flex", gap: '10px', alignItems: "center" }}>
+          <div style={{ display: 'flex', alignItems: 'center', margin: "3px 0px 0px 10px" }}>
+            <Typography sx={{ fontSize: { xs: '14px', sm: '18px', md: '20px' }, color: 'black', marginRight: '5px' }}>Live</Typography>
+            <Switch size='small' checked={active} onChange={(event) => handleChangeActive(event)} />
+            <Typography sx={{ fontSize: { xs: '14px', sm: '18px', md: '20px', color: 'black', marginRight: '5px' } }}>History</Typography>
+          </div>
 
-    
-      
+          <div style={{ display: 'flex', alignItems: "center", gap: '10px' }}>
+            <ToggleButtonGroup
+              sx={{
+                mt: { xs: 2, sm: 0 }
+              }}
+              value={toggleView}
+              exclusive
+              onChange={handleViewOrientation}
+            >
+              <ToggleButton disableRipple value="table_view">
+                <TableRowsTwoToneIcon sx={{ fontSize: { xs: '16px', sm: '18px', md: '20px' }, color: 'black' }} />
+              </ToggleButton>
+              <ToggleButton disableRipple value="grid_view">
+                <GridViewTwoToneIcon sx={{ color: "#fff", fontSize: { xs: '16px', sm: '18px', md: '20px' }, color: 'white', background: "black" }} />
+              </ToggleButton>
+            </ToggleButtonGroup>
+            <Button style={{ border: "1px solid black", padding: "5px", margin: "5px" }} onClick={() => fetchData('one')}>
+              <RefreshIcon style={{ color: "black" }} />
+            </Button>
+          </div>
+        </Box>
+
+        {/* Your second Box content */}
+        {active && (
+          <Box sx={{ display: 'flex', gap: '10px', alignItems: "center", margin: "15px 0px 5px", justifyContent: "flex-end" }}>
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                value={startDateValue}
+                label='From Date'
+                onChange={(newValue) => setstartDateValue(newValue.$d)}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <DatePicker
+                value={endDateValue}
+                label='End Date'
+                onChange={(newValue) => setendDateValue(newValue.$d)}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+
+            <TextField
+              label='Frequency'
+              name="frequency"
+              onChange={(e) => setFrequency(e.target.value)}
+              type="number"
+              value={frequency}
+              variant="outlined"
+            />
+            <div onClick={() => fetchData('group')} style={{ background: "#4071C9", display: "flex", alignItems: "center", justifyContent: "center", height: "40px", width: '40px', borderRadius: "10px", cursor: "pointer" }}>
+              <KeyboardArrowRightIcon sx={{ color: "#fff" }} />
+            </div>
+
+          </Box>
+        )}
+      </div>
 
 
-
-
-
-
-
-
-    
-    
-    
-      
-
-
-
-      
 
       {!active ?
         <>
           <Box>
             {toggleView === "table_view" &&
-              (<Card>
+              (<Card style={{marginTop:'250px'}}>
                 {selectCheckParam.length === 0 ? (
                   <>
                     <Typography
@@ -922,7 +888,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
         </>
         :
         <Box sx={{ color: "black", display: "flex", flexDirection: "column", gap: "30px", flex: "auto" }}>
-          
+
           {
             loading ? <Spin tip="loading..." size="large" style={{ marginTop: "5%" }} /> :
 
