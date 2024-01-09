@@ -345,13 +345,13 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
                         </div>
                     </div>
 
-                    { Vehi ? (<Button className=" flex gap-5 text-white" style={{margin:'20px auto 0 27px', padding:'0 91px 0 70px', color:"black", transition: 'background 0.3s ease'}}  onClick={() => {
+                    { Vehi ? (<Button className=" flex gap-5 text-black" style={{margin:'20px auto 0 27px', padding:'0 91px 0 70px', color:"black", transition: 'background 0.3s ease'}}  onClick={() => {
                         setVehiDetail(!Vehi)
                         console.log(Vehi)
                     }}>
                         <ToggleOnIcon />
                         <span className="ps-2">Features</span></Button>)
-                    : (<Button className=" flex gap-5 text-white" style={{margin:'20px auto 0 27px', padding:'0 91px 0 30px', color:"black", transition: 'background 0.3s ease'}}   onClick={() => {
+                    : (<Button className=" flex gap-5 text-black" style={{margin:'20px auto 0 27px', padding:'0 91px 0 30px', color:"black", transition: 'background 0.3s ease'}}   onClick={() => {
                         setVehiDetail(!Vehi)
                         console.log(Vehi)
                     }}>
