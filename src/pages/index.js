@@ -7,3 +7,5 @@ export { FirmwareUpdate } from './FirmwareUpdate';
 export { Profile } from './Profile';
 export { FotaCampaign } from './FotaCampaign';
 export { DC } from './LiveMap/DC';
+
+export {Dashboard } from './Dashboard/index';

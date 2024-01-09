@@ -1,3 +1,10 @@
+import TimelineIcon from '@mui/icons-material/Timeline';
+import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined';
+import CastSharpIcon from '@mui/icons-material/CastSharp';
+import BrowserUpdatedSharpIcon from '@mui/icons-material/BrowserUpdatedSharp';
+import PhonelinkSetupSharpIcon from '@mui/icons-material/PhonelinkSetupSharp';
+import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
+
 export const vehicleDetailMenuItems = [
     {
         key: 0,
@@ -73,30 +80,36 @@ export const vehicleDetailMenuItems_addin = [
         key: 13,
         type: 'link',
         label: 'Trip History',
+        icon: <TimelineIcon />,
         link: '/livemap/trip_history'
     }, {
         key: 14,
         type: 'link',
         label: 'Geofence',
+        icon: <PinDropOutlinedIcon />,
         link: '/livemap/geofence'
     }, {
         key: 15,
         type: 'link',
         label: 'Live Monitor',
+        icon: <CastSharpIcon / >,
         link: '/livemap/live_monitor'
     },{
         key: 17,
         type: 'link',
         label: 'Device Firmware Update',
+        icon: <BrowserUpdatedSharpIcon />,
         link: '/livemap/firmware_update'
     }, {
         key: 18,
         type: 'link',
         label: 'Device Configuration',
+        icon: <PhonelinkSetupSharpIcon />,
         link: '/livemap/device_config'
     }, {
         key: 19,
         type: 'button-delete',
+        icon: <DeleteSweepOutlinedIcon />,
         label: 'Delete',
     }
 ]

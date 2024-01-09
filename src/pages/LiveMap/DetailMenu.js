@@ -8,6 +8,9 @@ import { LiveMapUtils } from "../../utils";
 import { LiveMapActions } from "../../stores/actions";
 import Battery90Icon from '@mui/icons-material/Battery90';
 import NetworkCellIcon from '@mui/icons-material/NetworkCell';
+import ToggleOffIcon from '@mui/icons-material/ToggleOff';
+import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import { ThemeColor } from "../../utils/constants";
 
 import { Layout, Menu, Input, Button, Checkbox, Popconfirm, Select, ColorPicker, Radio } from 'antd';
 import { matchColor } from "../../utils/constants";
@@ -36,6 +39,7 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
 
     const [newVehicle, setNewVehicle] = useState(false);
     const [newVehicleGroup, setNewVehicleGroup] = useState(false);
+    const [Vehi, setVehiDetail] = useState(false);
     const [variantMode, setVariantMode] = useState('variant');
 
     useEffect( () => {
@@ -333,25 +337,40 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
                         <LeftCircleOutlined className='px-2' style={{fontSize: 20, color:'white'}} onClick={ () => handleClick('vehicle_list') }/>
                         <Header title={'Vehicle Detail'} style={{fontSize: 19, paddingInline: 0,  }} />
                         <div className="h-full flex items-center cursor-pointer pr-2" onClick={ () => handleClick(vehicleDetailEditable ? 'save-detail' : 'edit-detail') }>
-                            { vehicleDetailEditable ?
+                            { vehicleDetailEditable && Vehi ? (
                             <Icon icon="akar-icons:save" width="22" height="22" color="white"/>
-                            :
-                            <Icon icon="fa:edit" width="22" height="22" color="white" /> }
+                            ) : (
+                           Vehi && <Icon icon="fa:edit" width="22" height="22" color="white" /> 
+                            )}
                         </div>
                     </div>
+
+                    { Vehi ? (<Button className=" flex gap-5 text-white" style={{margin:'20px auto 0 27px', padding:'0 91px 0 70px', color:"black", transition: 'background 0.3s ease'}}  onClick={() => {
+                        setVehiDetail(!Vehi)
+                        console.log(Vehi)
+                    }}>
+                        <ToggleOnIcon />
+                        <span className="ps-2">Features</span></Button>)
+                    : (<Button className=" flex gap-5 text-white" style={{margin:'20px auto 0 27px', padding:'0 91px 0 30px', color:"black", transition: 'background 0.3s ease'}}   onClick={() => {
+                        setVehiDetail(!Vehi)
+                        console.log(Vehi)
+                    }}>
+                        <ToggleOffIcon />
+                       <span className="ps-2"> Vehicle Details</span></Button>)
+                    }
 
                     <Menu
                         className="overflow-hidden overflow-y-auto md:flex-grow"
                         theme="light"
                         mode="inline"
-                        
                         style={{ color: 'black', backgroundColor: 'white',  }}
                         selectable={false}
-                        items={ (newVehicle ? 
-                            LiveMapUtils.vehicleDetailMenuItems 
-                            : 
-                            [...LiveMapUtils.vehicleDetailMenuItems, ...LiveMapUtils.vehicleDetailMenuItems_addin]
-                            ).map((item, index) => ({
+                        items={[
+                        
+                            ...(Vehi ? LiveMapUtils.vehicleDetailMenuItems :  LiveMapUtils.vehicleDetailMenuItems_addin)
+                        ]
+                            .filter(item => item.type !== 'input' || item.keyName !== 'user') // Exclude user detail inputs
+                            .map((item, index) => ({
 
                             key: index,
                             label: item.type === 'input' ? (
@@ -389,11 +408,11 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
                                     cancelText="No"
                                     disabled={newVehicle}
                                 >
-                                    <Button className='w-full' danger disabled={newVehicle}> {item.label} </Button>
+                                    <Button className='w-full flex gap-5' danger disabled={newVehicle}><div>{item.icon}</div> {item.label} </Button>
                                 </Popconfirm>
                             ) : item.type === 'link' ? (
-                                <Button className="w-full">
-                                    <Link to={item.link}> {item.label} </Link>
+                                <Button className="w-full flex gap-5"> 
+                                    <div classNaame="">{item.icon} </div><Link to={item.link}>{item.label} </Link>
                                 </Button>
                             ) : item.type === 'dropdown' ? (
                                 <>
@@ -440,17 +459,17 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
                     { !vehicleGroupDetailVisible ?
                     <>
                         <Header title={'Vehicle Group List'} classes={'w-full'} style={{fontSize: 20}} />
-                        <PlusCircleOutlined className='cursor-pointer' style={{fontSize: 18, position: 'absolute', right: 10}} onClick={ () => handleClick('add-vehicle-group') } />
+                        <PlusCircleOutlined className='cursor-pointer' style={{fontSize: 18, position: 'absolute', right: 10, color: 'white'}} onClick={ () => handleClick('add-vehicle-group') } />
                     </>
                     :
                     <>
-                        <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ () => handleClick('vehicle_group_list') }/>
+                        <LeftCircleOutlined className='px-2' style={{fontSize: 20, color:'white'}} onClick={ () => handleClick('vehicle_group_list') }/>
                         <Header title={'Vehicle Group Detail'} style={{fontSize: 19, paddingInline: 0}} />
                         <div className="h-full flex items-center cursor-pointer pr-2" onClick={ () => handleClick(vehicleGroupDetailEditable ? 'save-group-detail' : 'edit-group-detail') }>
                             { vehicleGroupDetailEditable ?
                             <Icon icon="akar-icons:save" width="22" height="22" />
                             :
-                            <Icon icon="fa:edit" width="22" height="22" /> }
+                            <Icon icon="fa:edit" width="22" height="22" color="white" /> }
                         </div>
                     </> }
                     </div>
@@ -502,10 +521,10 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
 
                 <Footer style={{background: matchColor(themeColor), height: 40}} classes={'justify-evenly'}>
                     <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={ () => handleClick('vehicle_list') } style={!vehicleGroupVisible ? {filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2} : {}}>
-                        <Icon icon="ic:round-directions-car" width="25" height="25" color="white" />
+                    <Icon icon="ic:round-directions-car" width="35" height="25" />
                     </Button>
                     <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={ () => handleClick('vehicle_group') } style={vehicleGroupVisible ? {filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2} : {}}>
-                        <Icon icon="mdi:car-multiple" width="25" hegith="25" color="white" />
+                    <Icon icon="mdi:car-multiple" width="30" hegith="25"/>
                     </Button>
                 </Footer>
             </div>
