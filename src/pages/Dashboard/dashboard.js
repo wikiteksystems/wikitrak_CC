@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { AppMenu, Navbar, Header, Footer } from "../../components";
-import { AppMenuList, ThemeColor } from "../../utils/constants";
+import { AppMenuList, ThemeColor ,API_VEHICLE_URL} from "../../utils/constants";
 import { LiveMapUtils } from "../../utils";
 import { LiveMapActions } from "../../stores/actions"
 // import { Dashboard, DetailMenu, MapSection } from "./";
@@ -21,6 +21,8 @@ import Fab from '@mui/material/Fab';
 import { AppActions, UserActions } from '../../stores/actions';
 import AppMenu2 from "../../components/Appmneu2";
 import LocationOnSharpIcon from '@mui/icons-material/LocationOnSharp';
+import axios from "axios";
+
 
 // Socket Io
 import { socket } from "../../services/Socket";
@@ -33,11 +35,51 @@ const Dashboard = () => {
     const { vehicleList, vehicleGroupList } = useSelector(({ LiveMap }) => LiveMap);
     const { mainMenuCollapsed, detailMenuCollapsed } = useSelector(({ App }) => App);
     const [locationData, setLocationData] = useState([]);
+    const [onlineDevices, setOnlineDevices] = useState(0);
+    const [vinDataArray, setVinDataArray] = useState([]);
+    const [imeiList, setImeiList] = useState([]);
 
     useEffect(() => {
         dispatch(LiveMapActions.getVehicleList(userId));
         dispatch(LiveMapActions.getOEMList());
         dispatch(LiveMapActions.getVehicleGroupList(userId));
+        axios.get(`http://139.59.37.47:3031/api/vehicle/status`)
+        .then(response => {
+          const onlineDevicesCount = response.data['onlineDevices'];
+          setOnlineDevices(onlineDevicesCount);
+          setImeiList(response.data['imeiList']);
+  
+          // Fetch vehicle data for each IMEI
+          const promises = response.data['imeiList'].map(imei => {
+            return axios.get(`${API_VEHICLE_URL}/list/?imei=${imei}`)
+              .then(vehicleResponse => {
+                // Check if the correct mac_id is present in the imei array
+                const vehicle = vehicleResponse.data.results.find(v => v.imei.some(i => i.mac_id === imei));
+  
+                // Extract the VIN data from the vehicle response
+                const vinData = vehicle?.vin || 'Null';
+                return vinData;
+              })
+              .catch(error => {
+                console.error(`Error fetching vehicle data for IMEI ${imei}:`, error);
+                // Return 'Null' in case of an error
+                return 'Null';
+              });
+          });
+  
+          // Wait for all promises to resolve
+          Promise.all(promises)
+            .then(vinDataArray => {
+              // Now, vinDataArray contains the VIN data for each IMEI
+              setVinDataArray(vinDataArray);
+            })
+            .catch(error => {
+              console.error('Error fetching VIN data for IMEIs:', error);
+            });
+        })
+        .catch(error => {
+          console.error('Error fetching online devices:', error);
+        });
 
     }, [dispatch, userId]);
 
@@ -49,7 +91,7 @@ const Dashboard = () => {
                 imei.push(i?.mac_id);
             }
         }
-        let data = { imei, type: "one" }
+        let data = { imei, type: "info" }
         let result = await locationsApi.getImeiToReg(data);
         console.log(result);
         if (result) {
@@ -126,7 +168,7 @@ const Dashboard = () => {
                             }}
                         >
                             <h1 className="text-success" style={{ fontSize: '54px', textAlign: 'center' }}>
-                                {vehicleList.length}
+                                {onlineDevices}
                             </h1>
                         </Card>
                         <Card
@@ -138,7 +180,7 @@ const Dashboard = () => {
                             }}
                         >
                             <h1  className="text-danger" style={{ fontSize: '54px', textAlign: 'center' }}>
-                                {vehicleList.length}
+                                {vehicleList.length - onlineDevices}
                             </h1>
                         </Card>
                     </Space>
@@ -175,3 +217,4 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
+

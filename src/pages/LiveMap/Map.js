@@ -230,15 +230,16 @@ const containerStyle = {
   width: '100%',
   height: '100%'
 };
-function Map({ locationData, vehicleGroupList, vehicleList, gtLocation }) {
-  // console.log(gtLocation.lat, "gtLocation")
-  console.log(locationData, "our location data")
+function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi ,gtLocation}) {
+  // console.log(gtVehi, "gtLocation map component")
+  // console.log(locationData, "our location data")
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: GMAP_API_KEY
   })
 
   const [selectedMarker, setSelectedMarker] = useState(null);
+  
 
   const toggleInfoWindow = (markerId) => {
     console.log(markerId)
@@ -261,6 +262,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtLocation }) {
     fontSize: '36px', // Adjust the font size as needed to increase the icon size
   };
   useEffect(() => {
+    console.log(gtVehi, "gtLocation map component")
     if (locationData.length > 0) {
       console.log(locationData[0]?.latestDocument)
       setCenter({ lat: parseFloat(locationData[0]?.latestDocument?.lat), lng: parseFloat(locationData[0]?.latestDocument?.lng) })
@@ -309,19 +311,18 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtLocation }) {
   };
 
   useEffect(() => {
+  
     if (locationData.length > 0) {
       setCenter({
         lat: parseFloat(locationData[6]?.latestDocument?.lat),
         lng: parseFloat(locationData[6]?.latestDocument?.lng)
       });
     }
-
+  
     console.log(locationData, "locationDatalocationDatalocationData")
   }, [locationData]);
   const defaultLocaiton = { lat: 20.593683, lng: 78.962883 }
 
-  const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'GT-06');
-  const wikitekData = locationData.filter((item) => item.latestDocument.venderId === 'Wikitek');
 
 
   return isLoaded ? (
@@ -383,7 +384,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtLocation }) {
 
       {/* Uncomment the following block to display markers based on locationData */} *
 
-      {gt06Data.length > 0 && gt06Data.map((item, index) => (
+      {gtVehi.length > 0 && gtVehi.map((item, index) => (
         <Marker
           key={index}
           onClick={() => toggleInfoWindow(item.latestDocument._id)}
@@ -405,8 +406,8 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtLocation }) {
             <InfoWindow
               key={item.id}
               position={{
-                lat: parseFloat(item.latestDocument.lat),
-                lng: parseFloat(item.latestDocument.lng),
+                lat: parseFloat(31),
+                lng: parseFloat(58),
               }}
               onCloseClick={() => setSelectedMarker(null)}
               visible={selectedMarker === item.id}
@@ -418,7 +419,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtLocation }) {
       ))}
 
 
-      {wikitekData.length > 0 && wikitekData.map((item, index) => (
+      {wikitekVehi.length > 0 && wikitekVehi.map((item, index) => (
         <Marker
           key={index}
           onClick={() => toggleInfoWindow(item.latestDocument._id)}

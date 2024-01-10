@@ -11,7 +11,7 @@ const MarkerItem2 = ({ item }) => {
           >
             <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>
               <h2 style={{ color: "black", fontWeight: "600" }}>Device Type :</h2>
-              <p>{item?.latestDocument?.venderId}</p>
+              <p>wikitrak mini</p>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>
               <h2 style={{ color: "black", fontWeight: "600" }}>Imei :</h2>

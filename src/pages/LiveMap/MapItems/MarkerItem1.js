@@ -28,10 +28,10 @@ const MarkerItem1 = ({ item }) => {
           gap: "10px",
         }}
       >
-      <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>
+      {/* <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>
         <h2 style={{ color: "black", fontWeight: "600" }}>Veh Reg No :</h2>
         <p>{item?.latestDocument?.registrationNumber}</p>
-      </div>
+      </div> */}
       <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>
         <h2 style={{ color: "black", fontWeight: "600" }}>Imei :</h2>
         <p>{item?.latestDocument?.imei}</p>
