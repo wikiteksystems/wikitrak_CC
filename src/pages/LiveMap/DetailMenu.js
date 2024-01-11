@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { LeftCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Footer, Header } from "../../components";
-import { LiveMapUtils } from "../../utils";
+import { LiveMapUtils ,notification} from "../../utils";
 import { LiveMapActions } from "../../stores/actions";
 import Battery90Icon from '@mui/icons-material/Battery90';
 import NetworkCellIcon from '@mui/icons-material/NetworkCell';
@@ -12,13 +12,14 @@ import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import { ThemeColor } from "../../utils/constants";
 
+
 import { Layout, Menu, Input, Button, Checkbox, Popconfirm, Select, ColorPicker, Radio } from 'antd';
 import { matchColor } from "../../utils/constants";
 import Battery from "../../components/Battery/Battery";
 import NetworkStrength from "../../components/NetworkStrength/NetworkStrength";
 const { Sider } = Layout;
 
-const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
+const DetailMenu = ({ menuList, menuCollapsed,locationData,center,setCenter }) => {
     const dispatch = useDispatch();
     const { userId, userName, themeColor } = useSelector( ({User}) => User );
     const { oemList, variantList, modelList, subModelList, vehicleGroupList, segmentList, activeVehicle } = useSelector( ({LiveMap}) => LiveMap );
@@ -43,6 +44,7 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
     const [variantMode, setVariantMode] = useState('variant');
 
     useEffect( () => {
+        console.log("menu list",menuList);
         setSearchedMenuList(menuList.filter(item => item.registration_id.toLowerCase().includes(searchText.toLowerCase()) ))
     }, [searchText, menuList]);
 
@@ -279,7 +281,24 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
 
             return 8;
     }
-    
+     
+    const goToVehicleLocation= (e,data) =>{ 
+        let imei=data?.imei[0]?.mac_id
+        if(imei){
+            let latLong=locationData.find((item)=>{
+                return  item?.latestDocument?.imei===imei
+              })
+              // console.log("lat long Infor ", latLong.latestDocument.lat, latLong.latestDocument.lng)
+              setCenter({
+                  lat: parseFloat(latLong?.latestDocument?.lat),
+                  lng: parseFloat(latLong?.latestDocument?.lng)
+                });
+        }else{
+            notification('warning', 'Info',"Vehicle Not Found")
+        }
+        
+    }
+
 
     return (
         <div  className="absolute md:relative z-30 md:z-0 right-0">
@@ -321,8 +340,8 @@ const DetailMenu = ({ menuList, menuCollapsed,locationData }) => {
                             ) : (
                                 <div className="flex justify-between" style={{gap:"20px",alignItems:"center"}}>
                                     <NetworkStrength locationData={locationData} item={item}  />
-                                    <Battery locationData={locationData} item={item} />
-                                    <span className="w-full overflow-hidden" style={{textOverflow: 'ellipsis'}} onClick={ () => handleVehicleItemClick(item) }>  {item?.registration_id}</span>
+                                  <span title="Go to location" onClick={e=>goToVehicleLocation(e,item)}> <Battery  locationData={locationData} item={item}/></span> 
+                                    <span className="w-full overflow-hidden" title="Registration Id" style={{textOverflow: 'ellipsis'}} onClick={ () => handleVehicleItemClick(item) }> {item?.registration_id}</span>
                                     <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'select-one', item.id) } />
                                 </div>
                             )

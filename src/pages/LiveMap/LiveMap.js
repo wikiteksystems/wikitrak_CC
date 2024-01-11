@@ -30,6 +30,7 @@ const LiveMap = () => {
   lng: 72.877655,})
     const[gtVehi, setGtVehi]= useState()
     const[wikitekVehi, setwikitekVehi]= useState()
+    const [center, setCenter] = useState({ lat: 0, lng: 0 })
     
     const [lat,setLat]=useState(null);
   const [long,setLonng]=useState(null);
@@ -177,7 +178,8 @@ const LiveMap = () => {
               gtVehi={gtVehi}
               gtLocation={gtLocation}
               wikitekVehi= {wikitekVehi}
-              
+              center={center}
+              setCenter={setCenter}
               
             />
             {/* <Map2 users={locationData} /> */}
@@ -188,6 +190,8 @@ const LiveMap = () => {
           menuList={vehicleList}
           menuCollapsed={detailMenuCollapsed}
           locationData={locationData}
+          center={center}
+          setCenter={setCenter}
         />
       </Layout>
 

@@ -230,7 +230,7 @@ const containerStyle = {
   width: '100%',
   height: '100%'
 };
-function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi ,gtLocation}) {
+function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi ,gtLocation,center,setCenter}) {
   // console.log(gtVehi, "gtLocation map component")
   // console.log(locationData, "our location data")
   const { isLoaded } = useJsApiLoader({
@@ -257,7 +257,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
   const [cleaners, setCleaners] = useState([]);
   const radius = 5000; // 5km in meters
 
-  const [center, setCenter] = useState({ lat: 0, lng: 0 })
+  // const [center, setCenter] = useState({ lat: 0, lng: 0 })
   const iconStyle = {
     fontSize: '36px', // Adjust the font size as needed to increase the icon size
   };
@@ -314,8 +314,8 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
   
     if (locationData.length > 0) {
       setCenter({
-        lat: parseFloat(locationData[2]?.latestDocument?.lat),
-        lng: parseFloat(locationData[2]?.latestDocument?.lng)
+        lat: parseFloat(locationData[4]?.latestDocument?.lat),
+        lng: parseFloat(locationData[4]?.latestDocument?.lng)
       });
     }
   
