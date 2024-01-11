@@ -314,8 +314,8 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
   
     if (locationData.length > 0) {
       setCenter({
-        lat: parseFloat(locationData[6]?.latestDocument?.lat),
-        lng: parseFloat(locationData[6]?.latestDocument?.lng)
+        lat: parseFloat(locationData[2]?.latestDocument?.lat),
+        lng: parseFloat(locationData[2]?.latestDocument?.lng)
       });
     }
   
@@ -328,7 +328,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
-      zoom={10}
+      zoom={13}
       center={center}
       clickableIcons={false}
       options={{
@@ -337,7 +337,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
         zoomControl: true,
         mapTypeControl: true,
         scaleControl: true,
-        minZoom: 10,
+        minZoom: 2,
         maxZoom: 30,
         styles: [
           {
