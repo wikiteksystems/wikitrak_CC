@@ -44,6 +44,7 @@ export const getVehicleList = (userId) => {
 
         request.then(response => {
             const { results }  =  response.data;
+           
             let list = [];
             results.forEach( (vehicle, index) => {
                 list.push({
@@ -254,9 +255,11 @@ export const getVehicleGroupList = (userId) => {
 
 export const GET_FORECAST = '[LIVEMAP PAGE] GET_FORECAST';
 
-export const getForecast = () => {
-  const apiUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=18.579306&lon=73.982346&appid=175e97b3a049140934d438044156c3d3';
-
+export const getForecast = (center) => {
+    console.log(center,"centerlatgetforecast")
+//   const apiUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=18.579306&lon=73.982346&appid=175e97b3a049140934d438044156c3d3';
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${center.lat}&lon=${center.lng}&appid=175e97b3a049140934d438044156c3d3`;
+    
   return async (dispatch) => {
     dispatch(setLoading(true));
 

@@ -2,3 +2,7 @@
     background-color: #0F4C75;
 }
 
+.middlebarbg{
+    background: rgb(47,115,193);
+background: linear-gradient(155deg, rgba(47,115,193,1) 4%, rgba(0,134,145,1) 56%);
+}

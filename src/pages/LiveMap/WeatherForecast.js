@@ -6,28 +6,27 @@ import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
 import CloudIcon from '@mui/icons-material/Cloud';
 
-function WeatherForecast({center, locationData}) {
+function WeatherForecast({center,locationData}) {
     const { weatherForecast,vehicleList,vehicleGroupList } = useSelector( ({LiveMap}) => LiveMap );
    
-
-
-    console.log(locationData)
+  console.log(center,locationData,"____________________######")
+  
     
 
     const dispatch = useDispatch();
     console.log(center)
 
     useEffect( () => {
-        dispatch(LiveMapActions.getForecast());
+        dispatch(LiveMapActions.getForecast(center));
     },[])
   return (
     <>
-     <div className="" style={{ position: "absolute", top: "96%", right: "5%", bottom: "0", maxWidth: '90%', width: '35%', height: "auto", background: "#009999", color: "white", opacity: "0.7", padding: "2px 5px 0 5px", borderRadius: "5px 5px 0 0" }}>
+     <div className="" >
   <div className="flex flex-wrap gap-10 justify-evenly" style={{ fontSize: "18px" }}>
     {/* Vehicle Information */}
     <div>
       <DirectionsCarFilledIcon style={{ color: "#ff0000", marginRight: "5px" }} />
-      <span>veh: {vehicleList[0]?.label}</span>
+      {/* <span>veh: {vehicleList[0]?.label}</span> */}
     </div>
 
     {/* Temperature Information */}
@@ -52,3 +51,13 @@ function WeatherForecast({center, locationData}) {
 }
 
 export default WeatherForecast;
+
+
+
+
+
+
+
+
+
+
