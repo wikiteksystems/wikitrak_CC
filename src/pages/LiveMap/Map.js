@@ -51,9 +51,9 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
   };
   useEffect(() => {
     console.log(gtVehi, "gtLocation map component")
-    if (locationData.length > 0) {
+    if (locationData?.length > 0) {
       console.log(locationData[0]?.latestDocument)
-      setCenter({ lat: parseFloat(locationData[0]?.latestDocument?.lat), lng: parseFloat(locationData[0]?.latestDocument?.lng) })
+      setCenter({ lat: parseFloat(locationData[0  ]?.latestDocument?.lat), lng: parseFloat(locationData[0]?.latestDocument?.lng) })
     }
   }, [locationData])
 
@@ -65,10 +65,10 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
 
     let vechialFilter = vehicleList.filter((item) => item?.registration_id === regNo);
     console.log(vechialFilter);
-    if (vechialFilter.length > 0) {
+    if (vechialFilter?.length > 0) {
       let vechialGroupFilter = vehicleGroupList.filter((item) => item?.id === vechialFilter[0]?.vehicle_group);
       console.log(vechialGroupFilter[0]?.color)
-      if (vechialGroupFilter.length > 0)
+      if (vechialGroupFilter?.length > 0)
         return `#${vechialGroupFilter[0]?.color}`
 
     }
@@ -100,7 +100,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
 
   useEffect(() => {
   
-    if (locationData.length > 0) {
+    if (locationData?.length > 0) {
       setCenter({
         lat: parseFloat(locationData[4]?.latestDocument?.lat),
         lng: parseFloat(locationData[4]?.latestDocument?.lng)
@@ -125,7 +125,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
         zoomControl: true,
         mapTypeControl: true,
         scaleControl: true,
-        minZoom: 2,
+        minZoom: 5,
         maxZoom: 30,
         styles: [
           {
@@ -172,7 +172,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
 
       {/* Uncomment the following block to display markers based on locationData */} *
 
-      {gtVehi.length > 0 && gtVehi.map((item, index) => (
+      {gtVehi?.length > 0 && gtVehi.map((item, index) => (
         <Marker
         
           key={index}
@@ -198,7 +198,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
               key={item.id}
               position={{
                 lat: parseFloat(31),
-                lng: parseFloat(58),
+                // lng: parseFloat(58),
               }}
               onCloseClick={() => setSelectedMarker(null)}
               visible={selectedMarker === item.id}
@@ -210,7 +210,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
       ))}
 
 
-      {wikitekVehi.length > 0 && wikitekVehi.map((item, index) => (
+      {wikitekVehi?.length > 0 && wikitekVehi.map((item, index) => (
         <Marker
           key={index}
           onClick={() => toggleInfoWindow(item.latestDocument._id)}

@@ -272,6 +272,8 @@ import ElectricCarIcon from '@mui/icons-material/ElectricCar';
 import './Dashboard.css'
 import { API_VEHICLE_URL } from '../../utils/constants';
 import TwoWheelerIcon from '@mui/icons-material/TwoWheeler';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -282,6 +284,7 @@ const Dashboard = () => {
   const [imeiList, setImeiList] = useState([]);
   const [vinDataArray, setVinDataArray] = useState([]);
 
+  console.log(vehicleList, "vehicleListdashboard");
   useEffect(() => {
     dispatch(AppActions.setMainMenuCollapsed(true));
     dispatch(LiveMapActions.getVehicleList(userId));
@@ -292,36 +295,38 @@ const Dashboard = () => {
         const onlineDevicesCount = response.data['onlineDevices'];
         setOnlineDevices(onlineDevicesCount);
         setImeiList(response.data['imeiList']);
+        // console.log(imeiList,"imeiresssssssssss")
 
         // Fetch vehicle data for each IMEI
-        const promises = response.data['imeiList'].map(imei => {
-          return axios.get(`${API_VEHICLE_URL}/list/?imei=${imei}`)
-            .then(vehicleResponse => {
-              // Check if the correct mac_id is present in the imei array
-              const vehicle = vehicleResponse.data.results.find(v => v.imei.some(i => i.mac_id === imei));
+        // const promises = response.data['imeiList'].map(imei => {
+        //   return axios.get(`${API_VEHICLE_URL}/list/?imei=${imei}`)
+        //     .then(vehicleResponse => {
 
-              // Extract the VIN data from the vehicle response
-              const vinData = vehicle?.vin || 'Null';
-              return vinData;
+        //       // Check if the correct mac_id is present in the imei array
+        //       const vehicle = vehicleResponse.data.results.find(v => v.imei.some(i => i.mac_id === imei));
 
-            })
-            .catch(error => {
-              console.error(`Error fetching vehicle data for IMEI ${imei}:`, error);
-              // Return 'Null' in case of an error
-              return 'Null';
-            });
-        });
+        //       // Extract the VIN data from the vehicle response
+        //       const vinData = vehicle?.vin || 'Null';
+        //       return vinData;
+
+        //     })
+        //     .catch(error => {
+        //       console.error(`Error fetching vehicle data for IMEI ${imei}:`, error);
+        //       // Return 'Null' in case of an error
+        //       return 'Null';
+        //     });
+        // });
 
         // Wait for all promises to resolve
-        Promise.all(promises)
-          .then(vinDataArray => {
-            // Now, vinDataArray contains the VIN data for each IMEI
-            setVinDataArray(vinDataArray);
-            // console.log(vinDataArray,"vinnnnnnnnnnnnnnnn")
-          })
-          .catch(error => {
-            console.error('Error fetching VIN data for IMEIs:', error);
-          });
+        // Promise.all(promises)
+        //   .then(vinDataArray => {
+        //     // Now, vinDataArray contains the VIN data for each IMEI
+        //     setVinDataArray(vinDataArray);
+        //     // console.log(vinDataArray,"vinnnnnnnnnnnnnnnn")
+        //   })
+        //   .catch(error => {
+        //     console.error('Error fetching VIN data for IMEIs:', error);
+        //   });
       })
       .catch(error => {
         console.error('Error fetching online devices:', error);
@@ -345,6 +350,12 @@ const Dashboard = () => {
     dispatch(AppActions.setDetailMenuCollapsed(!detailMenuCollapsed));
   };
 
+  const imei2 = imeiList;
+
+  console.log(imei2,"imei22")
+
+
+
 
 
   return (
@@ -359,169 +370,7 @@ const Dashboard = () => {
         </div>
 
         <Layout style={{ flex: '1 1 auto' }} className="h-screen">
-          <Header title={'Dashboard'} showText={false} style={{ justifyContent: 'space-between' }} />
-          {/* <div className="d-flex flex-column bg-surface-secondary ">
-            <div className="h-screen  overflow-y-lg-auto">
-              <main className="bg-surface-secondary">
-                <div className="container-fluid">
-                  <div className="row mb-6">
-
-                    <div className="col-4 m-2" >
-                      <div className="card shadow border-0"style={{width:400 ,background: 'rgb(47, 115, 193)',
-                                background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)'}}>
-                        <div className="card-body " >
-                          <div className="row">
-                            <div className="col ">
-                              <span className="h6 font-semibold text-white text-sm d-block mb-2 ">Total Vehicle</span>
-                              <span className="h3 font-bold mb-0">{vehicleList.length}</span>
-                            </div>
-                            <div className="col-auto">
-                              <div className="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
-                                <Icon icon="mdi:car-multiple" color="white" width="50" height="40" />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="mt-2 mb-0 text-sm">
-                            <span className="badge badge-pill bg-soft-success text-success me-2">
-                              <i className="bi bi-arrow-up me-1"></i>
-                            </span>
-                            <span className="text-nowrap text-xs text-white">Total registered Vehicles</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-4 m-2">
-                      <div className="card shadow border-0" style={{width: 400,
-                                background: 'rgb(233, 34, 34)', 
-                                background: 'linear-gradient(155deg, rgba(233, 34, 34, 0.9724483543417367) 44%, rgba(249, 100, 8, 0.9276304271708683) 62%)'}}>
-                        <div className="card-body" >
-                          <div className="row">
-                            <div className="col">
-                              <span className="h6 font-semibold text-white text-sm d-block mb-2">Online Vehicle</span>
-                              <span className="h3 font-bold mb-0">{onlineDevices}</span>
-                            </div>
-                            <div className="col-auto">
-                              <div className="icon icon-shape bg-primary text-white text-lg rounded-circle">
-                                <Icon icon="ic:round-directions-car" color="white" width="50" height="40" />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="mt-2 mb-0 text-sm">
-                            <span className="badge badge-pill bg-soft-success text-success me-2">
-                              <i className="bi bi-arrow-up me-1"></i>
-                            </span>
-                            <span className="text-nowrap text-xs text-white">Total Online Vehicles</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-4 m-2">
-                      <div className="card shadow border-0"style={{
-                                width: 400,
-                                background: 'rgb(233, 34, 34)', // Set the background color using rgb values
-                                background: 'linear-gradient(155deg, rgba(233, 34, 34, 0.9724483543417367) 44%, rgba(249, 100, 8, 0.9276304271708683) 62%)'
-                            }}>
-                        <div className="card-body " >
-                          <div className="row">
-                            <div className="col">
-                              <span className="h6 font-semibold text-white text-sm d-block mb-2">Offline Vehicle</span>
-                              <span className="h3 font-bold mb-0">{vehicleList.length - onlineDevices}</span>
-                            </div>
-                            <div className="col-auto">
-                              <div className="icon icon-shape bg-info text-white text-lg rounded-circle">
-                                <Icon icon="mdi:car-off" color="white" width="50" height="40" />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="mt-2 mb-0 text-sm">
-                            <span className="badge badge-pill bg-soft-danger text-danger me-2">
-                              <i className="bi bi-arrow-down me-1"></i>
-                            </span>
-                            <span className="text-nowrap text-xs text-white">Total Offline Vehicles</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div className="row mb-7">
-                    <div className="col-md-6">
-                      <div className="card shadow border-0 mb-7">
-                        <div className="card-header">
-                          <h5 className="mb-0">
-                            <TwoWheelerIcon />
-                            Vehicle Lists</h5>
-                        </div>
-                        <div className="table-responsive">
-                          <table className="table table-hover table-nowrap">
-                            <thead className="thead-light">
-                              <tr>
-                                <th scope="col">Vehicles</th>
-                                <th scope="col">Group</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {vehicleList.map(item => (
-                                <tr key={item.id}>
-                                  <td className='d-flex'>
-                                    <div className="icon icon-shape bg-dark text-white text-lg rounded-circle">
-                                      <ElectricCarIcon color="white" width="50" height="40" />
-                                    </div>
-                                    <div className="text-heading font-semibold ps-4 pt-2">
-                                      {item?.registration_id}
-                                    </div>
-                                  </td>
-                                  <td>{getVehicleGroup(item.vehicle_group)}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="card shadow border-0 mb-7">
-                        <div className="card-header">
-                          <h5 className="mb-0">Online Vehicle List</h5>
-                        </div>
-                        <div className="table-responsive">
-                          <table className="table table-hover table-nowrap">
-                            <thead className="thead-light">
-                              <tr>
-                                <th scope="col">IMEI Number</th>
-                                <th scope="col">VIN Number</th>
-                              </tr>
-                            </thead>
-                            
-                            <tbody>
-                              {imeiList.map((imei, index) => (
-                                <div key={index}>
-                                  <p>{imei}</p>
-                                  <td>{vinDataArray[index]}</td>
-                                </div>
-                                
-                              ))
-                              
-                              }
-                              
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </main>
-            </div>
-          </div> */}
-
-
-
-
+          <Header title={'Dashboard'} showText={false} style={{ justifyContent: 'space-between',background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)' }} />
           <div className="row g-6 m-2 mb-5">
             <div className="col-xl-4 col-sm-6 col-12">
               <div className="card shadow border-0">
@@ -601,11 +450,11 @@ const Dashboard = () => {
           </div>
           <div></div>
           <div className="row mb-7 m-2" style={{ overflowX: 'auto', maxHeight: '1000px' }} >
-            <div className="col-md-6">
+            <div className="col-md-12">
               <div className="card shadow border-0 mb-7">
-                <div className="card-header">
-                  <h5 className="mb-0">
-                    <TwoWheelerIcon />
+                <div className="card-header" style={{ background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)', }}>
+                  <h5 className="mb-0 text-white">
+                    <TwoWheelerIcon className='me-2'/>
                     Vehicle Lists</h5>
                 </div>
                 <div className="table-responsive" >
@@ -614,6 +463,8 @@ const Dashboard = () => {
                       <tr>
                         <th scope="col">Vehicles</th>
                         <th scope="col">Group</th>
+                        <th scope="col">imei number</th>
+                        <th scope="col">Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -624,48 +475,48 @@ const Dashboard = () => {
                               <ElectricCarIcon color="white" width="50" height="40" />
                             </div>
                             <div className="text-heading font-semibold ps-4 pt-2">
-                              {item?.registration_id}
+                              {/* <Link to="/livemap" >{item?.registration_id}</Link>  */}
+                              <Link to={`/livemap/${item?.imei[0]?.mac_id}`}>{item?.registration_id}</Link>
+
                             </div>
                           </td>
                           <td>{getVehicleGroup(item.vehicle_group)}</td>
+
+
+
+                          <td>
+                            <p>{item?.imei[0]?.mac_id}</p>
+                          </td>
+                            
+                          <td>
+                            
+                            {imeiList.includes(parseFloat(item?.imei[0]?.mac_id))  ? (
+                              <>
+                              <span className="text-success ">Online </span>
+                              <span className="dot dot-online ms-3"></span>
+                              </>
+                              
+                            ) : (
+                              <>
+                              <span className="text-danger ">Offline</span>
+                              <span className="dot dot-offline ms-3"></span>
+                              </>
+                              
+                            )}
+                          </td>
+
                         </tr>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-6">
-              <div className="card shadow border-0 mb-7">
-                <div className="card-header">
-                  <h5 className="mb-0">Online Vehicle List</h5>
-                </div>
-                <div className="table-responsive">
-                  <table className="table table-hover table-nowrap">
-                    <thead className="thead-light">
-                      <tr>
-                        <th scope="col">IMEI Number</th>
-                        <th scope="col">VIN Number</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      {imeiList.map((imei, index) => (
-                        <div key={index}>
-                          <p>{imei}</p>
-                          <td>{vinDataArray[index]}</td>
-                        </div>
-
-                      ))
-
-                      }
 
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
+
+            
+
+
           </div>
         </Layout>
       </Layout>

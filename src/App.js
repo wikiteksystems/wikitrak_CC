@@ -54,7 +54,7 @@ function App() {
                         <RouteGuard path="/livemap/geofence" component={Geofence} />
                         <RouteGuard path="/livemap/dota" component={Dota} />
                         <RouteGuard path="/livemap/device_config" component={DC} />
-                        <RouteGuard path="/livemap" component={LiveMap} />
+                        <RouteGuard path="/livemap/:id?" component={LiveMap} />
                         <RouteGuard path="/fota_campaign" component={FotaCampaign} />
                         <RouteGuard path="/profile" component={Profile} />
                         <Route path="/login" component={Login} />

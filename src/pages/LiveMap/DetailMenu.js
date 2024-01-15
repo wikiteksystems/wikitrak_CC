@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from 'react-router-dom';
+import { Link , useParams} from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { LeftCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Footer, Header } from "../../components";
@@ -12,14 +12,15 @@ import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import { ThemeColor } from "../../utils/constants";
 
-
 import { Layout, Menu, Input, Button, Checkbox, Popconfirm, Select, ColorPicker, Radio } from 'antd';
 import { matchColor } from "../../utils/constants";
 import Battery from "../../components/Battery/Battery";
 import NetworkStrength from "../../components/NetworkStrength/NetworkStrength";
+import { localeData } from "moment";
 const { Sider } = Layout;
 
 const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }) => {
+    console.log(locationData,"detaillocation")
     const dispatch = useDispatch();
     const { userId, userName, themeColor } = useSelector(({ User }) => User);
     const { oemList, variantList, modelList, subModelList, vehicleGroupList, segmentList, activeVehicle } = useSelector(({ LiveMap }) => LiveMap);
@@ -43,12 +44,21 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
     const [Vehi, setVehiDetail] = useState(false);
     const [variantMode, setVariantMode] = useState('variant');
 
+    const { id } = useParams();
+
+  
+      
     useEffect(() => {
-        console.log("menu list", menuList);
+        // console.log(locationData, 'locationData line 51************************************************')
+        if(id){
+            goToVehicleLocation('fromDashboard', id)
+        }
+        console.log("menu list", id);
         setSearchedMenuList(menuList.filter(item => item.registration_id.toLowerCase().includes(searchText.toLowerCase())))
-    }, [searchText, menuList]);
+    }, [searchText, menuList, locationData]);
 
     useEffect(() => {
+        
         setSelectedGroupList([...vehicleGroupList]);
     }, [vehicleGroupList])
 
@@ -285,11 +295,26 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
     }
 
     const goToVehicleLocation = (e, data) => {
-        let imei = data?.imei[0]?.mac_id
+        // console.log(data)
+        // console.log("I am in vehicle location***************************************************", data)
+        // console.log(imei, "Reg")
+        let imei = ""
+        if(id && e == 'fromDashboard'){
+            imei = data
+        }else{
+            imei = data?.imei[0]?.mac_id 
+        }
+
+        // setTimeout(() => {
+        //     console.log(locationData, "I am in vehicle locationData%%%^%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+            
+        // }, 30000);
         if (imei) {
+            // console.log(locationData,"I am in vehicle location")
             let latLong = locationData.find((item) => {
                 return item?.latestDocument?.imei === imei
             })
+            console.log(latLong,'latlong')
             // console.log("lat long Infor ", latLong.latestDocument.lat, latLong.latestDocument.lng)
             setCenter({
                 lat: parseFloat(latLong?.latestDocument?.lat),
@@ -325,7 +350,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
                                         background: 'rgb(47, 115, 193)', // Set the background color using rgb values
                                         background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)', paddingBottom: "5px"
                                     }}>
-                                        <Header title={'Vehicle List'} classes='w-full' style={{ fontSize: 20 }} />
+                                        <Header title={'Vehicle List'} classes='w-full' style={{ fontSize: 20 ,background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)'}} />
                                         <PlusCircleOutlined className='cursor-pointer' style={{ fontSize: 25, color: 'white', position: 'absolute', right: 10 }} onClick={() => handleClick('add-vehicle')} />
                                     </div>
                                     <div className="flex items-center m-1">
@@ -352,6 +377,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
                                             ) : (
                                                 <div className="flex justify-between" style={{ gap: "20px", alignItems: "center" }}>
                                                     <NetworkStrength locationData={locationData} item={item} />
+                                                    
                                                     <span title="Go to location" onClick={e => goToVehicleLocation(e, item)}> <Battery locationData={locationData} item={item} /></span>
                                                     <span className="w-full overflow-hidden" title="Registration Id" style={{ textOverflow: 'ellipsis' }} onClick={() => handleVehicleItemClick(item)}> {item?.registration_id}</span>
                                                     <Checkbox checked={item.checked} onClick={e => handleCheckboxClick(e, 'select-one', item.id)} />

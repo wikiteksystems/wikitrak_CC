@@ -1,15 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -60,7 +49,7 @@ const LiveMap = () => {
     dispatch(LiveMapActions.getOEMList());
     dispatch(LiveMapActions.getVehicleGroupList(userId));
   }, [dispatch, userId]);
-
+  console.log(locationData,"livemappplocation");
   const fetchImeiData = async () => {
     let imei = [];
     for (let k of vehicleList) {
@@ -70,7 +59,6 @@ const LiveMap = () => {
     }
     let data = { imei, type: "one" };
     let result = await locationsApi.getImeiToReg(data);
-    console.log(result);
     if (result?.status === "SUCCESS") {
       setLocationData(result?.data);
     } else {
@@ -100,8 +88,10 @@ const LiveMap = () => {
     dispatch(AppActions.setDetailMenuCollapsed(!detailMenuCollapsed));
   };
 
+
+
   useEffect(() => {
-    console.log(locationData, "hello");
+    // console.log(locationData, "hello");
     socket.on("locationinfo", (data) => {
       // console.log(typeof(data),'--------type of')
       // let dataArray=data.split(',')
@@ -129,9 +119,9 @@ const LiveMap = () => {
       // console.log(hexLongitudeValues,"long")
       // console.log(cal_val,"**********")
       // setGtLocation(cal_val)
-      console.log(data, typeof(data) ,"socket data")
-
-      console.log(data.lat,data.lng,data.imei,"lat long")
+      
+      console.log(data.internalBatteryVoltage ,"socketdataforbatteryvoltage")
+      console.log(data.lat,data.lng,data.imei,"lat longbbbbbbbbbbbbb")
       // console.log(gtVehi,"gtvehi")
       // console.log(locationData,"location data")
       // setGtLocation(data)
@@ -180,7 +170,7 @@ const LiveMap = () => {
           <Header
             title={"Live Map"}
             showText={false}
-            style={{ justifyContent: "space-between" }}
+            style={{ justifyContent: "space-between",background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)' }}
           />
           <Content style={{ width: "100%" }} className="h-screen">
             <MapSection
