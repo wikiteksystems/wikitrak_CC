@@ -114,6 +114,6 @@ export const REGISTER_MSG = {
 export const ThemeColor = {
     light_color_1: "#0F4C75",
     light_color_2: "#3282B8",
-
+    light_color_3:"green"
 
 }

@@ -125,7 +125,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi 
         zoomControl: true,
         mapTypeControl: true,
         scaleControl: true,
-        minZoom: 5,
+        minZoom: 2,
         maxZoom: 30,
         styles: [
           {

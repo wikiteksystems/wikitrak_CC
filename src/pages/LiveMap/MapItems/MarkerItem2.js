@@ -1,11 +1,7 @@
 import WeatherForecast from "../WeatherForecast";
 
-
-
-
-
 const MarkerItem2 = ({ item }) => {
-
+  console.log(item,"markeritem")
   if (item?.latestDocument?.venderId === "GT-06") {
 
     return (
@@ -29,6 +25,7 @@ const MarkerItem2 = ({ item }) => {
             <p style={{ color: "black", fontWeight: "600" }}>Imei :</p>
             <p>{item?.latestDocument?.imei}</p>
           </div>
+          
           {/* <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>
             <p style={{ color: "black", fontWeight: "600" }}>Ignition status :</p>
             <p>{item?.latestDocument?.ignition}</p>
@@ -40,6 +37,12 @@ const MarkerItem2 = ({ item }) => {
               {item?.latestDocument?.ignition ? "On" : "Off"}
             </p>
           </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>
+            <p style={{ color: "black", fontWeight: "600" }}>Battery volts :</p>
+            <p>{item?.latestDocument?.internalBatteryVoltage}</p>
+          </div>
+
           <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>
             <p style={{ color: "black", fontWeight: "600" }}>Speed :</p>
             <p>{item?.latestDocument?.speed}</p>

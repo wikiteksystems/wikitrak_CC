@@ -17,7 +17,7 @@ const Battery = ({ locationData, item}) => {
 
 
   // Define the fill color based on your desired logic
-  const fillColor = ThemeColor.light_color_2;
+  const fillColor = ThemeColor.light_color_3;
 
   return (
     <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>

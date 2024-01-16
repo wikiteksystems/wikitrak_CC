@@ -38,8 +38,12 @@ const TripHistory = () => {
     const [speed,setSpeed] = useState(false)
 
     const fetchTripHis = async (startDate,endDate) =>{
+   
         if(vehicle?.imei.length>0&&startDate&&endDate){
+          console.log(vehicle,"Trip")
+            // let data = {imei:vehicle?.imei[0]?.mac_id,startDate,endDate,venderId:vehicle?.imei[0]?.device_typ}
             let data = {imei:vehicle?.imei[0]?.mac_id,startDate,endDate}
+
             let result = await locationsApi.getTripHistory(data);
               if(result.status === "SUCCESS"){
                setTripHis([...result?.data[0]?.documents])
