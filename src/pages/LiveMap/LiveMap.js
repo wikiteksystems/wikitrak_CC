@@ -137,7 +137,7 @@ const LiveMap = () => {
       //  console.log('updated coordinates1',cooridinates_obj,gt06Data);
  
     });
-  }, [socket, locationData]);
+  }, [socket, locationData,activeParametersList]);
 
   useEffect(()=>{
 
