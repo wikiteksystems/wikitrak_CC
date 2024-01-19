@@ -115,6 +115,7 @@ const LiveMap = () => {
          if(item.latestDocument.imei===activeParametersList[0].imei){
             activeParametersList[0].params.map((param) => {
               let par=param.label
+              console.log("live data",data , "data parameter",data[par])
               param.value=data[par]
             })
           dispatch(LiveMapActions.addParameter(activeParametersList))

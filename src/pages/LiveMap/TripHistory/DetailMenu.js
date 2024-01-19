@@ -108,7 +108,12 @@ const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,
                             key: index,
                             label:
                                 <div className="w-full flex justify-between items-center">
-                                    <span className="w-5/6 overflow-hidden" style={{textOverflow: 'ellipsis'}} >{startAddress?.locality},{startAddress?.city}  to {endAddress?.locality}, {startAddress?.city}</span>
+                                    <span className="w-5/6 overflow-hidden" style={{ textOverflow: 'ellipsis' }}>
+                                                {item?.startAddress?.city && item?.startAddress?.locality? `${item.startAddress.city},${item.startAddress.locality}` : `${item?.startAddress?.city},${item.startAddress.locality}`} 
+                                                &nbsp;To&nbsp; 
+                                                {item?.endAddress?.city && item?.startAddress?.locality ? `${item.endAddress.city},${item.endAddress.locality} ` : `${item?.startAddress?.city},${item.startAddress.locality}`}
+                                            </span>
+                                    {/* <span className="w-5/6 overflow-hidden" style={{textOverflow: 'ellipsis'}} >{startAddress?.locality},{startAddress?.city}  to {endAddress?.locality}, {startAddress?.city}</span> */}
                                     <Checkbox checked={item.checked} onClick={ e => handleCheckboxClick(e, 'select-one', index) } />
                                 </div>
                             })

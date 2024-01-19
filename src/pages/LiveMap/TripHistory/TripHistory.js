@@ -36,6 +36,7 @@ const TripHistory = () => {
     const [harshBreak,setHarshBreak] = useState(false)
     const [acceleration,setAcceleration] = useState(false)
     const [speed,setSpeed] = useState(false)
+    const [tripHistory, setTripHistory] = useState([]);
 
     const fetchTripHis = async (startDate,endDate) =>{
    
@@ -77,30 +78,81 @@ useEffect(() =>{
 const [startAddress,setStartAddress] = useState()
 const [endAddress,setEndAddress] = useState()
 
-const getStartAddress = async (lat,lng) =>{
-  try{
-  let result = await axios(`${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`)
-  console.log(result?.data)
-    setStartAddress(result.data?.data)
-  } catch(err){
-    console.log(err)
-  }
-}
+// const getStartAddress = async (lat,lng) =>{
+//   try{
+//   let result = await axios(`${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`)
+//   console.log(result?.data)
+//     setStartAddress(result.data?.data)
+//   } catch(err){
+//     console.log(err)
+//   }
+// }
 
-const getEndAddress = async (lat,lng) =>{
-    try{
-    let result = await axios(`${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`)
-    console.log(result?.data)
-      setEndAddress(result.data?.data)
-    } catch(err){
-      console.log(err)
-    }
-  }
+// const getEndAddress = async (lat,lng) =>{
+//     try{
+//     let result = await axios(`${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`)
+//     console.log(result?.data)
+//       setEndAddress(result.data?.data)
+//     } catch(err){
+//       console.log(err)
+//     }
+//   }
 
-useEffect(() =>{
-    getStartAddress(tripHis[0]?.data[0]?.lat,tripHis[0]?.data[0]?.lng)
-    getEndAddress(tripHis[0]?.data[tripHis[0]?.data.length-1]?.lat,tripHis[0]?.data[tripHis[0]?.data.length-1]?.lng)
-},[tripHis])
+// useEffect(() =>{
+//     getStartAddress(tripHis[0]?.data[0]?.lat,tripHis[0]?.data[0]?.lng)
+//     getEndAddress(tripHis[0]?.data[tripHis[0]?.data.length-1]?.lat,tripHis[0]?.data[tripHis[0]?.data.length-1]?.lng)
+// },[tripHis])
+
+const getStartAddress = async (lat, lng) => {
+  try {
+    const result = await axios(`${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`);
+    return result.data?.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+const getEndAddress = async (lat, lng) => {
+  try {
+    const result = await axios(`${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`);
+    return result.data?.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+
+useEffect(() => {
+
+
+  // Fetch start and end addresses for each trip
+  const fetchAddresses = async () => {
+    const updatedTripHistory = await Promise.all(
+      tripHis.map(async (trip) => {
+        const startLocation = trip.data[0];
+        const endLocation = trip.data[trip.data.length - 1];
+
+        const startAddress = await getStartAddress(startLocation.lat, startLocation.lng);
+        const endAddress = await getEndAddress(endLocation.lat, endLocation.lng);
+        // console.log(startLocation, endLocation,"xxxxx")
+
+
+        return {
+          ...trip,
+          startAddress,
+          endAddress,
+        };
+      })
+    );
+    console.log("tripdata ", updatedTripHistory);
+    // console.log("tripold",tripHis);
+    setTripHistory(updatedTripHistory);
+  };
+
+  fetchAddresses();
+}, [tripHis]);
 
 const StyledFab = styled(Fab)({
     position: 'absolute',
@@ -142,7 +194,7 @@ const StyledFab = styled(Fab)({
                     </Content>
                 </Layout>
 
-                <DetailMenu setHarshBreak={setHarshBreak} harshBreak={harshBreak} setAcceleration={setAcceleration} acceleration={acceleration} setSpeed={setSpeed} speed={speed} fetchTripHis={fetchTripHis} tripHis={tripHis}   vehicle={vehicle} menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} startAddress={startAddress} endAddress={endAddress} />
+                <DetailMenu setHarshBreak={setHarshBreak} harshBreak={harshBreak} setAcceleration={setAcceleration} acceleration={acceleration} setSpeed={setSpeed} speed={speed} fetchTripHis={fetchTripHis} tripHis={tripHistory}   vehicle={vehicle} menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} startAddress={startAddress} endAddress={endAddress} />
             </Layout>
 
             <div className="hidden">
