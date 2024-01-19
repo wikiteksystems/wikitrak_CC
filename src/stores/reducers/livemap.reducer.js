@@ -20,7 +20,10 @@ const initialState = {
             name: 'Group3'
         }, 
     ],
-    weatherForecast:[]
+    weatherForecast:[],
+    activeParametersList: [{reg_id:"",imei:'',params:[]}],
+    services: [] ,//new change //,
+    cooridinates_obj:{}
 };
 
 export const liveMapReducer = (state = initialState, action) => {
@@ -70,6 +73,21 @@ export const liveMapReducer = (state = initialState, action) => {
                 ...state,
                 weatherForecast: action.payload,
             };
+        case Actions.Add_Parameter_Group:
+            return {
+                ...state,
+                activeParametersList:action.payload ,
+            };
+            case Actions.GET_SERVICES:
+              return {
+                  ...state,
+                  services: action.payload,
+              };
+        case Actions.ADD_COORIDNATES_TO_OBJ:
+            return{
+                ...state,
+                cooridinates_obj:action.payload
+         }
         default:
             return state;
     }

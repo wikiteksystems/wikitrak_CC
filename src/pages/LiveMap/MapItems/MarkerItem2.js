@@ -2,7 +2,9 @@ import WeatherForecast from "../WeatherForecast";
 
 const MarkerItem2 = ({ item }) => {
   console.log(item,"markeritem")
-  if (item?.latestDocument?.venderId === "GT-06") {
+  // if (item?.latestDocument?.venderId === "GT-06") {
+  if (item?.latestDocument?.venderId === "WTK4G06") {
+
 
     return (
       <div style={{ display: "flex", gap: "30px", padding: "20px 10px" }}>

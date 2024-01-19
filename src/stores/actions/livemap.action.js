@@ -380,3 +380,72 @@ export const deleteVehicleGroup = (group_id) => {
         })
     };
 }
+
+export const Add_Parameter_Group = '[LIVEMAP PAGE] Add_Parameter_Group';
+export const addParameter = (value) => {
+
+    return (dispatch, getState) => {
+        // dispatch(setLoading(true));
+
+        try {
+            dispatch({
+                type: Add_Parameter_Group,
+                payload: value,
+              });
+        } catch (error) {
+            // handleAxiosError(error, dispatch);
+            // dispatch(setLoading(false));
+            console.log("add parameter error ", error);   
+        }
+    };
+}
+
+export const GET_SERVICES = '[LIVEMAP PAGE] GET_SERVICES';
+export const getServices = (services,active_vehiLocation) => {
+    // console.log(active_vehiLocation, "active_vehiLocation")
+    const apiUrl = `${process.env.REACT_APP_API2_URL}/api/nearby-places?location=${active_vehiLocation.lat},${active_vehiLocation.lng}&radius=1000&types=${services}`;
+  
+    return async (dispatch) => {
+      dispatch(setLoading(true));
+  
+      try {
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        const data = await response.json();
+        // console.log(data, "services")
+  
+        dispatch({
+          type: GET_SERVICES,
+          payload: data,
+        });
+  
+        dispatch(setLoading(false));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        dispatch(setLoading(false));
+      }
+    };
+  };
+
+export const ADD_COORIDNATES_TO_OBJ = '[LIVEMAP PAGE] ADD_COORIDNATES_TO_OBJ';
+export const add_cooridinates_to_obj = (value) => {
+
+    return (dispatch, getState) => {
+        // dispatch(setLoading(true));
+
+        try {
+            dispatch({
+                type: ADD_COORIDNATES_TO_OBJ,
+                payload: value,
+              });
+        } catch (error) {
+            // handleAxiosError(error, dispatch);
+            // dispatch(setLoading(false));
+            console.log("add parameter error ", error);   
+        }
+    };
+}

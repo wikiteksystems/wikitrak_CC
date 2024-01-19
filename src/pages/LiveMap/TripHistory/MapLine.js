@@ -41,8 +41,8 @@ export default function MapLine({aniActive,item,distance,setDistance}) {
         console.log(a)
         console.log(item?.data[a-2])
         const origin = { lat: parseFloat(item?.data[0]?.lat), lng: parseFloat(item?.data[0]?.lng) }; // Replace with your start coordinates
-       const destination = { lat: parseFloat(item?.data[item?.data.length-1]?.lat), lng: parseFloat(item?.data[item?.data.length-1]?.lng) };
-         console.log(origin,destination)
+        const destination = { lat: parseFloat(item?.data[item?.data.length-1]?.lat), lng: parseFloat(item?.data[item?.data.length-1]?.lng) };
+        console.log(origin,destination)
         directionsService.route(
           {
             origin,

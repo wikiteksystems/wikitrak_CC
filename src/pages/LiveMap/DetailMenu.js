@@ -17,10 +17,11 @@ import { matchColor } from "../../utils/constants";
 import Battery from "../../components/Battery/Battery";
 import NetworkStrength from "../../components/NetworkStrength/NetworkStrength";
 import { localeData } from "moment";
+import CustomAccordian from "./MapItems/CustomAccordion";
 const { Sider } = Layout;
 
-const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }) => {
-    console.log(locationData,"detaillocation")
+const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,gtVehi }) => {
+    // console.log(locationData,"detaillocation")
     const dispatch = useDispatch();
     const { userId, userName, themeColor } = useSelector(({ User }) => User);
     const { oemList, variantList, modelList, subModelList, vehicleGroupList, segmentList, activeVehicle } = useSelector(({ LiveMap }) => LiveMap);
@@ -30,7 +31,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
     const [searchedMenuList, setSearchedMenuList] = useState([...menuList]);
     const [vehicleDetailEditable, setVehicleDetailEditable] = useState(false);
     const [vehicleDetailVisible, setVehicleDetailVisible] = useState(false);
-    const [selectedVehicle, setSelectedVehicle] = useState(null);
+        const [selectedVehicle, setSelectedVehicle] = useState(null);
 
     const [selectedGroupList, setSelectedGroupList] = useState([...vehicleGroupList]);
     const [vehicleGroupVisible, setVehicleGroupVisible] = useState(false);
@@ -44,6 +45,8 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
     const [Vehi, setVehiDetail] = useState(false);
     const [variantMode, setVariantMode] = useState('variant');
 
+    const [showVehicleList, setShowVehicleList] = useState(false)
+
     const { id } = useParams();
 
   
@@ -53,7 +56,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
         if(id){
             goToVehicleLocation('fromDashboard', id)
         }
-        console.log("menu list", id);
+        // console.log("menu list", id);
         setSearchedMenuList(menuList.filter(item => item.registration_id.toLowerCase().includes(searchText.toLowerCase())))
     }, [searchText, menuList, locationData]);
 
@@ -216,6 +219,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
             setVehicleDetailVisible(true);
             setVehicleDetailEditable(true);
             setNewVehicle(true);
+            setShowVehicleList(false)
             setSelectedVehicle({
                 picture: null,
             });
@@ -226,12 +230,15 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
             setVehicleGroupVisible(false);
             setVehicleDetailVisible(false);
             setVehicleDetailEditable(false);
+            setShowVehicleList(false)
         }
         else if (type === 'edit-detail') {
             setVehicleDetailEditable(true);
+            setShowVehicleList(false)
         }
         else if (type === 'save-detail') {
             setVehicleDetailEditable(false);
+            setShowVehicleList(false)
 
             const data = {
                 ...selectedVehicle,
@@ -245,6 +252,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
         }
         else if (type === 'delete-vehicle') {
             dispatch(LiveMapActions.deleteVehicle(selectedVehicle.id));
+            setShowVehicleList(false)
             setVehicleDetailVisible(false);
         }
 
@@ -252,20 +260,25 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
             setVehicleGroupDetailVisible(true);
             setVehicleGroupDetailEditable(true);
             setNewVehicleGroup(true);
+            setShowVehicleList(false)
             setSelectedVehicleGroup({});
         }
         else if (type === 'vehicle_group') {
             setVehicleGroupVisible(true);
             setVehicleGroupDetailVisible(false);
+            setShowVehicleList(false)
         }
         else if (type === 'vehicle_group_list') {
             setVehicleGroupDetailVisible(false);
+            setShowVehicleList(false)
         }
         else if (type === 'edit-group-detail') {
             setVehicleGroupDetailEditable(true);
+            setShowVehicleList(false)
         }
         else if (type === 'save-group-detail') {
             setVehicleGroupDetailEditable(false);
+            setShowVehicleList(false)
             const data = {
                 ...selectedVehicleGroup,
                 user: userId
@@ -275,9 +288,10 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
         else if (type === 'delete-vehicle-group') {
             dispatch(LiveMapActions.deleteVehicleGroup(selectedVehicleGroup.id));
             setVehicleGroupDetailVisible(false);
+            setShowVehicleList(false)
         }
     };
-
+    
     const dropdownList = {
         oem: oemList,
         variant: variantList,
@@ -342,7 +356,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
                 width={300}
             >
                 <div className="detail-menu flex flex-col justify-between h-full">
-                    {!vehicleGroupVisible ?
+                {!showVehicleList?   <>  {!vehicleGroupVisible ?
                         <>
                             {!menuCollapsed && !vehicleDetailVisible &&
                                 <>
@@ -357,7 +371,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
                                         <Input className='w-5/6' placeholder={'Search'} style={{ marginRight: 8 }} value={searchText} onChange={e => setSearchText(e.target.value)} />
                                         <Checkbox style={{ position: 'absolute', right: 20 }} onClick={e => handleCheckboxClick(e, 'select-all')} />
                                     </div>
-
+                                    
                                     <Menu
 
                                         className="overflow-hidden overflow-y-auto"
@@ -574,15 +588,25 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter }
                                     }))}
                                 />
                             </>
-                        </>}
-
+                        </>}</>  :<div className="p-2">
+                            <CustomAccordian vehicleList={searchedMenuList} gtVehi={gtVehi}></CustomAccordian>
+                            </div>}
+                        {/* <Modal></Modal> */}
                     <Footer style={{ background: matchColor(themeColor), height: 40 }} classes={'justify-evenly'}>
-                        <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={() => handleClick('vehicle_list')} style={!vehicleGroupVisible ? { filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2 } : {}}>
+                        <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={() => handleClick('vehicle_list')} style={!vehicleGroupVisible && !showVehicleList ? { filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2 } : {}}>
                             <Icon icon="ic:round-directions-car" width="35" height="25" />
                         </Button>
-                        <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={() => handleClick('vehicle_group')} style={vehicleGroupVisible ? { filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2 } : {}}>
+                        <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={() => handleClick('vehicle_group')} style={vehicleGroupVisible && !showVehicleList ? { filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2 } : {}}>
                             <Icon icon="mdi:car-multiple" width="30" hegith="25" />
                         </Button>
+                        {/* <CustomTooltip showTooltip={true} data={"aniket"}> */}
+                         {/* <div style={{marginTop:"-8px"}}> */}
+                           
+                         <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={() => setShowVehicleList(true)} style={showVehicleList ? { filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2 } : {}}>
+                            <Icon icon="ant-design:setting-filled" width="30" hegith="25" />
+                        </Button>
+                         {/* </div> */}
+                        {/* </CustomTooltip> */}
                     </Footer>
                 </div>
             </Sider>
