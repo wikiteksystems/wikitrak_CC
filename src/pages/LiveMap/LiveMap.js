@@ -93,11 +93,20 @@ const LiveMap = () => {
 
   useEffect(() => {
       socket.on("locationinfo", (data) => {
-     
+        console.log("live data=>",data , "data parameter==>",activeParametersList,'live =>imei',data.imei,'selected imei--->',activeParametersList[0].imei)
+        if(data.imei===activeParametersList[0].imei){
+          activeParametersList[0].params.map((param) => {
+            let par=param.label
+            
+            param.value=data[par]
+          })
+        dispatch(LiveMapActions.addParameter(activeParametersList))
+        }
    // const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'GT-06');
    const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'WTK4G06');
 
       gt06Data.map((item) => {
+        
         // let c_data={};
         // if(Object.keys(cooridinates_obj).length === 0){
         //   let obj={lat:item.latestDocument.lat,lng:item.latestDocument.lng};
@@ -112,14 +121,8 @@ const LiveMap = () => {
           // item.latestDocument.lng=73.912239;
          }
         //  console.log('activeParameters list',activeParametersList);
-         if(item.latestDocument.imei===activeParametersList[0].imei){
-            activeParametersList[0].params.map((param) => {
-              let par=param.label
-              console.log("live data",data , "data parameter",data[par])
-              param.value=data[par]
-            })
-          dispatch(LiveMapActions.addParameter(activeParametersList))
-          }});
+    
+        });
      setGtVehi(gt06Data)
 
   
