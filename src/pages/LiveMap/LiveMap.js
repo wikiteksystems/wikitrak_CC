@@ -22,6 +22,7 @@ import { AppActions, UserActions } from "../../stores/actions";
 // import AppMenu2 from "../../components/AppMenu2";
 import { socket } from "../../services/Socket";
 
+
 const { Content } = Layout;
 
 const LiveMap = () => {
@@ -44,6 +45,10 @@ const LiveMap = () => {
     ({ App }) => App
   );
   const [locationData, setLocationData] = useState([]);
+  
+  
+
+  
 
   useEffect(() => {
     dispatch(LiveMapActions.getVehicleList(userId));
@@ -60,12 +65,13 @@ const LiveMap = () => {
     }
     let data = { imei, type: "one" };
     let result = await locationsApi.getImeiToReg(data);
-    if (result?.status === "SUCCESS") {
+    console.log(result,"result")
+    if (result?.status === "SUCCESS") { 
       setLocationData(result?.data);
     } else {
       setLocationData([]);
     }
-  };
+  };    
 
   useEffect(() => {
     if (vehicleList && vehicleList?.length > 0) fetchImeiData();
@@ -201,6 +207,7 @@ const LiveMap = () => {
           setCenter={setCenter}
           gtVehi={gtVehi}
         />
+        
        
       </Layout>
 
@@ -267,3 +274,9 @@ const LiveMap = () => {
 // }
 
 export default LiveMap;
+
+
+
+
+
+
