@@ -38,8 +38,8 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
 
 
     useEffect(() =>{
-        console.log(menuList)
-        console.log(lMonitorParamGroups)
+        // console.log(menuList)
+        // console.log(lMonitorParamGroups)
     },[menuList,lMonitorParamGroups])
 
     const [searchText, setSearchText] = useState('');
@@ -76,7 +76,7 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
     const [selectParamCheck,setSelectParamCheck] = useState([]);
 
     const handleCheckboxClick = (e, selectType, selectedId,data) => {
-console.log(data)
+// console.log(e,'selectType',selectType, "selelctedId",selectedId, 'checkbox clicked')
         if (selectType === 'select-all') {
             const list = searchedMenuList.map( item => ({
                 ...item,
@@ -86,7 +86,7 @@ console.log(data)
             setSearchedMenuList(list);
         }
         else if (selectType === 'select-one-param-in-group') {
-           console.log(data)
+           console.log(data,"selected one parameter in group list")
               
             const list = paramsInGroup.map( item => (
                 selectedId === item._id ? {
@@ -101,7 +101,7 @@ console.log(data)
             setSelecCheckParam(a)
 
         } else if (selectType === 'select-one') {
-            console.log(data)
+            console.log(data,"select One")
                
              const list = searchedMenuList.map( item => (
                  selectedId === item._id ? {
@@ -117,6 +117,7 @@ console.log(data)
  
          } 
         else if (selectType === 'group-select-one') {
+           
             const list = selectedGroupList.map( item => (
                 selectedId === item.id ? {
                     ...item,
@@ -133,10 +134,22 @@ console.log(data)
                 } : {...item}
             ));
             let a = paramList.filter((item) => item?.checked)
-            console.log(a)
+            // console.log(a)
             setSelecCheckParam(a)
             setSearchedMenuList(paramList);
             setSelectedGroupList(list);
+            console.log("aniket",{
+                'selected type':selectType,
+                'selected Id':selectedId,
+                'selected group list':selectedGroupList,
+                'list':list,
+                 'Group':group,
+                 'searched Menu list':searchedMenuList,
+                 'paramList':paramList,
+                 'a':a,
+                 'menu list':menuList
+
+            })
         }
     };
 
@@ -152,7 +165,7 @@ console.log(data)
         dispatch(LiveMonitorActions.getJ1939Params());
     };
     const handleVehicleGroupItemClick = (item) => {
-        console.log(item);
+        console.log(item,"vehicle group selected");
         setParamGroupDetailVisible(true);
         setParamGroupDetailEditable(false);
         setSelectedParamGroup(item);
@@ -201,12 +214,10 @@ console.log(data)
         } else if(type === 'param'){
              setSelectedParam({...selectedParam,[type]:value})
         }
-        console.log(selectedParam)
+        console.log(selectedParam,"selected param")
     }
 
-    const handleSave = () =>{
 
-    }
     const handleClick = (type) => {
         if (type === 'add-param') {
             setParamDetailVisible(true);
@@ -224,7 +235,7 @@ console.log(data)
         }
         else if (type === 'save-detail') {
             setParamDetailEditable(false);
-       console.log(selectedParam)
+    //    console.log(selectedParam)
           let data1 = {}
              data1 = {
                 color: selectedParam.param_group_color || 'ff0000',
@@ -241,7 +252,7 @@ console.log(data)
             //         data1[paramTypes[i].label.toLocaleLowerCase() + '_parameter'] = [`${selectedParam._id}`]
             //     else data1[paramTypes[i].label.toLocaleLowerCase() + '_parameter'] = []
             // }
-            console.log(data1)
+            console.log("data1=>",selectedParam)
             dispatch(LiveMonitorActions.saveLMonitorParam(data1, newParam, newParam ? '' : selectedParam.param_id));
         }
         else if (type === 'delete-param') {
@@ -309,7 +320,7 @@ console.log(data)
                     <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
                         <LeftCircleOutlined className='px-2' style={{fontSize: 20, color:"white"}} onClick={ () => history.goBack() } />
                         <Header title={'Select Parameters'} style={{paddingInline: 0, fontSize: 18}} />
-                        <PlusCircleOutlined className='pr-2' style={{fontSize: 20, color:'white'}} onClick={ () => handleClick('add-param') } />
+                        <PlusCircleOutlined title="aniket" className='pr-2' style={{fontSize: 20, color:'white'}} onClick={ () => handleClick('add-param') } />
                     </div>
                     <div className="flex items-center m-1">
                         <Input className='w-5/6' placeholder={'Search'} style={{marginRight: 8}} value={searchText} onChange={e => setSearchText(e.target.value)} />
@@ -390,7 +401,7 @@ console.log(data)
                                     dropdownRender={(menu) => paramDetailEditable ? menu : null}
                                 >
                                     {  (item.keyName === 'label' ? dropdownList[item.keyName][selectedParam.param_type.toLowerCase()] : dropdownList[item.keyName])?.map( optionItem => {
-                                         console.log(optionItem);
+                                         console.log(optionItem,"Option Item: " ,item);
                                        return (
                                         <Select.Option  key={optionItem.key} value={optionItem.id}> {optionItem.label} </Select.Option>
                                     )
@@ -411,7 +422,7 @@ console.log(data)
                                 >
                                     {  (item.keyName === 'label' ? dropdownList[item.keyName][selectedParam.param_type.toLowerCase()] : dropdownList[item.keyName])?.map( (optionItem,index) => {
                                   
-                                        console.log(item);
+                                        console.log(item,"select change current value1", 'selectedParam',selectedParam);
                                        return (
                                         <Select.Option  key={index} value={optionItem.id}> {optionItem.short_name}   </Select.Option>
                                     )
@@ -444,7 +455,7 @@ console.log(data)
                     { !paramGroupDetailVisible ?
                     <>
                         <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ () => history.goBack() }/>
-                        <Header title={'Parameter Group List'} style={{fontSize: 19, paddingInline: 0}} />
+                        <Header title={'Parameter Grou'} style={{fontSize: 19, paddingInline: 0}} />
                         <PlusCircleOutlined className='cursor-pointer pr-2' style={{fontSize: 18}} onClick={ () => handleClick('add-param-group') } />
                     </>
                     :
@@ -467,7 +478,7 @@ console.log(data)
                         style={{ color: 'black', backgroundColor: 'white', flexGrow: 1 }}
                         selectable={false}
                         items={ (paramGroupDetailVisible ? [...LiveMonitorUtils.groupDetailMenuItems, ...paramsInGroup] : selectedGroupList).map((item, index) =>{
-                            console.log(item)
+                            
                             return ({
                             key: index,
                             label: item.type === 'input' ? (

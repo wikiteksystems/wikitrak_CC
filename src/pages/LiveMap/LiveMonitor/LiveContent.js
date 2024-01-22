@@ -1084,7 +1084,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
     try {
       setLoading(true)
 
-      console.log(selectCheckParam);
+      console.log(selectCheckParam,"selectCheckParam");
 
       // Specify the key for which you want to remove duplicates
       const keyToCheck = 'param_header';
@@ -1488,7 +1488,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                             console.log(item);
                             if (item.param_header === 'LGN') {
                               // Use a React.Fragment to enclose multiple JSX elements
-                              console.log(true);
+                              console.log(true,"trye");
                               return (
                                 <React.Fragment key={index}>
                                   {loginData.length > 0 && loginData.map((loginItem, innerIndex) => {
@@ -1496,10 +1496,10 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                                     return (
                                       <TableRow hover key={innerIndex} >
                                         <TableCell>
-                                          <Typography>{item?.label}</Typography>
+                                          <Typography>{item?.label} aniket</Typography>
                                         </TableCell>
                                         <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
-                                          <Typography>{loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]} {item?.unit}</Typography>
+                                          <Typography>{loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]} {item?.unit} dsd</Typography>
                                         </TableCell>
                                       </TableRow>
                                     );
@@ -1512,7 +1512,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                           })}
 
                           {selectCheckParam.map((item, index) => {
-                            console.log(item);
+                            console.log(item, "checked click",'checked parames',selectCheckParam);
                             if (item.param_header === 'NRM') {
                               // Use a React.Fragment to enclose multiple JSX elements
 
@@ -1537,7 +1537,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                                     <tbody>
                                       <tr style={{ border: "1px solid black" }} className="mb-3">
                                         <td className='p-3'>
-                                          <span>{item.label}</span>
+                                          <span>{item.label} sds</span>
                                         </td>
                                         <td style={{ display: "flex", justifyContent: "flex-end", padding: "10px" }}>
                                           <span>{typeof loginItem.latestDocument[item.label] === 'boolean'

@@ -1,0 +1,12 @@
+.nav-link.active {
+    color: white !important;
+    /* background-color: yellow !important; */
+    text-decoration: 'none';
+    border-bottom: 2px solid red;
+}
+/* styles.css */
+.custom-tabs-container .nav-link {
+    flex: 1; /* Equal width for all tabs */
+    text-align: center; /* Optional: Center the text within each tab */
+  }
+  
