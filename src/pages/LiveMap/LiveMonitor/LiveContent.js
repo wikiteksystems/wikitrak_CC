@@ -72,10 +72,10 @@
 
 // const CardWrapper = styled(Card)(
 //   ({ theme }) => `
-  
+
 //     position: relative;
 //     overflow: visible;
-  
+
 //     &::after {
 //       content: '';
 //       position: absolute;
@@ -87,7 +87,7 @@
 //       z-index: 1;
 //       transition: ${theme.transitions.create(['box-shadow'])};
 //     }
-        
+
 //       &.Mui-selected::after {
 //         box-shadow: 0 0 0 3px blue;
 //       }
@@ -1123,7 +1123,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
             console.log("login packet")
             let data = { imei: [imeiNo], type: "one" }
             const result = await loginApi.getImeiToReg(data);
-            console.log(result)
+
             if (result.status === "SUCCESS")
               setLoginData(result.data);
           } else if (k.param_header === "NRM") {
@@ -1170,7 +1170,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
           } else if (k.param_header === "NRM") {
             console.log("location packet")
             const result = await locationsApi.getImeiToReg(data);
-            // console.log(result, "bhushanlocaton")
+            console.log(result, "bhushanlocatongraph")
             if (result.status === "SUCCESS") {
               location = result.data
               setLocationData(result.data)
@@ -1210,30 +1210,31 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                 innerArr.push({
                   time: dayjs(i?.createdAt).format('YYYY-MM-DD'),
                   value: i[k?.label],
-                  
+
                 })
-                
+
               }
             }
           } else if (k?.param_header === "NRM") {
             for (let innerK of location) {
-              for (let i of innerK?.data) {
+              for (let i of innerK?.data) {  
                 innerArr.push({
                   Date: dayjs(i?.createdAt).format('YYYY-MM-DD'),
                   // value: i[k?.label],
                   value: i[k?.label] === true ? 1 : i[k?.label] === false ? 0 : i[k?.label],
-                  Time:dayjs(i?.createdAt).format('HH:mm')
+                  Time: dayjs(i?.createdAt).format('HH:mm'),
+                  label: k?.label
                 })
               }
             }
 
           }
 
-          arr.push({ data: [...innerArr], label: k?.label });
+          arr.push({ data: [...innerArr, k?.label], label: k?.label });
         }
         arr.sort((a, b) => a.date - b.date);
         setChartValue([...arr]);
-        console.log(arr,"arrrrrdatatatatatatatat");
+        console.log(arr, "arrrrrdatatatatatatatat");
 
       }
     } catch (error) {
@@ -1243,6 +1244,172 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
     }
 
   }
+
+  // ORIGNAL FETCH DATA IS BELOW 
+  // const fetchData = async (type) => {
+  //   try {
+  //     setLoading(true)
+
+  //     console.log(selectCheckParam);
+
+  //     // Specify the key for which you want to remove duplicates
+  //     const keyToCheck = 'param_header';
+
+  //     // Create a Set to store unique values
+  //     const uniqueValues = new Set();
+
+  //     // Create a new array for objects with unique values
+  //     const uniqueArrayOfObjects = [];
+
+  //     // Iterate through the original array
+  //     for (const obj of selectCheckParam) {
+  //       const valueToCheck = obj[keyToCheck];
+
+  //       // Check if the value is not in the Set
+  //       if (!uniqueValues.has(valueToCheck)) {
+  //         // Add the value to the Set
+  //         uniqueValues.add(valueToCheck);
+
+  //         // Push the object to the new array
+  //         uniqueArrayOfObjects.push(obj);
+  //       }
+  //     }
+
+  //     let imeiNo = "";
+  //     if (uniqueArrayOfObjects.length > 0) {
+  //       const filterData = vehicleList.filter((item) => item?.label === uniqueArrayOfObjects[0]?.vehicle_reg)
+  //       console.log(filterData);
+  //       if (filterData.length > 0)
+  //         imeiNo = filterData[0]?.imei[0]?.mac_id
+  //     }
+  //     if (type === 'one') {
+  //       for (let k of uniqueArrayOfObjects) {
+  //         console.log(k)
+  //         if (k.param_header === "LGN") {
+  //           console.log("login packet")
+  //           let data = { imei: [imeiNo], type: "one" }
+  //           const result = await loginApi.getImeiToReg(data);
+
+  //           if (result.status === "SUCCESS")
+  //             setLoginData(result.data);
+  //         } else if (k.param_header === "NRM") {
+  //           console.log("location packet")
+  //           let data = { imei: [imeiNo], type: "one" }
+  //           const result = await locationsApi.getImeiToReg(data);
+  //           console.log(result)
+  //           if (result.status === "SUCCESS")
+  //             setLocationData(result.data)
+  //         } else if (k.param_header === "HBT") {
+  //           console.log("health packet")
+  //           let data = { imei: [imeiNo], type: "one" }
+  //           const result = await healthsApi.getImeiToReg(data);
+  //           console.log(result)
+  //           if (result.status === "SUCCESS")
+  //             setHealthData(result.data)
+  //         } else if (k.param_header === "EPB") {
+  //           console.log("emergency packet")
+  //           let data = { imei: [imeiNo], type: "one" }
+  //           const result = await emergencyApi.getImeiToReg(data);
+  //           console.log(result)
+  //           if (result.status === "SUCCESS")
+  //             setEmergencyData(result.data)
+  //         }
+  //       }
+  //     } else if (type === 'group') {
+  //       console.log(type)
+  //       let location = [];
+  //       let health = [];
+  //       let login = [];
+  //       let emergency = [];
+  //       for (let k of uniqueArrayOfObjects) {
+  //         console.log(k)
+  //         let data = { imei: [imeiNo], type: "group", startDate: startDateValue, endDate: endDateValue, frequency: frequency }
+  //         console.log(data);
+  //         if (k.param_header === "LGN") {
+  //           console.log("login packet")
+  //           const result = await loginApi.getImeiToReg(data);
+  //           console.log(result)
+  //           if (result.status === "SUCCESS") {
+  //             login = result.data;
+  //             setLoginData(result.data);
+  //           }
+  //         } else if (k.param_header === "NRM") {
+  //           console.log("location packet")
+  //           const result = await locationsApi.getImeiToReg(data);
+  //           console.log(result, "bhushanlocatongraph")
+  //           if (result.status === "SUCCESS") {
+  //             location = result.data
+  //             setLocationData(result.data)
+  //           }
+  //         } else if (k.param_header === "HBT") {
+  //           console.log("health packet")
+  //           const result = await healthsApi.getImeiToReg(data);
+  //           console.log(result)
+  //           if (result.status === "SUCCESS") {
+  //             health = result.data
+  //             setHealthData(result.data)
+  //           }
+  //         } else if (k.param_header === "EPB") {
+  //           console.log("emergency packet")
+  //           const result = await emergencyApi.getImeiToReg(data);
+  //           console.log(result)
+  //           if (result.status === "SUCCESS") {
+  //             emergency = result.data
+  //             setEmergencyData(result.data)
+  //           }
+  //         }
+  //       }
+
+  //       let arr = []
+  //       let innerArr = [];
+  //       console.log(location, "timespeed");
+
+  //       let ab = "imei";
+
+  //       for (let k of selectCheckParam) {
+  //         console.log(k?.label);
+  //         innerArr = []
+  //         if (k?.param_header === "LGN") {
+
+  //           for (let innerK of login) {
+  //             for (let i of innerK?.data) {
+  //               innerArr.push({
+  //                 time: dayjs(i?.createdAt).format('YYYY-MM-DD'),
+  //                 value: i[k?.label],
+
+  //               })
+
+  //             }
+  //           }
+  //         } else if (k?.param_header === "NRM") {
+  //           for (let innerK of location) {
+  //             for (let i of innerK?.data) {  
+  //               innerArr.push({
+  //                 Date: dayjs(i?.createdAt).format('YYYY-MM-DD'),
+  //                 // value: i[k?.label],
+  //                 value: i[k?.label] === true ? 1 : i[k?.label] === false ? 0 : i[k?.label],
+  //                 Time: dayjs(i?.createdAt).format('HH:mm'),
+  //                 label: k?.label
+  //               })
+  //             }
+  //           }
+
+  //         }
+
+  //         arr.push({ data: [...innerArr, k?.label], label: k?.label });
+  //       }
+  //       arr.sort((a, b) => a.date - b.date);
+  //       setChartValue([...arr]);
+  //       console.log(arr, "arrrrrdatatatatatatatat");
+
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+
+  // }
   if (loading) {
     console.log("loading bro....")
   }
@@ -1274,7 +1441,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
   // Graph function
   const graphData = (arrayData, key) => {
     console.log(arrayData, "graphdata")
-    console.log(key,"keyyy")
+    console.log(key, "keyyy")
     let chartData = []
     for (let k of locationData) {
       chartData.push({
@@ -1283,7 +1450,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
       })
     }
 
-    console.log(chartData,"graphdatachart")
+    console.log(chartData, "graphdatachart")
 
     return chartData;
   }
@@ -1457,16 +1624,16 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
       </div>
 
 
-
+{/* //table// */}
       {!active ?
         <>
-          <Box className="d-flex justify-content-center">
+          <Box className="d-flex justify-content-center "mb={3}>
             {toggleView === "table_view" &&
-              (<Card style={{ height: "auto", width: "400px" }}>
+              (<Card style={{ height: "auto", width: "800px" }}>
                 {selectCheckParam.length === 0 ? (
                   <>
                     <div
-
+                      
                       variant="h5"
                       fontWeight="normal"
                       color="text.secondary"
@@ -1518,37 +1685,37 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
 
                               return (
                                 <React.Fragment key={index}>
-                                {locationData.length > 0 && locationData.map((loginItem, innerIndex) => (
-                                  // <Table hover key={innerIndex} >
-                                  //   <tbody >
-                                  //     <tr style={{border:"1px solid black",}} >
-                                  //       <td className='p-3'>
-                                  //         <span>{item.label}</span>
-                                  //       </td>
-                                  //       <td style={{ display: "flex", justifyContent: "flex-end", padding: "10px",}}>
-                                  //         <span>{typeof loginItem.latestDocument[item.label] === 'boolean'
-                                  //           ? loginItem.latestDocument[item.label] ? 'on' : 'off'
-                                  //           : loginItem.latestDocument[item.label]} {item.unit}</span>
-                                  //       </td>
-                                  //     </tr>
-                                  //   </tbody>
-                                  // </Table>
-                                  <Table hover key={innerIndex} >
-                                    <tbody>
-                                      <tr style={{ border: "1px solid black" }} className="mb-3">
-                                        <td className='p-3'>
-                                          <span>{item.label} sds</span>
-                                        </td>
-                                        <td style={{ display: "flex", justifyContent: "flex-end", padding: "10px" }}>
-                                          <span>{typeof loginItem.latestDocument[item.label] === 'boolean'
-                                            ? loginItem.latestDocument[item.label] ? 'on' : 'off'
-                                            : loginItem.latestDocument[item.label]} {item.unit}</span>
-                                        </td>
-                                      </tr>
-                                    </tbody>
-                                  </Table>
-                                ))}
-                              </React.Fragment>
+                                  {locationData.length > 0 && locationData.map((loginItem, innerIndex) => (
+                                    // <Table hover key={innerIndex} >
+                                    //   <tbody >
+                                    //     <tr style={{border:"1px solid black",}} >
+                                    //       <td className='p-3'>
+                                    //         <span>{item.label}</span>
+                                    //       </td>
+                                    //       <td style={{ display: "flex", justifyContent: "flex-end", padding: "10px",}}>
+                                    //         <span>{typeof loginItem.latestDocument[item.label] === 'boolean'
+                                    //           ? loginItem.latestDocument[item.label] ? 'on' : 'off'
+                                    //           : loginItem.latestDocument[item.label]} {item.unit}</span>
+                                    //       </td>
+                                    //     </tr>
+                                    //   </tbody>
+                                    // </Table>
+                                    <Table hover key={innerIndex} >
+                                      <tbody>
+                                        <tr style={{ border: "1px solid black" }} className="mb-3">
+                                          <td className='p-3'>
+                                            <span>{item.label}</span>
+                                          </td>
+                                          <td style={{ display: "flex", justifyContent: "flex-end", padding: "10px" }}>
+                                            <span>{typeof loginItem.latestDocument[item.label] === 'boolean'
+                                              ? loginItem.latestDocument[item.label] ? 'on' : 'off'
+                                              : loginItem.latestDocument[item.label]} {item.unit}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </Table>
+                                  ))}
+                                </React.Fragment>
                               );
                             }
                             // If the condition is not met, return null or an empty element
@@ -1583,7 +1750,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                           })}
 
                           {selectCheckParam.map((item, index) => {
-                            console.log(item,"hbt");
+                            console.log(item, "hbt");
                             if (item.param_header === 'HBT') {
                               // Use a React.Fragment to enclose multiple JSX elements
                               console.log(true);
@@ -1664,7 +1831,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                                         position: 'relative',
                                         zIndex: '2',
                                         backgroundColor: `#${item?.param_group_color}`,
-                                        border: '1px solid #000', 
+                                        border: '1px solid #000',
                                         borderRadius: '10px',
                                       }}
                                     >
@@ -1741,19 +1908,19 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                                       </Box>
                                     </Box>
                                   </CardWrapper> */}
-                                     <div className="position-relative" style={{ zIndex: '2', background: 'linear-gradient(0deg, rgba(80,236,238,1) 0%, rgba(0,0,0,1) 98%)', minHeight: '85px', padding: "20px" }}>
+                                  <div className="position-relative" style={{ zIndex: '2', background:   'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)', minHeight: '85px', padding: "20px" }}>
 
-<div className="pl-2 py-1 pr-1 d-flex flex-column align-items-center justify-content-center">
-  <h6 className='text-white'>{item?.label}</h6>
-  <h4 style={{ color: loginItem.latestDocument[item.label] ? 'yellow' : 'red' }}>
-    {typeof loginItem.latestDocument[item.label] === 'boolean'
-      ? loginItem.latestDocument[item.label] ? 'on' : 'off'
-      : loginItem.latestDocument[item.label]} {item.unit}
-  </h4>
-  <p className='text-white'>{item?.unit}</p>
-</div>
+                                    <div className="pl-2 py-1 pr-1 d-flex flex-column align-items-center justify-content-center">
+                                      <h6 className='text-white'>{item?.label}</h6>
+                                      <h4 style={{ color: loginItem.latestDocument[item.label] ? 'yellow' : 'red' }}>
+                                        {typeof loginItem.latestDocument[item.label] === 'boolean'
+                                          ? loginItem.latestDocument[item.label] ? 'on' : 'off'
+                                          : loginItem.latestDocument[item.label]} {item.unit}
+                                      </h4>
+                                      <p className='text-white'>{item?.unit}</p>
+                                    </div>
 
-</div>
+                                  </div>
                                 </Grid>
                               ))}
                             </>
@@ -1879,39 +2046,35 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                 {selectCheckParam.length === 0 ?
                   ""
                   :
-                  chartValue.length > 0 && chartValue.map((item, index) => {
-                    return (
-                      <>
-                        {
-                          loading ? <Spin size='large' /> :
-                            <Card key={index} sx={{ margin: "20px", padding: "10px" }}>
-                              <h2>{item.label}</h2>
-                              {/* <ReactApexChart
-        options={chartOptions}
-        series={[
-          {
-            name: item.label,
-            data: [...item.data]
-        }
-        ]}
-        type="line"
-        height={300}
-      /> */}
-                              <LineCharts data={item.data} />
-                                                            {/* <LineChart width={1000} height={250} data={item.data}
-  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-  <CartesianGrid strokeDasharray="3 3" />
-  <XAxis dataKey="date" />
-  <YAxis />
-  <Tooltip />
-  <Legend />
-  <Line type="monotone" dataKey="value" name='Data' stroke="#8884d8" />
-</LineChart> */}
-                            </Card>
-                        }
-                      </>
-                    )
-                  })
+                  //for single data 
+                  // chartValue.length > 0 && chartValue.map((item, index) => {
+                  //   return (
+                  //     <>
+                  //       {
+                  //         loading ? <Spin size='large' /> :
+                  //           <Card key={index} sx={{ margin: "20px", padding: "10px" }}>
+                  //             <h2>{item.label}</h2>
+               
+                  //             <LineCharts data={item.data} /> 
+                  //           </Card>
+                  //       }
+                  //     </>
+                  //   )
+                  // })
+                  <LineCharts data={chartValue} /> // for multiple data
+                  // chartValue.length > 0 && chartValue.map((item, index) => {
+                  //   return (
+                  //     <>
+                  //       {
+                  //         loading ? <Spin size='large' /> :
+                  //           <Card key={index} sx={{ margin: "20px", padding: "10px" }}>
+                  //             <h2>{item.label}</h2>
+               
+                  //           </Card>
+                  //       }
+                  //     </>
+                  //   )
+                  // })
                 }
               </Box>
           }
