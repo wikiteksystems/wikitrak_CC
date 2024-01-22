@@ -41,7 +41,7 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
 
                             <span style={{ fontSize: 25 }} className="font-bold">WIKITRACK</span>
                         </div>
-                        {!menuCollapsed &&
+                        {!menuCollapsed && 
                             <div className="w-full flex flex-col items-center py-5">
                                 {avatar === null ?
                                     <Avatar size={100} style={{ background: ThemeColor.light_color_1, fontSize: 60 }}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
