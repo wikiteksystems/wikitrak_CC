@@ -1222,7 +1222,7 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                   Date: dayjs(i?.createdAt).format('YYYY-MM-DD'),
                   // value: i[k?.label],
                   value: i[k?.label] === true ? 1 : i[k?.label] === false ? 0 : i[k?.label],
-                  Time: dayjs(i?.createdAt).format('HH:mm'),
+                  Time: dayjs(i?.createdAt).format('hh:mm A'),
                   label: k?.label
                 })
               }
