@@ -42,7 +42,7 @@ const MarkerItem2 = ({ item }) => {
 
           <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>
             <p style={{ color: "black", fontWeight: "600" }}>Battery volts :</p>
-            <p>{item?.latestDocument?.internalBatteryVoltage}</p>
+            <p>{item?.latestDocument?.mainInputVoltage}</p>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>

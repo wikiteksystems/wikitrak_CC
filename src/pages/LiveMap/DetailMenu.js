@@ -636,6 +636,8 @@ import Battery from "../../components/Battery/Battery";
 import NetworkStrength from "../../components/NetworkStrength/NetworkStrength";
 import { localeData } from "moment";
 import CustomAccordian from "./MapItems/CustomAccordion";
+import { LiveMonitorActions } from "../../stores/actions";
+
 const { Sider } = Layout;
 
 const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,gtVehi }) => {
@@ -675,6 +677,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,g
             goToVehicleLocation('fromDashboard', id)
         }
         // console.log("menu list", id);
+        dispatch(LiveMonitorActions.getLMonitorParamGroups(userId));
         setSearchedMenuList(menuList.filter(item => item.registration_id.toLowerCase().includes(searchText.toLowerCase())))
     }, [searchText, menuList, locationData]);
 
@@ -1206,8 +1209,13 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,g
                                     }))}
                                 />
                             </>
-                        </>}</>  :<div className="p-2">
-                            <CustomAccordian vehicleList={searchedMenuList} gtVehi={gtVehi}></CustomAccordian>
+                        </>}</>  :<div className="">
+                            <CustomAccordian 
+                            vehicleList={searchedMenuList} 
+                            gtVehi={gtVehi} 
+                            menuList={menuList}
+                            handleClick={handleClick}
+                            ></CustomAccordian>
                             </div>}
                         {/* <Modal></Modal> */}
                     <Footer style={{ background: matchColor(themeColor), height: 40 }} classes={'justify-evenly'}>
