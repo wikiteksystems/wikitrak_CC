@@ -103,7 +103,7 @@ const DetailMenu = ({ setHarshBreak ,harshBreak ,setAcceleration ,acceleration ,
                         style={{ color: 'black', backgroundColor: 'white', flexGrow: 1 }}
                         selectable={false}
                         items={ searchedMenuList.map((item, index) => {
-                            console.log(item)
+                            console.log(item,"triphistorydata")
                             return ({
                             key: index,
                             label:

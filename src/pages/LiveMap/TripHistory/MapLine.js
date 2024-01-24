@@ -5,6 +5,7 @@ import { GoogleMap, useJsApiLoader, Circle, Marker,InfoWindow,Polyline,Direction
 import { CarOutlined } from '@ant-design/icons';
 import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
 import moment from 'moment';
+import MarkerItem2 from '../MapItems/MarkerItem2';
 
 const containerStyle = {
   width: '100%',
@@ -52,11 +53,13 @@ export default function MapLine({aniActive,item,distance,setDistance}) {
           (result, status) => {
             if (status === 'OK') {
               setDirections(result);
+              
               const routePath = result.routes[0].overview_path;
+              // console.log(routePath,"routepath")
               setPath(routePath);
               const route = result.routes[0].legs[0];
               const distanceInMeters = route.distance.value;
-              console.log(distanceInMeters)
+              console.log(distanceInMeters,"distance meters")
               setDistance(distanceInMeters);
             } else {
               console.error(`Directions request failed: ${status}`);
@@ -78,7 +81,7 @@ export default function MapLine({aniActive,item,distance,setDistance}) {
         return () => clearInterval(interval);
     }
       }, [path, pathIndex,aniActive]);
-    
+    // console.log(directions,"dirrr****************")
 
 
   return (
@@ -94,20 +97,23 @@ export default function MapLine({aniActive,item,distance,setDistance}) {
           
         />
         <Polyline
+
         path={path.slice(0, pathIndex)}
         options={{
-          strokeColor: '#0000FF', // Color of the line
+          strokeColor: 'red', // Color of the line
           strokeOpacity: 1, // Opacity of the line
           strokeWeight: 4, // Thickness of the line
         }}
       />
-      </>
+      </> 
       )}
-{/* 
-        {selectedMarker === item?.latestDocument?._id &&  <InfoWindow
+
+        {selectedMarker === item?.latestDocument?._id &&  
+        <InfoWindow
             key={item.id}
             position={{
               lat: parseFloat(item?.latestDocument?.lat),
+              
               lng: parseFloat(item?.latestDocument?.lng),
             }}
             onCloseClick={() => setSelectedMarker(null)}
@@ -115,9 +121,9 @@ export default function MapLine({aniActive,item,distance,setDistance}) {
             visible={selectedMarker === item.id}
           >
            
-         <MarkerItem1 item={item} />
+         <MarkerItem2 item={item} />
           </InfoWindow>
-} */}
+}
 
 
     </div>
