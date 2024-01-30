@@ -690,7 +690,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 text-white text-sm d-block mb-2">Registered Vehicles: <b>{vehicleList.length}</b></span>                        
+                        <span className="h6 text-white text-sm d-block mb-2">Registered: <b>{vehicleList.length}</b></span>                        
                       </div>
                     </div>
                   </div>
@@ -710,7 +710,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Online Vehicles: <b>{onlineDevices}</b></span>                        
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Online: <b>{onlineDevices}</b></span>                        
                       </div>
                       
                     </div>
@@ -732,7 +732,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Offline Vehicles: <b>{vehicleList.length - onlineDevices}</b></span>
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Offline: <b>{vehicleList.length - onlineDevices}</b></span>
                         <span className="h3 font-bold mb-0"></span>
                       </div>                      
                     </div>
@@ -756,7 +756,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Running Vehicles: <b>{runningVehicleList.length}</b></span>
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Running: <b>{runningVehicleList.length}</b></span>
                       </div>
                     </div>
                   </div>
@@ -778,7 +778,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Idle Vehicles: <b>{stopVehicleList.length}</b></span>
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Vehicles: <b>{stopVehicleList.length}</b></span>
                         <span className="h3 font-bold mb-0"></span>
                       </div>
                     </div>

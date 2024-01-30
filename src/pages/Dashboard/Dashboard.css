@@ -23,6 +23,12 @@
     background-color: red; /* Change this to the desired color for offline status */
   }
 
+  .condition-column {
+    text-transform: uppercase;
+    margin-left: 15px;
+  }
+
+
 
   /* //bike */
 
