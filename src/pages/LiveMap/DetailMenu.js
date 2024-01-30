@@ -1228,8 +1228,8 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,g
                         {/* <CustomTooltip showTooltip={true} data={"aniket"}> */}
                          {/* <div style={{marginTop:"-8px"}}> */}
                            
-                         <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={() => setShowVehicleList(true)} style={showVehicleList ? { filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2 } : {}}>
-                            <Icon icon="ant-design:setting-filled" width="30" hegith="25" />
+                        <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={() => setShowVehicleList(true)} style={showVehicleList ? { filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2 } : {}}>
+                            <Icon icon="ant-design:sliders-outlined" width="30" hegith="25" />
                         </Button>
                          {/* </div> */}
                         {/* </CustomTooltip> */}

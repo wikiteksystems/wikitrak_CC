@@ -207,21 +207,10 @@ function CustomAccordian({ vehicleList, gtVehi }) {
                       title='Parameters List'
                       className="w-[40px] flex justify-center items-center" shape='circle' size="large"
                     >
-                      <Icon icon="icon-park-solid:setting-two" width={25} height={25} />
+                      <Icon icon="ant-design:sliders-outlined" width={25} height={25} />
                       <span title="Create Parameter">
                       </span>
-                    </Button>
-                    {
-                      !isCreate && <PlusCircleOutlined
-                        title="Create Parameter Group"
-                        className='mt-2 ml-4'
-                        style={{ fontSize: 20, color: 'white' }}
-                        onClick={() => {
-                          setIsCreate(!isCreate);
-                          setSelectedParam({ param_type: "Telematic" });
-                          
-                        }} />
-                    }
+                    </Button>                  
 
                   </div>
                 }
@@ -263,20 +252,12 @@ function CustomAccordian({ vehicleList, gtVehi }) {
                        setIsCreate(false)
                       }}
                     >
-                      <Icon icon="ic:round-settings-suggest" width={25} height={25} />
-                      <span title="Create Parameter">
-                      </span>
+                      <Icon icon="ant-design:sliders-filled" width={25} height={25} />
+                      
                     </Button>
-                  {!isCreateGroup && <PlusCircleOutlined
-                        title="Create Parameter"
-                        className='mt-2 ml-4'
-                        style={{ fontSize: 20, color: 'white' }}
-                        onClick={() => {
-                          setIsCreateGroup(!isCreate);
-                          setSelectedParam({ param_type: "Telematic" });
-                          
-                        }} />
-                    }
+                    {/* <span className='text-white'>
+                      Groups
+                    </span> */}
                   </div>}
               >
                     {!isCreateGroup && <>

@@ -676,31 +676,22 @@ const Dashboard = () => {
           </div>
 
           <Layout style={{ flex: '1 1 auto' }} className="h-screen">
-            <Header title={'Dashboard'} showText={false} style={{ justifyContent: 'space-between', background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)' }} />
+            <Header title={'Dashboard'} showText={false} hideArrow={true} style={{ justifyContent: 'space-between', background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)' }} />
             <div className="row no-gutters m-5">
               <div className="col">
                 <div className="card shadow border-0">
                   <div className="card-body rounded" style={{ background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)', }}>
                     <div className="row">
-                      <div className="col">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Total Vehicle</span>
-                        <span className="h3 font-bold mb-0 text-white">{vehicleList.length}</span>
-                      </div>
-                      <div className="col-auto">
+                    <div className="col-auto">
                         <div className="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
                         <Link to={`/livemap/allVehicles`}>
                           <Icon icon="mdi:car-multiple" color="white" width="50" height="40" />
                           </Link>
                         </div>
                       </div>
-                    </div>
-
-
-                    <div className="mt-2 mb-0 text-sm">
-                      <span className="badge badge-pill bg-soft-success text-success me-2">
-                        <i className="bi bi-arrow-up me-1"></i>
-                      </span>
-                      <span className="text-nowrap text-xs text-white">Total registered Vehicles</span>
+                      <div className="col-auto">
+                        <span className="h6 text-white text-sm d-block mb-2">Registered Vehicles: <b>{vehicleList.length}</b></span>                        
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -711,23 +702,17 @@ const Dashboard = () => {
                     background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)',
                   }}>
                     <div className="row">
-                      <div className="col">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Online Vehicle</span>
-                        <span className="h3 font-bold mb-0">{onlineDevices}</span>
-                      </div>
-                      <div className="col-auto">
+                    <div className="col-auto">
                         <div className="icon icon-shape bg-primary text-white text-lg rounded-circle">
                           <Link to={`/livemap/onlineVehicles`}>
                             <Icon icon="ic:round-directions-car" color="white" width="50" height="40" />
                           </Link>
                         </div>
                       </div>
-                    </div>
-                    <div className="mt-2 mb-0 text-sm">
-                      <span className="badge badge-pill bg-soft-success text-success me-2">
-                        <i className="bi bi-arrow-up me-1"></i>
-                      </span>
-                      <span className="text-nowrap text-xs text-dark">Total Online Vehicles</span>
+                      <div className="col-auto">
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Online Vehicles: <b>{onlineDevices}</b></span>                        
+                      </div>
+                      
                     </div>
                   </div>
                 </div>
@@ -739,10 +724,6 @@ const Dashboard = () => {
 
                   }}>
                     <div className="row">
-                      <div className="col">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Offline Vehicle</span>
-                        <span className="h3 font-bold mb-0">{vehicleList.length - onlineDevices}</span>
-                      </div>
                       <div className="col-auto">
                         <div className="icon icon-shape bg-info text-white text-lg rounded-circle">
                           <Link to={`/livemap/offlineVehicles`}>
@@ -750,14 +731,11 @@ const Dashboard = () => {
                           </Link>
                         </div>
                       </div>
+                      <div className="col-auto">
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Offline Vehicles: <b>{vehicleList.length - onlineDevices}</b></span>
+                        <span className="h3 font-bold mb-0"></span>
+                      </div>                      
                     </div>
-                    <div className="mt-2 mb-0 text-sm">
-                      <span className="badge badge-pill bg-soft-danger text-danger me-2">
-                        <i className="bi bi-arrow-down me-1"></i>
-                      </span>
-                      <span className="text-nowrap text-xs text-white">Total Offline Vehicles</span>
-                    </div>
-
                   </div>
                 </div>
               </div>
@@ -769,10 +747,6 @@ const Dashboard = () => {
 
                   }}>
                     <div className="row">
-                      <div className="col">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Running Vehicle</span>
-                        <span className="h3 font-bold mb-0">{runningVehicleList.length}</span>
-                      </div>
                       <div className="col-auto">
                         <div className="icon icon-shape bg-info text-white text-lg rounded-circle">
                           {/* <Icon icon="mdi:car-off" color="white" width="50" height="40" /> */}
@@ -781,14 +755,10 @@ const Dashboard = () => {
                           </Link>
                         </div>
                       </div>
+                      <div className="col-auto">
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Running Vehicles: <b>{runningVehicleList.length}</b></span>
+                      </div>
                     </div>
-                    <div className="mt-2 mb-0 text-sm">
-                      <span className="badge badge-pill bg-soft-danger text-danger me-2">
-                        <i className="bi bi-arrow-down me-1"></i>
-                      </span>
-                      <span className="text-nowrap text-xs text-white">Total Running Vehicles</span>
-                    </div>
-
                   </div>
                 </div>
               </div>
@@ -799,10 +769,6 @@ const Dashboard = () => {
 
                   }}>
                     <div className="row">
-                      <div className="col">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Idle Vehicle</span>
-                        <span className="h3 font-bold mb-0">{stopVehicleList.length}</span>
-                      </div>
                       <div className="col-auto">
                         <div className="icon icon-shape bg-info text-white text-lg rounded-circle">
                           {/* <Icon icon="mdi:car-off" color="white" width="50" height="40" /> */}
@@ -811,14 +777,11 @@ const Dashboard = () => {
                           </Link>
                         </div>
                       </div>
+                      <div className="col-auto">
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Idle Vehicles: <b>{stopVehicleList.length}</b></span>
+                        <span className="h3 font-bold mb-0"></span>
+                      </div>
                     </div>
-                    <div className="mt-2 mb-0 text-sm">
-                      <span className="badge badge-pill bg-soft-danger text-danger me-2">
-                        <i className="bi bi-arrow-down me-1"></i>
-                      </span>
-                      <span className="text-nowrap text-xs text-white">Total Idle Vehicles</span>
-                    </div>
-
                   </div>
                 </div>
               </div>
@@ -836,19 +799,17 @@ const Dashboard = () => {
                     <h5 className="mb-0 text-white">
                       {/* <TwoWheelerIcon className='me-2' /> */}
                       <i class="bi bi-bar-chart-fill me-2 fs-3"></i>
-                      Vehicle Analysis</h5>
+                      Analysis</h5>
                   </div>
                   <div className="table-responsive" >
                     <table className="table table-hover table-nowrap">
                       <thead className="thead-light">
                         <tr >
-                          <th scope="col" className='fs-4'>Vehicles</th>
-                          <th scope="col" className='fs-4'>Group <i class="bi bi-collection"></i></th>
-                          <th scope="col" className='fs-4'>imei number <i class="bi bi-list-ol"></i></th>
-                          <th scope="col" className='fs-4'>Battery Voltage <i class="bi bi-battery-charging"></i></th>
-                          <th scope="col" className='fs-4'>Status <i class="bi bi-broadcast-pin"></i></th>
-                          <th scope="col" className='fs-4'>Conditions <i class="bi bi-speedometer2"></i></th>
-
+                          <th scope="col" className='fs-6'>Vehicles</th>
+                          <th scope="col" className='fs-6'>Group <i class="bi bi-collection"></i></th>
+                          <th scope="col" className='fs-6'>imei number <i class="bi bi-list-ol"></i></th>
+                          <th scope="col" className='fs-6'>Battery Voltage <i class="bi bi-battery-charging"></i></th>
+                          <th scope="col" className='fs-6'>Status <i class="bi bi-broadcast-pin"></i></th>                          
                         </tr>
                       </thead>
                       <tbody>
@@ -891,12 +852,13 @@ const Dashboard = () => {
                                 </>
 
                               )}
+
+                              <span className='condition-column'>
+                                {dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition}
+                              </span>
                             </td>
 
-                            <td>
-                              {dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition}
-                            </td>
-
+                            
 
                           </tr>
                         ))}

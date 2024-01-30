@@ -100,11 +100,11 @@ function LiveContent({ harshBreak, acceleration, speed, selectCheckParam }) {
     <Box>
       {/* <Typography style={{textAlign:"center",fontSize:"22px",padding:"10px",background:"#4071C9",color:"#fff",fontWeight:"600"}}>Trip History</Typography> */}
       <Box sx={{ display: "flex", justifyContent: "flex-end", marginRight: "100px", padding: "10px" }}>
-        <div className='w-100 p-3 me-1' style={{ background: ThemeColor.light_color_2, color: 'black' }}>
+        <div className='w-100 p-3 me-1' style={{ color: 'black' }}>
           <b> Total Distance:- {distance ? `${(distance / 1000).toFixed(2)} km` : 'Calculating...'} </b> 
-          <b className='ms-3'>speed:</b> 
-          <b className='ms-3'>ignition status:</b>
-          <b className='ms-3'>battery voltage:</b>
+          <b className='ms-3'>Speed:</b> 
+          <b className='ms-3'>Ignition Status:</b>
+          <b className='ms-3'>Battery Voltage:</b>
         </div>
 
 
@@ -316,7 +316,7 @@ function LiveContent({ harshBreak, acceleration, speed, selectCheckParam }) {
         :
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: '400px' }}>
           <Card sx={{ padding: "20px", fontSize: "20px", fontWeight: "600" }}>
-            Please Select Location
+            Choose Date Range From Right Panel
           </Card>
         </Box>
       }

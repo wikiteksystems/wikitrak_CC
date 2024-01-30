@@ -7,7 +7,7 @@ import { AppActions, UserActions } from '../stores/actions';
 import { LeftCircleOutlined, MenuOutlined, RightCircleOutlined } from '@ant-design/icons';
 const { Header } = Layout;
 
-export default function HeaderBar({title, classes, style, showText}) {
+export default function HeaderBar({title, classes, style, showText, hideArrow}) {
     const dispatch = useDispatch();
     const { login, themeColor, userName } = useSelector( ({User}) => User );
     const { mainMenuCollapsed, detailMenuCollapsed } = useSelector( ({App}) => App );
@@ -38,15 +38,20 @@ export default function HeaderBar({title, classes, style, showText}) {
 
             { showText === false && login && 
                 <div className='hidden md:flex    justify-center items-center'>
-                     
 
-                    { detailMenuCollapsed ?
-                    <LeftCircleOutlined className='' style={{fontSize: 30}} onClick={ handleDetailMenuCollapse } />
-                    :
-                    <RightCircleOutlined className='' style={{fontSize: 30}} onClick={ handleDetailMenuCollapse } />
+                    {
+                        hideArrow ?
+                        <div></div>
+                        :
+                        detailMenuCollapsed ?
+                            <LeftCircleOutlined className='' style={{fontSize: 30}} onClick={ handleDetailMenuCollapse } />
+                            :
+                            <RightCircleOutlined className='' style={{fontSize: 30}} onClick={ handleDetailMenuCollapse } />
+                        
+                         
                     }
                 </div>
-                }
+            }
         </Header>
     )
 }
