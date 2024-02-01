@@ -98,25 +98,25 @@ function CustomAccordian({ vehicleList, gtVehi }) {
         item._id === id ? { ...item, checked:e.target.checked } : item
       )
     );
-    //     console.log(paramArray,'paramArray')
     let active_paramList = activeParamList
+    let tempParamList = activeParamList
     if (e.target.checked) {
       gtVehi.map((item) => {
         if (item.latestDocument.imei === imei) {
           // if(!isCreate) active_paramList=[]
           active_paramList.push({ label: param, value: item.latestDocument[param] })
-          console.log('active_paramList', active_paramList)
+          tempParamList = active_paramList;
           setActiveParamList(active_paramList);
         }
       })
-
-
     } else {
       let removeParam = activeParamList.filter(item => item.label !== param);
+      tempParamList = removeParam
       setActiveParamList(removeParam)
-      console.log('removeParam', removeParam)
     }
-    
+
+    let obj = [{ 'reg_id': id, 'imei': imei, params: tempParamList }]
+    dispatch(LiveMapActions.addParameter(obj))
   };
 
   const handleParameterGroupChange = (e, param, imei, id) => {
@@ -138,6 +138,7 @@ function CustomAccordian({ vehicleList, gtVehi }) {
    console.log(filteredParameter, 'filtered parameter');
   
    let active_paramList = activeParamGroupList
+   let tempParamList = activeParamGroupList
    if (e.target.checked) {
      gtVehi.map((item) => {
        if (item.latestDocument.imei === imei) {
@@ -145,41 +146,23 @@ function CustomAccordian({ vehicleList, gtVehi }) {
               let parameter=par.label
               active_paramList.push({ label: parameter, value: item.latestDocument[parameter] })
             })
-  
-         
-         console.log('active_paramList', active_paramList)
-         setActiveParamGroupList(active_paramList);
+          tempParamList = active_paramList;
+          setActiveParamGroupList(active_paramList);
        }
      })
 } else {
    let removeParam=activeParamGroupList
    let removeItem = filteredParameter.map((param) => {
     console.log( activeParamGroupList,param.label)
-    removeParam = removeParam.filter(item => item.label !== param.label);
-   
-    console.log('removeParam', removeParam)
+    removeParam = removeParam.filter(item => item.label !== param.label);   
+    tempParamList = removeParam;
    })
-    setActiveParamGroupList(removeParam)
-   
-     
-    //  console.log('removeParam', removeParam)
+    setActiveParamGroupList(removeParam);
    }
-    
-  }
-
-  const handleAddClick = (reg_id, imei) => {
    
-      console.log('activeParamList', activeParamList)
-    let obj = [{ 'reg_id': reg_id, 'imei': imei, params: activeParamList }]
+    let obj = [{ 'reg_id': id, 'imei': imei, params: tempParamList }]
     dispatch(LiveMapActions.addParameter(obj))
   }
-
-  const handleAddGroupClick = (reg_id, imei) => {
-    console.log('activeParamGroupList', activeParamGroupList)
-    let obj = [{ 'reg_id': reg_id, 'imei': imei, params: activeParamGroupList }]
-    dispatch(LiveMapActions.addParameter(obj))
-  }
-
 
   return (
     <Accordion defaultActiveKey="" onSelect={getLMonitorParams} >
@@ -226,7 +209,7 @@ function CustomAccordian({ vehicleList, gtVehi }) {
                         <Checkbox style={{ position: 'absolute', right: 20 }}
                           checked={param.checked}
                           onChange={(e) => {
-                            handleParameterChange(e, param.label, item.imei[0].mac_id, param._id)
+                            handleParameterChange(e, param.label, item.imei[0].mac_id, param._id);
                           }}
                         />
                       </div>
@@ -234,7 +217,6 @@ function CustomAccordian({ vehicleList, gtVehi }) {
                   }</> : <div className='text-white'>
                     No parameters found
                   </div>}
-                  <button className='btn btn-primary w-100  mt-3' onClick={() => { handleAddClick(item.registration_id, item.imei[0].mac_id) }}>Add</button>
                 </>}
 
 
@@ -277,7 +259,6 @@ function CustomAccordian({ vehicleList, gtVehi }) {
                   }</> : <div className='text-white'>
                     No parameters found
                   </div>}
-                  <button className='btn btn-primary w-100  mt-3' onClick={() => { handleAddGroupClick(item.registration_id, item.imei[0].mac_id) }}>Add</button>
                 </>}
                 {isCreateGroup && <CreateParameterGroup selectedParam={selectedParam} setSelectedParam={setSelectedParam} />}
               </Tab>
