@@ -12,6 +12,7 @@ import Typography from 'antd/es/typography/Typography';
 import Button from '@mui/material/Button';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
+import tripHistoryImage from "./trip-history.png";
 
 const { GMAP_API_KEY, ThemeColor } = require("../../../utils/constants")
 
@@ -314,7 +315,14 @@ function LiveContent({ harshBreak, acceleration, speed, selectCheckParam }) {
 
         </GoogleMap>
         :
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: '400px' }}>
+        <Box sx={{ 
+                backgroundImage:`url(${tripHistoryImage})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "contain",
+                display: "center", 
+                alignItems: "center", 
+                justifyContent: "center", 
+                height: '100%' }}>
           <Card sx={{ padding: "20px", fontSize: "20px", fontWeight: "600" }}>
             Choose Date Range From Right Panel
           </Card>
