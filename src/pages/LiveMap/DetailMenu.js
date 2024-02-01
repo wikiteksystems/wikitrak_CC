@@ -1014,7 +1014,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,g
                                                     <NetworkStrength locationData={locationData} item={item} />
                                                     
                                                     <span title="Go to location" onClick={e => goToVehicleLocation(e, item)}> <Battery locationData={locationData} item={item} /></span>
-                                                    <span className="w-full overflow-hidden" title="Registration Id" style={{ textOverflow: 'ellipsis' }} onClick={() => handleVehicleItemClick(item)}> {item?.registration_id}</span>
+                                                    <span className="w-full overflow-hidden" title="Registration I" style={{ textOverflow: 'ellipsis' }} onClick={() => handleVehicleItemClick(item)}> {item?.registration_id}</span>
                                                     <Checkbox checked={item.checked} onClick={e => handleCheckboxClick(e, 'select-one', item.id)} />
                                                 </div>
                                             )
