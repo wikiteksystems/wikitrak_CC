@@ -1666,10 +1666,10 @@ export default function LiveContent({ selectCheckParam, setSelecCheckParam }) {
                                     return (
                                       <TableRow hover key={innerIndex} >
                                         <TableCell>
-                                          <Typography>{item?.label} aniket</Typography>
+                                          <Typography>{item?.label}</Typography>
                                         </TableCell>
                                         <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
-                                          <Typography>{loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]} {item?.unit} dsd</Typography>
+                                          <Typography>{loginItem?.latestDocument[item?.label.replace(/[^a-zA-Z0-9]/g, '')]} {item?.unit}</Typography>
                                         </TableCell>
                                       </TableRow>
                                     );

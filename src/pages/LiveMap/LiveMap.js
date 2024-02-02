@@ -109,8 +109,9 @@ const LiveMap = () => {
         dispatch(LiveMapActions.addParameter(activeParametersList))
         }
    // const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'GT-06');
-   const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'WTK4G06');
-
+   const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'WTK4G06'|| item.latestDocument.venderId === 'WTK2G06');
+  //  
+       
       gt06Data.map((item) => {
         
         // let c_data={};
@@ -129,7 +130,7 @@ const LiveMap = () => {
         //  console.log('activeParameters list',activeParametersList);
     
         });
-     setGtVehi(gt06Data)
+     setGtVehi(locationData)
 
   
       // console.log('coordinates1',cooridinates_obj,gt06Data);
@@ -148,15 +149,8 @@ const LiveMap = () => {
   useEffect(()=>{
 
     // const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'GT-06');
-    const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'WTK4G06');
-//     let data={};
-//     gt06Data.map((item) =>{
-//       let obj={lat:item.latestDocument.lat,lng:item.latestDocument.lng};
-//       data[item.latestDocument.imei]=[obj]
-//  })
-//     dispatch(LiveMapActions.add_cooridinates_to_obj(data));
-  
-    setGtVehi(gt06Data)
+    const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'WTK4G06'|| item.latestDocument.venderId === 'WTK2G06');
+    setGtVehi(locationData)
     
     const wikitekData = locationData.filter((item) => item.latestDocument.venderId === 'Wikitek');
     setwikitekVehi(wikitekData)
