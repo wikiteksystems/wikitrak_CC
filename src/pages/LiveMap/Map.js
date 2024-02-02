@@ -1432,7 +1432,7 @@ function Map({
                       </div>
                       <div className="col-md-6 d-flex align-items-center">
                         <h4 className="text-light">
-                          {activeParametersList[0].reg_id}
+                          {activeParametersList[0].reg_id}  
                         </h4>
                       </div>
                     </div>
