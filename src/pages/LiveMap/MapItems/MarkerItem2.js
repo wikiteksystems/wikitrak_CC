@@ -3,7 +3,7 @@ import WeatherForecast from "../WeatherForecast";
 const MarkerItem2 = ({ item }) => {
   console.log(item,"markeritem")
   // if (item?.latestDocument?.venderId === "GT-06") {
-  if (item?.latestDocument?.venderId === "WTK4G06") {
+  if (true) {
 
 
     return (
@@ -20,7 +20,7 @@ const MarkerItem2 = ({ item }) => {
         >
           <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>
             <p style={{ color: "black", fontWeight: "600" }}>Device Type :</p>
-            <p>wikitrak mini</p>
+            <p>{item?.latestDocument?.venderId}</p>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "40px", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.3)" }}>

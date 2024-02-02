@@ -1347,7 +1347,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi,
                     )}
                   </Marker>
                 ))}
-                {wikitekVehi?.length > 0 && wikitekVehi.map((item, index) => (
+                {/* {wikitekVehi?.length > 0 && wikitekVehi.map((item, index) => (
                   <Marker
                     key={index}
                     onClick={() => toggleInfoWindow(item.latestDocument._id)}
@@ -1384,7 +1384,7 @@ function Map({ locationData, vehicleGroupList, vehicleList, gtVehi, wikitekVehi,
                       </InfoWindow>
                     )}
                   </Marker>
-                ))}
+                ))} */}
               </>
             )
           }
