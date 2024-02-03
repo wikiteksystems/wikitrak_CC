@@ -1056,7 +1056,7 @@ function Map({
         )}
         <GoogleMap
           mapContainerStyle={containerStyle}
-          zoom={13}
+          zoom={8}
           center={center}
           clickableIcons={false}
           options={{

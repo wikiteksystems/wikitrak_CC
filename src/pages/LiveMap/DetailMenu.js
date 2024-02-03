@@ -640,11 +640,11 @@ import { LiveMonitorActions } from "../../stores/actions";
 
 const { Sider } = Layout;
 
-const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,gtVehi }) => {
+const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,gtVehi,setGtVehi }) => {
     // console.log(locationData,"detaillocation")
     const dispatch = useDispatch();
     const { userId, userName, themeColor } = useSelector(({ User }) => User);
-    const { oemList, variantList, modelList, subModelList, vehicleGroupList, segmentList, activeVehicle } = useSelector(({ LiveMap }) => LiveMap);
+    const { oemList, variantList, modelList, subModelList, vehicleGroupList, segmentList, activeVehicle,vehicleList } = useSelector(({ LiveMap }) => LiveMap);
     const [modelYearList, setModelYearList] = useState([]);
 
     const [searchText, setSearchText] = useState('');
@@ -715,23 +715,36 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,g
             setSearchedMenuList(list);
         }
         else if (selectType === 'group-select-one') {
+            let findVehicleList=vehicleList.filter((item) =>item.vehicle_group===selectedId)
+            let  groupArray=[]
+            if(e.target.checked){
+                let groupVehicleList=findVehicleList.map((list)=>{
+                    let vehicleDetail=locationData.find((imei) =>imei.latestDocument.imei===list.imei[0].mac_id )
+                    groupArray.push(vehicleDetail)
+                    // setCenter({ lat: 19.076090, lng: 72.877426 })
+              })
+              setGtVehi(groupArray)
+            }else{
+                setGtVehi(locationData)
+            }
+            
             const list = selectedGroupList.map(item => (
                 selectedId === item.id ? {
                     ...item,
                     checked: e.target.checked
-                } : { ...item }
+                } : { ...item, checked: false}
             ));
 
             const group = selectedGroupList.find(item => selectedId === item.id);
 
-            const vehicleList = searchedMenuList.map(item => (
+            const vehiclesList = searchedMenuList.map(item => (
                 item.vehicle_group === group.id ? {
                     ...item,
                     checked: e.target.checked
                 } : { ...item }
             ));
 
-            setSearchedMenuList(vehicleList);
+            setSearchedMenuList(vehiclesList);
             setSelectedGroupList(list);
         }
         else if (selectType === 'variant' || selectType === 'model') {
