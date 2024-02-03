@@ -26,6 +26,7 @@ import Button from "@mui/material/Button";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import tripHistoryImage from "./trip-history.png";
+import BgCar from './newcar.gif'
 
 const { GMAP_API_KEY, ThemeColor } = require("../../../utils/constants");
 
@@ -394,16 +395,18 @@ function LiveContent({ harshBreak, acceleration, speed, selectCheckParam }) {
       ) : (
         <Box
           sx={{
-            backgroundImage: `url(${tripHistoryImage})`,
+            backgroundImage: `url(${BgCar})`,
             backgroundRepeat: "no-repeat",
-            backgroundSize: "contain",
+            backgroundSize: "cover",
             display: "center",
             alignItems: "center",
             justifyContent: "center",
             height: "100%",
+            width: "100%",
+            opacity:"0.70"
           }}
         >
-          <Card sx={{ padding: "20px", fontSize: "20px", fontWeight: "600" }}>
+          <Card sx={{ padding: "20px", fontSize: "20px", fontWeight: "600", backgroundColor:"#232561",color:"white"}}>
             Choose Date Range From Right Panel
           </Card>
         </Box>

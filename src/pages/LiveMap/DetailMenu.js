@@ -1040,7 +1040,7 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,g
                                 <>
                                     <div className="flex justify-between items-center" style={{ backgroundColor: "#0F4C75", paddingBottom: "5px" }}>
                                         <LeftCircleOutlined className='px-2' style={{ fontSize: 20, color: 'white' }} onClick={() => handleClick('vehicle_list')} />
-                                        <Header title={'Vehicle Detail'} style={{ fontSize: 19, paddingInline: 0, }} />
+                                        <Header title={selectedVehicle?.registration_id} style={{ fontSize: 19, paddingInline: 0, }} />
                                         <div className="h-full flex items-center cursor-pointer pr-2" onClick={() => handleClick(vehicleDetailEditable ? 'save-detail' : 'edit-detail')}>
                                             {vehicleDetailEditable && Vehi ? (
                                                 <Icon icon="akar-icons:save" width="22" height="22" color="white" />
@@ -1050,18 +1050,21 @@ const DetailMenu = ({ menuList, menuCollapsed, locationData, center, setCenter,g
                                         </div>
                                     </div>
 
-                                    {Vehi ? (<Button className=" flex gap-5 text-black" style={{ margin: '20px auto 0 27px', padding: '0 91px 0 70px', color: "black", transition: 'background 0.3s ease' }} onClick={() => {
+                                    {Vehi ? (
+                                    <Button className="" style={{ margin: '10px', padding: '0 91px 0 70px', color: "black" }} onClick={() => {
                                         setVehiDetail(!Vehi)
-                                        console.log(Vehi)
+                                        
                                     }}>
-                                        <ToggleOnIcon />
-                                        <span className="ps-2">Features</span></Button>)
-                                        : (<Button className=" flex gap-5 text-black" style={{ margin: '20px auto 0 27px', padding: '0 91px 0 30px', color: "black", transition: 'background 0.3s ease' }} onClick={() => {
+                                        <ToggleOnIcon  className="text-light" />
+                                        <b className="ps-2 text-light">Features</b></Button>)
+                                        : (
+                                        <Button className="" style={{ margin: '10px', padding: '0 91px 0 30px', color: "black" }} onClick={() => {
                                             setVehiDetail(!Vehi)
-                                            console.log(Vehi)
-                                        }}>
-                                            <ToggleOffIcon />
-                                            <span className="ps-2"> Vehicle Details</span></Button>)
+                                       }}>
+                                            <ToggleOffIcon className="text-light" />
+                                            <b className="ps-2 text-light"> Vehicle Details</b>
+                                        </Button>
+                                    )
                                     }
 
                                     <Menu

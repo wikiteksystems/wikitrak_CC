@@ -185,10 +185,10 @@ const StyledFab = styled(Fab)({
                 </div>
 
                 <Layout style={{ flex: "1 1 auto" }} className="h-screen">
-                   
+                <Header title={"Trip History"} showText={false} style={{justifyContent: "space-between"}} />
 
-                    <Content style={{width: '100%', height: '100%'}} className="h-screen">
-                    <Header title={"Trip History"} showText={false} style={{justifyContent: "space-between"}} />
+                    <Content style={{width: '100%'}} className="h-screen">
+                  
                        
                      <LiveContent harshBreak={harshBreak} acceleration={acceleration} speed={speed} selectCheckParam={selectCheckParam} setSelecCheckParam={setSelecCheckParam} />
                     </Content>
