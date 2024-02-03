@@ -1355,7 +1355,7 @@ function Map({
                       )}
                     </Marker>
                   ))}
-                {wikitekVehi?.length > 0 &&
+                {/* {wikitekVehi?.length > 0 &&
                   wikitekVehi.map((item, index) => (
                     <Marker
                       key={index}
@@ -1400,7 +1400,7 @@ function Map({
                         </InfoWindow>
                       )}
                     </Marker>
-                  ))}
+                  ))} */}
               </>
             )}
           {activeParametersList[0].reg_id && (
