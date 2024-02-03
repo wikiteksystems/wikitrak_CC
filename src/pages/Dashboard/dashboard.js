@@ -709,7 +709,7 @@ useEffect(() => {
   const handleRunningVehicleClick = () =>{
     let runningVehicleData=[]
     vehicleList.map((item)=>{
-    if(dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition.status==="Running"){
+    if(dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition.subStatus==="(Running)"){
       runningVehicleData.push(item)
     }
    setAllVehiclesList(runningVehicleData);
@@ -719,7 +719,7 @@ useEffect(() => {
   const handleIdleVehicleClick=() =>{
     let runningVehicleData=[]
     vehicleList.map((item)=>{
-    if(dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition.status==="Idle"){
+    if(dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition.subStatus==="(Idle)"){
       runningVehicleData.push(item)
     }
    setAllVehiclesList(runningVehicleData);
