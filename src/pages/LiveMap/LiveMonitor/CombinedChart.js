@@ -1,17 +1,19 @@
-import React from 'react';
-import ZoomableLineChart from './ZoomableLineChart';
-import ZoomableLineChart2 from './ZoomableLineChart2';
+// CombinedCharts.js
+import React from "react";
+import ZoomableLineChart from "./LineCharts";
+import { Card } from "@mui/material";
 
+const CombinedCharts = ({ combinedChartData }) => {
+  console.log("Combined Data:", combinedChartData);
 
+  return (
+    <div style={{ display: "flex", flexDirection: "row" }}>
+      <Card sx={{ margin: "20px", padding: "10px", width: "100%" }}>
+        <h2>Combined Chart</h2>
+        <ZoomableLineChart data={combinedChartData} />
+      </Card>
+    </div>
+  );
+};
 
-const CombinedCharts = ({ data }) => {
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <ZoomableLineChart data={data} />
-        <ZoomableLineChart2 data={chartValue} />
-      </div>
-    );
-  };
-  
-  export default CombinedCharts;
+export default CombinedCharts;
