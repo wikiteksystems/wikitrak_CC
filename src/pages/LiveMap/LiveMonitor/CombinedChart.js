@@ -10,7 +10,7 @@ const CombinedCharts = ({ combinedChartData }) => {
     <div style={{ display: "flex", flexDirection: "row" }}>
       <Card sx={{ margin: "20px", padding: "10px", width: "100%" }}>
         <h2>Combined Chart</h2>
-        <ZoomableLineChart data={combinedChartData} />
+        <ZoomableLineChart data={combinedChartData.map((item) => item.data)} />
       </Card>
     </div>
   );

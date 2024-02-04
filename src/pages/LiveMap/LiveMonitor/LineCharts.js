@@ -11,12 +11,10 @@ import {
 } from "recharts";
 
 const ZoomableLineChart = ({ data }) => {
+  console.log("Received Data:", data);
   return (
     <ResponsiveContainer width="100%" height={500}>
-      <LineChart
-        data={data[0]?.data}
-        margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
-      >
+      <LineChart margin={{ top: 20, right: 30, left: 20, bottom: 10 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="Time" />
         <YAxis
@@ -42,24 +40,30 @@ const ZoomableLineChart = ({ data }) => {
         <Tooltip />
         <Line
           type="monotone"
+          data={data[0]} // Use the first array for speed
           dataKey="value"
           stroke="#8884d8"
-          name={data[0]?.label}
+          name="Speed"
           yAxisId="speed"
+          dot={false} // Hide dots
         />
         <Line
           type="monotone"
+          data={data[1]} // Use the second array for mainInputVoltage
           dataKey="value"
           stroke="#82ca9d"
-          name={data[1]?.label}
+          name="Main Input Voltage"
           yAxisId="mainInputVoltage"
+          dot={false} // Hide dots
         />
         <Line
           type="monotone"
+          data={data[2]} // Use the third array for ignition
           dataKey="value"
           stroke="#ffc658"
-          name={data[2]?.label}
+          name="Ignition"
           yAxisId="ignition"
+          dot={false} // Hide dots
         />
         <Brush dataKey="Time" height={30} stroke="#8884d8" />
       </LineChart>
