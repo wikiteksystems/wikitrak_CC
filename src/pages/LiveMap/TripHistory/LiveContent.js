@@ -12,6 +12,7 @@ import DirectionsCarFilledIcon from "@mui/icons-material/DirectionsCarFilled";
 import MarkerItem1 from "../MapItems/MarkerItem1";
 import moment from "moment";
 import MapLine from "./MapLine";
+import './animation.css';
 import {
   Box,
   Card,
@@ -395,9 +396,9 @@ function LiveContent({ harshBreak, acceleration, speed, selectCheckParam }) {
       ) : (
         <Box
           sx={{
-            backgroundImage: `url(${BgCar})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
+            // backgroundImage: `url(${tripHistoryImage})`,
+            // backgroundRepeat: "no-repeat",
+            // backgroundSize: "cover",
             display: "center",
             alignItems: "center",
             justifyContent: "center",
@@ -406,9 +407,16 @@ function LiveContent({ harshBreak, acceleration, speed, selectCheckParam }) {
             opacity:"0.70"
           }}
         >
-          <Card sx={{ padding: "20px", fontSize: "20px", fontWeight: "600", backgroundColor:"#232561",color:"white"}}>
-            Choose Date Range From Right Panel
-          </Card>
+     <div style={{marginTop:'200px'}}>
+       <Box sx={{display:"flex",alignItems:"center",justifyContent:"center",height:'400px'}}>
+    {/* <Card sx={{padding:"20px",fontSize:"20px",fontWeight:"600"}}>
+    Please Select Location
+    </Card> */}
+    <div class="map1">
+		<div class="car1"></div>
+</div>
+    </Box>
+    </div>
         </Box>
       )}
     </Box>

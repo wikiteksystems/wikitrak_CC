@@ -47,7 +47,7 @@ const TripHistory = () => {
 
             let result = await locationsApi.getTripHistory(data);
               if(result.status === "SUCCESS"){
-               setTripHis([...result?.data[0]?.documents])
+               setTripHis([...result?.data?.documents])
                console.log(result)
               }
          }
