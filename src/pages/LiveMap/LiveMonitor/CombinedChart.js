@@ -9,7 +9,6 @@ const CombinedCharts = ({ combinedChartData }) => {
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
       <Card sx={{ margin: "20px", padding: "1px", width: "100%" }}>
-       
         <ZoomableLineChart data={combinedChartData.map((item) => item.data)} />
       </Card>
     </div>

@@ -1146,9 +1146,7 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
                 padding: "20px",
               }}
             >
-             
-                <CombinedCharts combinedChartData={combinedChartData} />
-            
+              <CombinedCharts combinedChartData={combinedChartData} />
             </Box>
           )}
         </Box>
