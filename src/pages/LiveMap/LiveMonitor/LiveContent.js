@@ -1146,9 +1146,9 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
                 padding: "20px",
               }}
             >
-              <Card sx={{ margin: "20px", padding: "10px" }}>
+             
                 <CombinedCharts combinedChartData={combinedChartData} />
-              </Card>
+            
             </Box>
           )}
         </Box>

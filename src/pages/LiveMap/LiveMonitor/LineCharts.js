@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   LineChart,
   Line,
@@ -11,29 +11,38 @@ import {
 } from "recharts";
 
 const ZoomableLineChart = ({ data }) => {
-  console.log("Received Data:", data);
+  const [brushData, setBrushData] = useState([]);
+
+  const handleBrushChange = (data) => {
+    setBrushData(data);
+  };
+
   return (
     <ResponsiveContainer width="100%" height={500}>
-      <LineChart margin={{ top: 20, right: 30, left: 20, bottom: 10 }}>
+      <LineChart
+        margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+        data={brushData.length > 0 ? brushData : data[0]}
+        onMouseLeave={() => setBrushData([])} // Clear brushData when mouse leaves the chart
+      >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="Time" />
         <YAxis
           yAxisId="speed"
-          domain={[0, 100]} // Set the domain for speed
+          domain={[0, 100]}
           tick={{ fill: "#8884d8" }}
           axisLine={{ stroke: "#8884d8" }}
         />
         <YAxis
           yAxisId="mainInputVoltage"
           orientation="right"
-          domain={[0, 16]} // Set the domain for mainInputVoltage
+          domain={[0, 16]}
           tick={{ fill: "#82ca9d" }}
           axisLine={{ stroke: "#82ca9d" }}
         />
         <YAxis
           yAxisId="ignition"
           orientation="right"
-          domain={[0, 1]} // Set the domain for ignition
+          domain={[0, 1]}
           tick={{ fill: "#ffc658" }}
           axisLine={{ stroke: "#ffc658" }}
         />
@@ -65,7 +74,7 @@ const ZoomableLineChart = ({ data }) => {
           yAxisId="ignition"
           dot={false} // Hide dots
         />
-        <Brush dataKey="Time" height={30} stroke="#8884d8" />
+        <Brush dataKey="Time" height={30} stroke="#8884d8" onChange={handleBrushChange} />
       </LineChart>
     </ResponsiveContainer>
   );
