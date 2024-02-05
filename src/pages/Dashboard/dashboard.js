@@ -493,6 +493,7 @@ const Dashboard = () => {
   const [locationData, setLocationData] = useState([]);
   const [stopVehicleList, setStopVehicleList] = useState([]);
   const [runningVehicleList, setRunningVehicleList] = useState([]);
+  const [allVehiclesList, setAllVehiclesList] = useState([]);
   console.log(vehicleList, "vehicleListdashboard");
 
   useEffect(() => {
@@ -569,6 +570,7 @@ const Dashboard = () => {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
+  setAllVehiclesList(vehicleList)
     const fetchData = async () => {
       try {
         let imei = [];
@@ -615,21 +617,60 @@ const Dashboard = () => {
   // const imeiNumbers = locations.map(location => location.latestDocument.imei);
   const dataArray = [];
 
-  const extractedData = locations.map(location => ({
-    imei: location.latestDocument.imei,
-    mainInputVoltage: location.latestDocument.mainInputVoltage,
-    ignition: location.latestDocument.ignition ? "Running" : "idle"
-  }));
+  // const extractedData = locations.map(location => ({
+  //   imei: location.latestDocument.imei,
+  //   mainInputVoltage: location.latestDocument.mainInputVoltage,
+  //   ignition: location.latestDocument.ignition ? "Running" : "idle"
+  // }));
+  const getVehicleStatus=(imei,ignition,speed) => {
+     let status='';
+     let color='';
+     let subStatus='';
+    //  imeiList.includes(parseFloat(imei))&& ignition && !speed>5
+     if(imeiList.includes(parseFloat(imei))){
+      if (ignition){
+        if(ignition && speed>5){
+          status='Online'
+          subStatus='(Running)'
+          color='#2cb322'
+        }else{
+          status='Online'
+          subStatus='(Idle)'
+          // colodr='#e0b01f'
+          color='#2cb322'
+        }
+          
+      }else{
+        status='Online'
+        subStatus= ''
+        color='#2cb322'
+      }
+     }else{
+      status='Offline'
+      subStatus= ''
+      color='red'
+     }
 
-  dataArray.push(...extractedData);
+return {status,color,subStatus}
+ }
+  const extractedData = locations.map((location)=>{
+    const {imei,ignition,speed}=location.latestDocument
+     getVehicleStatus(imei, ignition,speed)
+    let obj={
+      imei: location.latestDocument.imei,
+      mainInputVoltage: location.latestDocument.mainInputVoltage,
+      ignition: getVehicleStatus(imei,ignition,speed),
+      speed:location.latestDocument.speed,
+      ign:location.latestDocument.ignition,
+      }
+    dataArray.push(obj);
+  })
 
-  console.log(dataArray, "dataarray");
-
-
-  useEffect(() => {
+  
+useEffect(() => {
     console.log("location data", locationData)
-    const ignitionFalseData = locationData.filter(entry => entry.latestDocument.ignition === false);
-    const ignitionTrueData = locationData.filter(entry => entry.latestDocument.ignition === true);
+    const ignitionFalseData = locationData.filter(entry => imeiList.includes(parseFloat(entry.latestDocument.imei)) && entry.latestDocument.ignition && entry.latestDocument.speed < 5);
+    const ignitionTrueData = locationData.filter(entry => imeiList.includes(parseFloat(entry.latestDocument.imei)) && entry.latestDocument.ignition && entry.latestDocument.speed>5);
     setRunningVehicleList(ignitionTrueData);
     setStopVehicleList(ignitionFalseData)
   }, [locationData])
@@ -639,7 +680,53 @@ const Dashboard = () => {
 
   }, [vehicleList, vehicleGroupList]);
 
+  
+  const handleTotalVehicleClick = () =>{
+   
+    setAllVehiclesList(vehicleList)
+  }
 
+  const handleOnlineVehicleClick = () =>{
+    let onlineVehicleData=[]
+    vehicleList.map((item)=>{
+      if(imeiList.includes(parseFloat(item?.imei[0]?.mac_id))){
+        onlineVehicleData.push(item)
+      }
+    })
+    setAllVehiclesList(onlineVehicleData)
+  }
+
+  const handleOfflineVehicleClick = () =>{
+    let offLineVehicleData=[]
+    vehicleList.map((item)=>{
+      if(!imeiList.includes(parseFloat(item?.imei[0]?.mac_id))){
+        offLineVehicleData.push(item)
+      }
+    })
+    setAllVehiclesList(offLineVehicleData)
+  }
+
+  const handleRunningVehicleClick = () =>{
+    let runningVehicleData=[]
+    vehicleList.map((item)=>{
+    if(dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition.subStatus==="(Running)"){
+      runningVehicleData.push(item)
+    }
+   setAllVehiclesList(runningVehicleData);
+    })
+ }
+
+  const handleIdleVehicleClick=() =>{
+    let runningVehicleData=[]
+    vehicleList.map((item)=>{
+    if(dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition.subStatus==="(Idle)"){
+      runningVehicleData.push(item)
+    }
+   setAllVehiclesList(runningVehicleData);
+    })
+  }
+
+  
 
 
   // console.log(extractedData,"extracteddata")
@@ -680,7 +767,7 @@ const Dashboard = () => {
             <div className="row no-gutters m-5">
               <div className="col">
                 <div className="card shadow border-0">
-                  <div className="card-body rounded" style={{ background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)', }}>
+                  <div className="card-body rounded" title='Total Vehicle' onClick={handleTotalVehicleClick} style={{ background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)',cursor:"pointer" }}>
                     <div className="row">
                     <div className="col-auto">
                         <div className="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
@@ -698,8 +785,9 @@ const Dashboard = () => {
               </div>
               <div className="col">
                 <div className="card shadow border-0">
-                  <div className="card-body rounded" style={{
+                  <div className="card-body rounded" title='Online Vehicle' onClick={handleOnlineVehicleClick} style={{
                     background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)',
+                    cursor:"pointer"
                   }}>
                     <div className="row">
                     <div className="col-auto">
@@ -719,9 +807,9 @@ const Dashboard = () => {
               </div>
               <div className="col">
                 <div className="card shadow border-0">
-                  <div className="card-body rounded" style={{
+                  <div className="card-body rounded" title='Offline Vehicle' onClick={handleOfflineVehicleClick} style={{
                     background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)',
-
+                     cursor:"pointer"
                   }}>
                     <div className="row">
                       <div className="col-auto">
@@ -742,9 +830,9 @@ const Dashboard = () => {
               {/* //running// */}
               <div className="col">
                 <div className="card shadow border-0">
-                  <div className="card-body rounded" style={{
+                  <div className="card-body rounded" title='Running Vehicle' onClick={handleRunningVehicleClick} style={{
                     background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)',
-
+                    cursor:"pointer"
                   }}>
                     <div className="row">
                       <div className="col-auto">
@@ -764,9 +852,9 @@ const Dashboard = () => {
               </div>
               <div className="col">
                 <div className="card shadow border-0">
-                  <div className="card-body rounded" style={{
+                  <div className="card-body rounded" title='Idle Vehicle' onClick={handleIdleVehicleClick} style={{
                     background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)',
-
+                    cursor:"pointer"
                   }}>
                     <div className="row">
                       <div className="col-auto">
@@ -778,7 +866,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Vehicles: <b>{stopVehicleList.length}</b></span>
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Idel: <b>{stopVehicleList.length}</b></span>
                         <span className="h3 font-bold mb-0"></span>
                       </div>
                     </div>
@@ -813,7 +901,7 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {vehicleList.map(item => (
+                        {allVehiclesList.length>0 && allVehiclesList.map(item => (
                           <tr key={item.id}>
                             <td className='d-flex '>
                               <div className="icon icon-shape bg-dark text-white text-lg rounded-circle">
@@ -839,7 +927,7 @@ const Dashboard = () => {
 
                             <td>
 
-                              {imeiList.includes(parseFloat(item?.imei[0]?.mac_id)) ? (
+                              {/* {imeiList.includes(parseFloat(item?.imei[0]?.mac_id)) ? (
                                 <>
                                   <span className="text-success ">Online </span>
                                   <span className="dot dot-online ms-3"></span>
@@ -851,10 +939,10 @@ const Dashboard = () => {
                                   <span className="dot dot-offline ms-3"></span>
                                 </>
 
-                              )}
+                              )} */}
 
-                              <span className='condition-column'>
-                                {dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition}
+                              <span className='condition-column' style={{color:`${dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition.color}`}} >
+                                {dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition.status} <span style={{color:"#e0b01f"}}>{dataArray.find(data => data.imei === item?.imei[0]?.mac_id)?.ignition.subStatus}</span>
                               </span>
                             </td>
 

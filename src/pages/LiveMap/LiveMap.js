@@ -112,7 +112,7 @@ const LiveMap = () => {
    const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'WTK4G06'|| item.latestDocument.venderId === 'WTK2G06');
   //  
        
-      gt06Data.map((item) => {
+      locationData.map((item) => {
         
         // let c_data={};
         // if(Object.keys(cooridinates_obj).length === 0){
@@ -200,6 +200,7 @@ const LiveMap = () => {
           center={center}
           setCenter={setCenter}
           gtVehi={gtVehi}
+          setGtVehi={setGtVehi}
         />
         
        

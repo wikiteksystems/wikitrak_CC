@@ -91,7 +91,7 @@ function CustomAccordian({ vehicleList, gtVehi }) {
     }
   }
 
-  const handleParameterChange = (e, param, imei, id) => {
+  const handleParameterChange = (e, param, imei, id,reg_id) => {
 
     setParamList((prevItems) =>
       prevItems.map((item) =>
@@ -115,7 +115,7 @@ function CustomAccordian({ vehicleList, gtVehi }) {
       setActiveParamList(removeParam)
     }
 
-    let obj = [{ 'reg_id': id, 'imei': imei, params: tempParamList }]
+    let obj = [{ 'reg_id': reg_id, 'imei': imei, params: tempParamList }]
     dispatch(LiveMapActions.addParameter(obj))
   };
 
@@ -209,7 +209,7 @@ function CustomAccordian({ vehicleList, gtVehi }) {
                         <Checkbox style={{ position: 'absolute', right: 20 }}
                           checked={param.checked}
                           onChange={(e) => {
-                            handleParameterChange(e, param.label, item.imei[0].mac_id, param._id);
+                            handleParameterChange(e, param.label, item.imei[0].mac_id, param._id,item.registration_id);
                           }}
                         />
                       </div>
