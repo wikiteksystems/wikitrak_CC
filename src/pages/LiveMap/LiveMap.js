@@ -1,25 +1,19 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import { AppMenu, Navbar, Header, Footer } from "../../components";
-import { AppMenuList, ThemeColor } from "../../utils/constants";
-import { LiveMapUtils } from "../../utils";
-import { LiveMapActions } from "../../stores/actions";
-import { DetailMenu, MapSection } from "./";
-
 import { Layout } from "antd";
-import { locationsApi } from "../../mocks/location";
 import { useState } from "react";
 import { AppBar, IconButton, Toolbar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Home from "@mui/icons-material/Home";
 import { Box, styled } from "@mui/system";
 import PlayArrowOutlined from "@mui/icons-material/PlayArrowOutlined";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import Fab from "@mui/material/Fab";
-import { AppActions, UserActions } from "../../stores/actions";
-// import AppMenu2 from "../../components/AppMenu2";
+import { Fab } from "@mui/material";
+import { AppActions, LiveMapActions, UserActions } from "../../stores/actions";
+import { AppMenu, Header, Footer, Navbar } from "../../components";
+import { AppMenuList, ThemeColor } from "../../utils/constants";
+import { locationsApi } from "../../mocks/location";
 import { socket } from "../../services/Socket";
+import { DetailMenu, MapSection } from "./";
 
 const { Content } = Layout;
 
@@ -36,9 +30,7 @@ const LiveMap = () => {
   const [gtVehi, setGtVehi] = useState();
   const [wikitekVehi, setwikitekVehi] = useState();
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
-
-  const [lat, setLat] = useState(null);
-  const [long, setLonng] = useState(null);
+  const [locationData, setLocationData] = useState([]);
 
   const { vehicleList, vehicleGroupList } = useSelector(
     ({ LiveMap }) => LiveMap
@@ -46,14 +38,13 @@ const LiveMap = () => {
   const { mainMenuCollapsed, detailMenuCollapsed } = useSelector(
     ({ App }) => App
   );
-  const [locationData, setLocationData] = useState([]);
 
   useEffect(() => {
     dispatch(LiveMapActions.getVehicleList(userId));
     dispatch(LiveMapActions.getOEMList());
     dispatch(LiveMapActions.getVehicleGroupList(userId));
   }, [dispatch, userId]);
-  // console.log(locationData,"livemappplocation");
+
   const fetchImeiData = async () => {
     let imei = [];
     for (let k of vehicleList) {
@@ -63,7 +54,6 @@ const LiveMap = () => {
     }
     let data = { imei, type: "one" };
     let result = await locationsApi.getImeiToReg(data);
-    console.log(result, "result");
     if (result?.status === "SUCCESS") {
       setLocationData(result?.data);
     } else {
@@ -73,9 +63,63 @@ const LiveMap = () => {
 
   useEffect(() => {
     if (vehicleList && vehicleList?.length > 0) fetchImeiData();
-    // console.log(vehicleList,'this is vehicle list')
-    // console.log(vehicleGroupList)
   }, [vehicleList, vehicleGroupList]);
+
+  useEffect(() => {
+    socket.on("locationinfo", (data) => {
+      const gt06Data = locationData.filter(
+        (item) =>
+          item.latestDocument.venderId === "WTK4G06" ||
+          item.latestDocument.venderId === "WTK2G06"
+      );
+
+      locationData.forEach((item) => {
+        if (item.latestDocument.imei === data.imei) {
+          const prevPosition = {
+            lat: item.latestDocument.lat,
+            lng: item.latestDocument.lng,
+          };
+          const duration = 500; // Duration of the animation in milliseconds
+          const fps = 60; // Frames per second
+          const steps = duration / (1000 / fps); // Number of steps
+          const latStep = (data.lat - prevPosition.lat) / steps;
+          const lngStep = (data.lng - prevPosition.lng) / steps;
+
+          let stepCount = 0;
+
+          const moveVehicle = setInterval(() => {
+            const newLat = prevPosition.lat + latStep * stepCount;
+            const newLng = prevPosition.lng + lngStep * stepCount;
+
+            item.latestDocument.lat = newLat;
+            item.latestDocument.lng = newLng;
+
+            stepCount++;
+
+            if (stepCount >= steps) {
+              clearInterval(moveVehicle);
+            }
+
+            setGtVehi([...locationData]);
+          }, 1000 / fps);
+        }
+      });
+    });
+  }, [socket, locationData, activeParametersList]);
+
+  useEffect(() => {
+    const gt06Data = locationData.filter(
+      (item) =>
+        item.latestDocument.venderId === "WTK4G06" ||
+        item.latestDocument.venderId === "WTK2G06"
+    );
+    setGtVehi(locationData);
+
+    const wikitekData = locationData.filter(
+      (item) => item.latestDocument.venderId === "Wikitek"
+    );
+    setwikitekVehi(wikitekData);
+  }, [locationData]);
 
   const StyledFab = styled(Fab)({
     position: "absolute",
@@ -93,78 +137,6 @@ const LiveMap = () => {
     dispatch(AppActions.setDetailMenuCollapsed(!detailMenuCollapsed));
   };
 
-  useEffect(() => {
-    socket.on("locationinfo", (data) => {
-      console.log(
-        "live data=>",
-        data,
-        "data parameter==>",
-        activeParametersList,
-        "live =>imei",
-        data.imei,
-        "selected imei--->",
-        activeParametersList[0].imei
-      );
-      if (data.imei === activeParametersList[0].imei) {
-        activeParametersList[0].params.map((param) => {
-          let par = param.label;
-
-          param.value = data[par];
-        });
-        dispatch(LiveMapActions.addParameter(activeParametersList));
-      }
-      // const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'GT-06');
-      const gt06Data = locationData.filter(
-        (item) =>
-          item.latestDocument.venderId === "WTK4G06" ||
-          item.latestDocument.venderId === "WTK2G06"
-      );
-      //
-
-      locationData.map((item) => {
-        // let c_data={};
-        // if(Object.keys(cooridinates_obj).length === 0){
-        //   let obj={lat:item.latestDocument.lat,lng:item.latestDocument.lng};
-        //   data[item.latestDocument.imei]=[obj]
-        // }
-        // dispatch(LiveMapActions.add_cooridinates_to_obj(data));
-        if (item.latestDocument.imei === data.imei) {
-          item.latestDocument.lat = data.lat;
-          item.latestDocument.lng = data.lng;
-          // item.latestDocument.lat=18.566526;
-          // item.latestDocument.lng=73.912239;
-        }
-        //  console.log('activeParameters list',activeParametersList);
-      });
-      setGtVehi(locationData);
-
-      // console.log('coordinates1',cooridinates_obj,gt06Data);
-      // let coordinates=cooridinates_obj
-      // if(coordinates.hasOwnProperty(data.imei)){
-      //   let obj={lat:data.lat,lng:data.lng};
-      //   // let obj={lat:18.566526,lng:73.912239};
-      //   coordinates[data.imei].push(obj)
-      //  }
-      //  dispatch(LiveMapActions.add_cooridinates_to_obj(coordinates));
-      //  console.log('updated coordinates1',cooridinates_obj,gt06Data);
-    });
-  }, [socket, locationData, activeParametersList]);
-
-  useEffect(() => {
-    // const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'GT-06');
-    const gt06Data = locationData.filter(
-      (item) =>
-        item.latestDocument.venderId === "WTK4G06" ||
-        item.latestDocument.venderId === "WTK2G06"
-    );
-    setGtVehi(locationData);
-
-    const wikitekData = locationData.filter(
-      (item) => item.latestDocument.venderId === "Wikitek"
-    );
-    setwikitekVehi(wikitekData);
-  }, [locationData]);
-
   return (
     <Layout className="flex h-screen">
       <Layout className="h-screen">
@@ -172,12 +144,7 @@ const LiveMap = () => {
           <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
         </div>
 
-        <div className="md:hidden">
-          {/* <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/> */}
-        </div>
-
         <Layout style={{ flex: "1 1 auto" }} className="h-screen">
-          {/* <Navbar /> */}
           <Header
             title={"Live Map"}
             showText={false}
@@ -200,7 +167,6 @@ const LiveMap = () => {
               setCenter={setCenter}
               activeParametersList={activeParametersList}
             />
-            {/* <Map2 users={locationData} /> */}
           </Content>
         </Layout>
 
@@ -252,29 +218,5 @@ const LiveMap = () => {
     </Layout>
   );
 };
-
-// function calculate_lat_long(hexLatitudeValues, hexLongitudeValues) {
-//   console.log(hexLatitudeValues, hexLongitudeValues, "(hexLatitudeValues, hexLongitudeValues)");
-
-//   // Convert hex values to decimal
-
-//  let lat = hexToDecimal(hexLatitudeValues) / 1e6; // Adjust the scale for latitude
-//  let lng = hexToDecimal(hexLongitudeValues) / 1e6; // Adjust the scale for longitude
-
-//  return {lat,lng}
-
-//   // You can now use the decimalLatitude and decimalLongitude as needed.
-// }
-
-// // Function to convert hex to decimal
-// function hexToDecimal(hexValues) {
-//   // Parse the hex values and convert them to decimal
-//   const decimals = hexValues.map(hex => parseInt(hex, 16));
-
-//   // Combine the decimal values into a single number
-//   const result = decimals.reduce((acc, val) => acc * 256 + val, 0);
-//   console.log(result, "resultresult")
-//   return result;
-// }
 
 export default LiveMap;
