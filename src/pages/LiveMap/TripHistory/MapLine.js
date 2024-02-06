@@ -22,6 +22,11 @@ const containerStyle = {
 
 export default function MapLine({ aniActive, item, distance, setDistance }) {
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [directions, setDirections] = useState(null);
+  const [map, setMap] = useState(null);
+  const [path, setPath] = useState([]);
+  const [pathIndex, setPathIndex] = useState(0);
+  const [speedAtPoint, setSpeedAtPoint] = useState(null);
 
   //   const toggleInfoWindow = (markerId) => {
   //     console.log(markerId)
@@ -33,11 +38,6 @@ export default function MapLine({ aniActive, item, distance, setDistance }) {
   //       setSelectedMarker(markerId);
   //     }
   //   };
-
-  const [directions, setDirections] = useState(null);
-  const [map, setMap] = useState(null);
-  const [path, setPath] = useState([]);
-  const [pathIndex, setPathIndex] = useState(0);
 
   useEffect(() => {
     const directionsService = new window.google.maps.DirectionsService();
@@ -57,25 +57,39 @@ export default function MapLine({ aniActive, item, distance, setDistance }) {
       {
         origin,
         destination,
-        travelMode: "DRIVING", // You can change this to other travel modes like 'WALKING' or 'BICYCLING'
+        travelMode: "DRIVING",
       },
       (result, status) => {
         if (status === "OK") {
           setDirections(result);
 
           const routePath = result.routes[0].overview_path;
-          // console.log(routePath,"routepath")
           setPath(routePath);
-          const route = result.routes[0].legs[0];
-          const distanceInMeters = route.distance.value;
-          console.log(distanceInMeters, "distance meters");
+
+          if (result.routes && result.routes.length > 0) {
+            const route = result.routes[0];
+            const currentLegIndex = pathIndex - 1;
+
+            if (
+              currentLegIndex >= 0 &&
+              route.legs &&
+              route.legs.length > currentLegIndex
+            ) {
+              const previousLeg = route.legs[currentLegIndex];
+              const time = previousLeg.duration.value; // in seconds
+              const speed = (previousLeg.distance.value / time) * 3.6; // speed in km/h
+              setSpeedAtPoint(speed.toFixed(2));
+            }
+          }
+
+          const distanceInMeters = result.routes[0].legs[0].distance.value;
           setDistance(distanceInMeters);
         } else {
           console.error(`Directions request failed: ${status}`);
         }
       }
     );
-  }, [item]);
+  }, [item, pathIndex]);
 
   useEffect(() => {
     if (aniActive) {
@@ -123,6 +137,23 @@ export default function MapLine({ aniActive, item, distance, setDistance }) {
           visible={selectedMarker === item.id}
         >
           <MarkerItem2 item={item} />
+        </InfoWindow>
+      )}
+      {selectedMarker === item?.latestDocument?._id && (
+        <InfoWindow
+          key={item.id}
+          position={{
+            lat: parseFloat(item?.latestDocument?.lat),
+            lng: parseFloat(item?.latestDocument?.lng),
+          }}
+          onCloseClick={() => setSelectedMarker(null)}
+          options={{ maxWidth: 200 }}
+          visible={selectedMarker === item.id}
+        >
+          <div>
+            <MarkerItem2 item={item} />
+            {speedAtPoint && <p>Speed: {speedAtPoint} km/h</p>}
+          </div>
         </InfoWindow>
       )}
     </div>

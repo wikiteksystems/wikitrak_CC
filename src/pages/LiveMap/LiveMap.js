@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -22,21 +21,24 @@ import { AppActions, UserActions } from "../../stores/actions";
 // import AppMenu2 from "../../components/AppMenu2";
 import { socket } from "../../services/Socket";
 
-
 const { Content } = Layout;
 
 const LiveMap = () => {
-  const {activeParametersList ,cooridinates_obj} = useSelector(({ LiveMap }) => LiveMap);
+  const { activeParametersList, cooridinates_obj } = useSelector(
+    ({ LiveMap }) => LiveMap
+  );
   const dispatch = useDispatch();
   const userId = useSelector(({ User }) => User.userId);
-  const [gtLocation, setGtLocation] = useState({lat: 19.075983, 
-  lng: 72.877655,})
-    const[gtVehi, setGtVehi]= useState()
-    const[wikitekVehi, setwikitekVehi]= useState()
-    const [center, setCenter] = useState({ lat: 0, lng: 0 })
-    
-    const [lat,setLat]=useState(null);
-  const [long,setLonng]=useState(null);
+  const [gtLocation, setGtLocation] = useState({
+    lat: 19.075983,
+    lng: 72.877655,
+  });
+  const [gtVehi, setGtVehi] = useState();
+  const [wikitekVehi, setwikitekVehi] = useState();
+  const [center, setCenter] = useState({ lat: 0, lng: 0 });
+
+  const [lat, setLat] = useState(null);
+  const [long, setLonng] = useState(null);
 
   const { vehicleList, vehicleGroupList } = useSelector(
     ({ LiveMap }) => LiveMap
@@ -45,10 +47,6 @@ const LiveMap = () => {
     ({ App }) => App
   );
   const [locationData, setLocationData] = useState([]);
-  
-  
-
-  
 
   useEffect(() => {
     dispatch(LiveMapActions.getVehicleList(userId));
@@ -65,13 +63,13 @@ const LiveMap = () => {
     }
     let data = { imei, type: "one" };
     let result = await locationsApi.getImeiToReg(data);
-    console.log(result,"result")
-    if (result?.status === "SUCCESS") { 
+    console.log(result, "result");
+    if (result?.status === "SUCCESS") {
       setLocationData(result?.data);
     } else {
       setLocationData([]);
     }
-  };    
+  };
 
   useEffect(() => {
     if (vehicleList && vehicleList?.length > 0) fetchImeiData();
@@ -95,44 +93,51 @@ const LiveMap = () => {
     dispatch(AppActions.setDetailMenuCollapsed(!detailMenuCollapsed));
   };
 
-
-
   useEffect(() => {
-      socket.on("locationinfo", (data) => {
-        console.log("live data=>",data , "data parameter==>",activeParametersList,'live =>imei',data.imei,'selected imei--->',activeParametersList[0].imei)
-        if(data.imei===activeParametersList[0].imei){
-          activeParametersList[0].params.map((param) => {
-            let par=param.label
-            
-            param.value=data[par]
-          })
-        dispatch(LiveMapActions.addParameter(activeParametersList))
-        }
-   // const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'GT-06');
-   const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'WTK4G06'|| item.latestDocument.venderId === 'WTK2G06');
-  //  
-       
+    socket.on("locationinfo", (data) => {
+      console.log(
+        "live data=>",
+        data,
+        "data parameter==>",
+        activeParametersList,
+        "live =>imei",
+        data.imei,
+        "selected imei--->",
+        activeParametersList[0].imei
+      );
+      if (data.imei === activeParametersList[0].imei) {
+        activeParametersList[0].params.map((param) => {
+          let par = param.label;
+
+          param.value = data[par];
+        });
+        dispatch(LiveMapActions.addParameter(activeParametersList));
+      }
+      // const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'GT-06');
+      const gt06Data = locationData.filter(
+        (item) =>
+          item.latestDocument.venderId === "WTK4G06" ||
+          item.latestDocument.venderId === "WTK2G06"
+      );
+      //
+
       locationData.map((item) => {
-        
         // let c_data={};
         // if(Object.keys(cooridinates_obj).length === 0){
         //   let obj={lat:item.latestDocument.lat,lng:item.latestDocument.lng};
         //   data[item.latestDocument.imei]=[obj]
         // }
         // dispatch(LiveMapActions.add_cooridinates_to_obj(data));
-         if (item.latestDocument.imei===data.imei)
-         {
-          item.latestDocument.lat=data.lat;
-          item.latestDocument.lng=data.lng;
+        if (item.latestDocument.imei === data.imei) {
+          item.latestDocument.lat = data.lat;
+          item.latestDocument.lng = data.lng;
           // item.latestDocument.lat=18.566526;
           // item.latestDocument.lng=73.912239;
-         }
+        }
         //  console.log('activeParameters list',activeParametersList);
-    
-        });
-     setGtVehi(locationData)
+      });
+      setGtVehi(locationData);
 
-  
       // console.log('coordinates1',cooridinates_obj,gt06Data);
       // let coordinates=cooridinates_obj
       // if(coordinates.hasOwnProperty(data.imei)){
@@ -142,21 +147,23 @@ const LiveMap = () => {
       //  }
       //  dispatch(LiveMapActions.add_cooridinates_to_obj(coordinates));
       //  console.log('updated coordinates1',cooridinates_obj,gt06Data);
- 
     });
-  }, [socket, locationData,activeParametersList]);
+  }, [socket, locationData, activeParametersList]);
 
-  useEffect(()=>{
-
+  useEffect(() => {
     // const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'GT-06');
-    const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'WTK4G06'|| item.latestDocument.venderId === 'WTK2G06');
-    setGtVehi(locationData)
-    
-    const wikitekData = locationData.filter((item) => item.latestDocument.venderId === 'Wikitek');
-    setwikitekVehi(wikitekData)
+    const gt06Data = locationData.filter(
+      (item) =>
+        item.latestDocument.venderId === "WTK4G06" ||
+        item.latestDocument.venderId === "WTK2G06"
+    );
+    setGtVehi(locationData);
 
-  }, [locationData])
-    
+    const wikitekData = locationData.filter(
+      (item) => item.latestDocument.venderId === "Wikitek"
+    );
+    setwikitekVehi(wikitekData);
+  }, [locationData]);
 
   return (
     <Layout className="flex h-screen">
@@ -174,7 +181,12 @@ const LiveMap = () => {
           <Header
             title={"Live Map"}
             showText={false}
-            style={{ justifyContent: "space-between",background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)' }}
+            style={{
+              justifyContent: "space-between",
+              background: "rgb(47, 115, 193)",
+              background:
+                "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
+            }}
           />
           <Content style={{ width: "100%" }} className="h-screen">
             <MapSection
@@ -183,11 +195,10 @@ const LiveMap = () => {
               vehicleList={vehicleList}
               gtVehi={gtVehi}
               gtLocation={gtLocation}
-              wikitekVehi= {wikitekVehi}
+              wikitekVehi={wikitekVehi}
               center={center}
               setCenter={setCenter}
               activeParametersList={activeParametersList}
-              
             />
             {/* <Map2 users={locationData} /> */}
           </Content>
@@ -202,8 +213,6 @@ const LiveMap = () => {
           gtVehi={gtVehi}
           setGtVehi={setGtVehi}
         />
-        
-       
       </Layout>
 
       <div className="hidden">
@@ -239,7 +248,7 @@ const LiveMap = () => {
             </IconButton>
           </Toolbar>
         </AppBar>
-              </div>
+      </div>
     </Layout>
   );
 };
@@ -248,7 +257,7 @@ const LiveMap = () => {
 //   console.log(hexLatitudeValues, hexLongitudeValues, "(hexLatitudeValues, hexLongitudeValues)");
 
 //   // Convert hex values to decimal
- 
+
 //  let lat = hexToDecimal(hexLatitudeValues) / 1e6; // Adjust the scale for latitude
 //  let lng = hexToDecimal(hexLongitudeValues) / 1e6; // Adjust the scale for longitude
 
@@ -269,9 +278,3 @@ const LiveMap = () => {
 // }
 
 export default LiveMap;
-
-
-
-
-
-
