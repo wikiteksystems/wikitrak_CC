@@ -85,7 +85,8 @@ const DetailMenu = ({
               ...item,
               checked: e.target.checked,
             }
-          : { ...item }
+          : { ...item ,
+            checked: false}
       );
 
       setSearchedMenuList(list);
