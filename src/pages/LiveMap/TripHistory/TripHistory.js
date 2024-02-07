@@ -43,13 +43,32 @@ const TripHistory = () => {
   const fetchTripHis = async (startDate, endDate) => {
     if (vehicle?.imei.length > 0 && startDate && endDate) {
       console.log(vehicle, "Trip");
-      // let data = {imei:vehicle?.imei[0]?.mac_id,startDate,endDate,venderId:vehicle?.imei[0]?.device_typ}
+      // Construct the request data
       let data = { imei: vehicle?.imei[0]?.mac_id, startDate, endDate };
 
-      let result = await locationsApi.getTripHistory(data);
-      if (result.status === "SUCCESS") {
-        setTripHis([...result?.data?.documents]);
-        console.log(result);
+      try {
+        // Make the API request
+        const result = await locationsApi.getTripHistory(data);
+
+        // Check if the request was successful
+        if (result.status === "SUCCESS") {
+          // Extract the trip history data from the response
+          const tripData = result?.data?.documents;
+          setTripHis([...tripData]); // Set the trip history state with the fetched data
+
+          // Additional processing, if needed
+          // ...
+        } else {
+          // Handle error cases
+          console.error("Failed to fetch trip history:", result.error);
+          // Additional error handling, if needed
+          // ...
+        }
+      } catch (error) {
+        // Handle network or other errors
+        console.error("Error fetching trip history:", error);
+        // Additional error handling, if needed
+        // ...
       }
     }
   };
@@ -206,6 +225,7 @@ const TripHistory = () => {
               speed={speed}
               selectCheckParam={selectCheckParam}
               setSelecCheckParam={setSelecCheckParam}
+              tripHis={tripHis} // Pass trip data to LiveContent
             />
           </Content>
         </Layout>

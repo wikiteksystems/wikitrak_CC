@@ -8,10 +8,9 @@ import {
 import { Box, Popover, Button } from "@mui/material";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
-import { Line } from "react-chartjs-2";
+import ApexChart from "./ApexChart"; // Import the ApexChart component
 import MapLine from "./MapLine";
 import { GMAP_API_KEY, ThemeColor } from "../../../utils/constants";
-import { Chart, LinearScale, CategoryScale } from "chart.js/auto";
 
 const filters = {
   harshBreak: "HB",
@@ -24,7 +23,13 @@ const containerStyle = {
   height: "100%",
 };
 
-const LiveContent = ({ harshBreak, acceleration, speed, selectCheckParam }) => {
+const LiveContent = ({
+  harshBreak,
+  acceleration,
+  speed,
+  selectCheckParam,
+  tripHis,
+}) => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: GMAP_API_KEY,
@@ -36,9 +41,6 @@ const LiveContent = ({ harshBreak, acceleration, speed, selectCheckParam }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
-  const [speedData, setSpeedData] = useState([]);
-  const [ignitionData, setIgnitionData] = useState([]);
-  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
@@ -51,32 +53,7 @@ const LiveContent = ({ harshBreak, acceleration, speed, selectCheckParam }) => {
 
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
-      const speedData = selectCheckParam.map((trip) => trip.speed);
-      const ignitionData = selectCheckParam.map((trip) => trip.ignition);
-      setSelectedTrip({ speedData, ignitionData });
-      setSpeedData(speedData);
-      setIgnitionData(ignitionData);
-
-      // Update chart data when speed and ignition data change
-      setChartData({
-        labels: speedData.map((_, index) => index),
-        datasets: [
-          {
-            label: "Speed",
-            data: speedData,
-            fill: false,
-            borderColor: "rgb(75, 192, 192)",
-            tension: 0.1,
-          },
-          {
-            label: "Ignition",
-            data: ignitionData.map((value) => (value ? 1 : 0)),
-            fill: false,
-            borderColor: "rgba(255, 99, 132, 0.6)",
-            tension: 0.1,
-          },
-        ],
-      });
+      setSelectedTrip(selectCheckParam[0]); // Select the first trip by default
     }
   }, [selectCheckParam]);
 
@@ -98,19 +75,6 @@ const LiveContent = ({ harshBreak, acceleration, speed, selectCheckParam }) => {
     } else {
       setSelectedMarker(markerId);
     }
-  };
-
-  // Define chart options
-  const chartOptions = {
-    scales: {
-      y: {
-        type: "linear", // Specify the type of scale
-        beginAtZero: true,
-      },
-      x: {
-        type: "category", // Assuming you're using category scale for labels
-      },
-    },
   };
 
   return isLoaded ? (
@@ -237,22 +201,6 @@ const LiveContent = ({ harshBreak, acceleration, speed, selectCheckParam }) => {
             height: "100vh",
           }}
         >
-          {chartData.datasets.length > 0 && (
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: "80px", // Adjust this value to move the graph up or down
-                left: "20px",
-                zIndex: 1000,
-                padding: "10px",
-                background: "#fff",
-                borderRadius: "8px",
-              }}
-            >
-              <Line data={chartData} options={chartOptions} />
-            </Box>
-          )}
-
           <GoogleMap
             mapContainerStyle={{
               position: "absolute",
@@ -411,6 +359,14 @@ const LiveContent = ({ harshBreak, acceleration, speed, selectCheckParam }) => {
               </>
             ))}
           </GoogleMap>
+          <div style={{ position: "absolute", bottom: 0, left: 0 }}>
+            {selectedTrip && selectedTrip.data && (
+              <ApexChart
+                speedData={selectedTrip.data.map((item) => item.speed)} // Pass speed data of the selected trip
+                ignitionData={selectedTrip.data.map((item) => item.ignition)} // Pass ignition data of the selected trip
+              />
+            )}
+          </div>
         </Box>
       ) : (
         <Box
