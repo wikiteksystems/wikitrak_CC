@@ -38,6 +38,7 @@ const LiveContent = ({ harshBreak, acceleration, speed, selectCheckParam }) => {
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [speedData, setSpeedData] = useState([]);
   const [ignitionData, setIgnitionData] = useState([]);
+  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
@@ -55,6 +56,27 @@ const LiveContent = ({ harshBreak, acceleration, speed, selectCheckParam }) => {
       setSelectedTrip({ speedData, ignitionData });
       setSpeedData(speedData);
       setIgnitionData(ignitionData);
+
+      // Update chart data when speed and ignition data change
+      setChartData({
+        labels: speedData.map((_, index) => index),
+        datasets: [
+          {
+            label: "Speed",
+            data: speedData,
+            fill: false,
+            borderColor: "rgb(75, 192, 192)",
+            tension: 0.1,
+          },
+          {
+            label: "Ignition",
+            data: ignitionData.map((value) => (value ? 1 : 0)),
+            fill: false,
+            borderColor: "rgba(255, 99, 132, 0.6)",
+            tension: 0.1,
+          },
+        ],
+      });
     }
   }, [selectCheckParam]);
 
@@ -76,27 +98,6 @@ const LiveContent = ({ harshBreak, acceleration, speed, selectCheckParam }) => {
     } else {
       setSelectedMarker(markerId);
     }
-  };
-
-  // Define chart data
-  const chartData = {
-    labels: speedData.map((_, index) => index),
-    datasets: [
-      {
-        label: "Speed",
-        data: speedData,
-        fill: false,
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
-      },
-      {
-        label: "Ignition",
-        data: ignitionData.map((value) => (value ? 1 : 0)),
-        fill: false,
-        borderColor: "rgba(255, 99, 132, 0.6)",
-        tension: 0.1,
-      },
-    ],
   };
 
   // Define chart options
@@ -236,19 +237,21 @@ const LiveContent = ({ harshBreak, acceleration, speed, selectCheckParam }) => {
             height: "100vh",
           }}
         >
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: "80px", // Adjust this value to move the graph up or down
-              left: "20px",
-              zIndex: 1000,
-              padding: "10px",
-              background: "#fff",
-              borderRadius: "8px",
-            }}
-          >
-            <Line data={chartData} options={chartOptions} />
-          </Box>
+          {chartData.datasets.length > 0 && (
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: "80px", // Adjust this value to move the graph up or down
+                left: "20px",
+                zIndex: 1000,
+                padding: "10px",
+                background: "#fff",
+                borderRadius: "8px",
+              }}
+            >
+              <Line data={chartData} options={chartOptions} />
+            </Box>
+          )}
 
           <GoogleMap
             mapContainerStyle={{
