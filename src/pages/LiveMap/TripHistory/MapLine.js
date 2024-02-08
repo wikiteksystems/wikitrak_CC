@@ -28,7 +28,7 @@ export default function MapLine({
   const [map, setMap] = useState(null);
   const [path, setPath] = useState([]);
   const [pathIndex, setPathIndex] = useState(0);
-  const [speedAtPoint, setSpeedAtPoint] = useState(null);
+  const [speedAtPoint, setSpeedAtPoint] = useState([]);
 
   useEffect(() => {
     const directionsService = new window.google.maps.DirectionsService();
@@ -58,20 +58,24 @@ export default function MapLine({
             const route = result.routes[0];
             let speedPoints = []; // Store speeds for all points
 
-            route.legs.forEach((leg) => {
-              leg.steps.forEach((step) => {
-                const stepDuration = step.duration.value; // in seconds
-                const stepDistance = step.distance.value; // in meters
-                const stepSpeed = (stepDistance / stepDuration) * 3.6; // speed in km/h
-                const stepPath = step.path;
+            for (let i = 0; i < route.legs.length; i++) {
+              const leg = route.legs[i];
+              const steps = leg.steps;
 
-                stepPath.forEach((point) => {
-                  speedPoints.push(stepSpeed.toFixed(1)); // Limit to one decimal place
-                });
-              });
-            });
+              for (let j = 0; j < steps.length; j++) {
+                const step = steps[j];
+                const duration = step.duration.value; // in seconds
+                const distance = step.distance.value; // in meters
+                const speed = (distance / duration) * 3.6; // speed in km/h
+
+                for (let k = 0; k < step.path.length; k++) {
+                  speedPoints.push(speed.toFixed(1));
+                }
+              }
+            }
 
             setSpeedAtPoint(speedPoints); // Set speed points for all points
+            setSpeed(speedPoints[0]); // Set initial speed
           } else {
             console.error(`Directions request failed: ${status}`);
           }
@@ -83,22 +87,16 @@ export default function MapLine({
   useEffect(() => {
     if (aniActive) {
       const interval = setInterval(() => {
-        if (pathIndex < path.length) {
-          setPathIndex(pathIndex + 1);
+        if (pathIndex < path.length - 1) {
+          setPathIndex((prevIndex) => prevIndex + 1);
+          setSpeed(speedAtPoint[pathIndex + 1]); // Update speed based on the pathIndex
         } else {
           clearInterval(interval);
         }
       }, 100); // Adjust the interval to control the drawing speed (e.g., 100ms for slower motion)
       return () => clearInterval(interval);
     }
-  }, [path, pathIndex, aniActive]);
-
-  useEffect(() => {
-    if (speedAtPoint) {
-      const currentIndex = Math.min(pathIndex, speedAtPoint.length - 1);
-      setSpeed(speedAtPoint[currentIndex]);
-    }
-  }, [speedAtPoint, pathIndex]);
+  }, [pathIndex, path, aniActive, speedAtPoint]);
 
   return (
     <div>
@@ -109,7 +107,7 @@ export default function MapLine({
             options={{ suppressMarkers: true }}
           />
           <Polyline
-            path={path.slice(0, pathIndex)}
+            path={path.slice(0, pathIndex + 1)}
             options={{
               strokeColor: "red", // Color of the line
               strokeOpacity: 1, // Opacity of the line
