@@ -5,11 +5,23 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
-import { Box, Popover, Button } from "@mui/material";
+import {
+  Box,
+  Popover,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import ApexChart from "./ApexChart"; // Import the ApexChart component
 import MapLine from "./MapLine";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 import { GMAP_API_KEY, ThemeColor } from "../../../utils/constants";
 
 const filters = {
@@ -33,6 +45,62 @@ const LiveContent = ({
     id: "google-map-script",
     googleMapsApiKey: GMAP_API_KEY,
   });
+  // Function to generate PDF report
+  // Function to generate PDF report
+  const generatePDFReport = (selectedTrip, speed) => {
+    // Create a new jsPDF instance
+    const pdf = new jsPDF();
+
+    // Render the table content
+    const tableContent = `
+    <table>
+      <thead>
+        <tr>
+          <th>Date & Time (Start)</th>
+          <th>Date & Time (End)</th>
+          <th>Start Point Location</th>
+          <th>End Point Location</th>
+          <th>Total Distance Travel</th>
+          <th>Max Min Voltage</th>
+          <th>Travel Time</th>
+          <th>Average Speed</th>
+          <th>Selected Parameter TBD</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${
+          selectedTrip
+            ? `
+          <tr>
+            <td>${selectedTrip.startTime}</td>
+            <td>${selectedTrip.endTime}</td>
+            <td>${selectedTrip.startLocation}</td>
+            <td>${selectedTrip.endLocation}</td>
+            <td>${selectedTrip.totalDistance}</td>
+            <td>${selectedTrip.maxMinVoltage}</td>
+            <td>${selectedTrip.travelTime}</td>
+            <td>${speed !== null ? `${speed} km/h` : "Loading..."}</td>
+            <td>${selectedTrip.selectedParameter}</td>
+          </tr>
+        `
+            : ""
+        }
+      </tbody>
+    </table>
+  `;
+
+    // Add the table content to the PDF
+    pdf.html(tableContent, {
+      callback: () => {
+        // Save the PDF file with a specific name
+        pdf.save("trip_details_report.pdf");
+      },
+    });
+  };
+
+  const handleClickDownloadPDF = () => {
+    generatePDFReport(selectedTrip, speed);
+  };
 
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [distance, setDistance] = useState(null);
@@ -113,6 +181,13 @@ const LiveContent = ({
           alignItems: "center",
         }}
       >
+        <Button
+          variant="contained"
+          onClick={handleClickDownloadPDF}
+          style={{ marginRight: "10px" }}
+        >
+          Download PDF Report
+        </Button>
         <Box
           sx={{
             backdropFilter: "blur(8px)",
