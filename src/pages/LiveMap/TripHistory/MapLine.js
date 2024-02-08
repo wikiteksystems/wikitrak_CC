@@ -29,6 +29,7 @@ export default function MapLine({
   const [path, setPath] = useState([]);
   const [pathIndex, setPathIndex] = useState(0);
   const [speedAtPoint, setSpeedAtPoint] = useState([]);
+  const [totalDistance, setTotalDistance] = useState(0); // State variable to store total distance
 
   useEffect(() => {
     const directionsService = new window.google.maps.DirectionsService();
@@ -76,6 +77,15 @@ export default function MapLine({
 
             setSpeedAtPoint(speedPoints); // Set speed points for all points
             setSpeed(speedPoints[0]); // Set initial speed
+
+            // Calculate total distance
+            const totalDistance = result.routes[0].legs.reduce(
+              (acc, curr) => acc + curr.distance.value,
+              0
+            );
+
+            setTotalDistance(totalDistance); // Set total distance
+            setDistance(totalDistance); // Set distance in the parent component
           } else {
             console.error(`Directions request failed: ${status}`);
           }
@@ -132,6 +142,8 @@ export default function MapLine({
             <MarkerItem2 item={item} />
             {speedAtPoint && <p>Speed: {speedAtPoint[pathIndex]} km/h</p>}{" "}
             {/* Select speed for the current point */}
+            <p>Total Distance: {totalDistance} meters</p>{" "}
+            {/* Display total distance */}
           </div>
         </InfoWindow>
       )}
