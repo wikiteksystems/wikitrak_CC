@@ -149,7 +149,7 @@ const LiveContent = ({
             marginRight: "10px",
           }}
         >
-          <b className="ms-3">Ignition Status:</b>
+          <b className="ms-3">Ignition:</b>
         </Box>
         <Box
           sx={{
@@ -378,7 +378,7 @@ const LiveContent = ({
                     </div>
                     <div>Speed: {item?.data[0]?.speed} km/h</div>
                     <div>
-                      Ignition Status: {item?.data[0]?.ignition ? "On" : "Off"}
+                      Ignition: {item?.data[0]?.ignition ? "On" : "Off"}
                     </div>
                   </InfoWindow>
                 )}
