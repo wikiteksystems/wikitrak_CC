@@ -140,10 +140,8 @@ export default function MapLine({
         >
           <div>
             <MarkerItem2 item={item} />
-            {speedAtPoint && <p>Speed: {speedAtPoint[pathIndex]} km/h</p>}{" "}
-            {/* Select speed for the current point */}
-            <p>Total Distance: {totalDistance} meters</p>{" "}
-            {/* Display total distance */}
+            <p>Speed: {speedAtPoint[pathIndex]} km/h</p>
+            <p>Total Distance: {totalDistance} meters</p>
           </div>
         </InfoWindow>
       )}
