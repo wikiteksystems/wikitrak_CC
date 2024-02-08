@@ -149,8 +149,16 @@ const LiveContent = ({
             marginRight: "10px",
           }}
         >
-          <b className="ms-3">Ignition:</b>
+          <b className="ms-3">
+            Ignition:{" "}
+            {selectedTrip && selectedTrip.data && selectedTrip.data.length > 0
+              ? selectedTrip.data[0].ignition
+                ? "On"
+                : "Off"
+              : "Loading..."}
+          </b>
         </Box>
+
         <Box
           sx={{
             backdropFilter: "blur(8px)",
