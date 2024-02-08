@@ -46,7 +46,6 @@ const LiveContent = ({
     googleMapsApiKey: GMAP_API_KEY,
   });
   // Function to generate PDF report
-  // Function to generate PDF report
   const generatePDFReport = (selectedTrip, speed) => {
     // Create a new jsPDF instance
     const pdf = new jsPDF();
@@ -186,7 +185,7 @@ const LiveContent = ({
           onClick={handleClickDownloadPDF}
           style={{ marginRight: "10px" }}
         >
-          Download PDF Report
+          Download PDF
         </Button>
         <Box
           sx={{
