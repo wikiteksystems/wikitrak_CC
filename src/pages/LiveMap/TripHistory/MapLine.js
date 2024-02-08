@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -9,10 +9,6 @@ import {
   DirectionsService,
   DirectionsRenderer,
 } from "@react-google-maps/api";
-// import { CarOutlined } from '@ant-design/icons';
-import { CarOutlined } from "@ant-design/icons";
-import DirectionsCarFilledIcon from "@mui/icons-material/DirectionsCarFilled";
-import moment from "moment";
 import MarkerItem2 from "../MapItems/MarkerItem2";
 
 const containerStyle = {
@@ -20,7 +16,13 @@ const containerStyle = {
   height: "100%",
 };
 
-export default function MapLine({ aniActive, item, distance, setDistance }) {
+export default function MapLine({
+  aniActive,
+  item,
+  distance,
+  setDistance,
+  setSpeed, // Include setSpeed as a prop
+}) {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [directions, setDirections] = useState(null);
   const [map, setMap] = useState(null);
@@ -28,31 +30,17 @@ export default function MapLine({ aniActive, item, distance, setDistance }) {
   const [pathIndex, setPathIndex] = useState(0);
   const [speedAtPoint, setSpeedAtPoint] = useState(null);
 
-  //   const toggleInfoWindow = (markerId) => {
-  //     console.log(markerId)
-  //     if (selectedMarker === markerId) {
-  //       // If the same marker is clicked again, close its InfoWindow
-  //       setSelectedMarker(null);
-  //     } else {
-  //       // Otherwise, open the InfoWindow for the clicked marker
-  //       setSelectedMarker(markerId);
-  //     }
-  //   };
-
   useEffect(() => {
     const directionsService = new window.google.maps.DirectionsService();
-    let a = item.length;
-    console.log(a);
-    console.log(item?.data[a - 2]);
     const origin = {
       lat: parseFloat(item?.data[0]?.lat),
       lng: parseFloat(item?.data[0]?.lng),
-    }; // Replace with your start coordinates
+    };
     const destination = {
       lat: parseFloat(item?.data[item?.data.length - 1]?.lat),
       lng: parseFloat(item?.data[item?.data.length - 1]?.lng),
     };
-    console.log(origin, destination);
+
     directionsService.route(
       {
         origin,
@@ -68,28 +56,29 @@ export default function MapLine({ aniActive, item, distance, setDistance }) {
 
           if (result.routes && result.routes.length > 0) {
             const route = result.routes[0];
-            const currentLegIndex = pathIndex - 1;
+            let speedPoints = []; // Store speeds for all points
 
-            if (
-              currentLegIndex >= 0 &&
-              route.legs &&
-              route.legs.length > currentLegIndex
-            ) {
-              const previousLeg = route.legs[currentLegIndex];
-              const time = previousLeg.duration.value; // in seconds
-              const speed = (previousLeg.distance.value / time) * 3.6; // speed in km/h
-              setSpeedAtPoint(speed.toFixed(2));
-            }
+            route.legs.forEach((leg) => {
+              leg.steps.forEach((step) => {
+                const stepDuration = step.duration.value; // in seconds
+                const stepDistance = step.distance.value; // in meters
+                const stepSpeed = (stepDistance / stepDuration) * 3.6; // speed in km/h
+                const stepPath = step.path;
+
+                stepPath.forEach((point) => {
+                  speedPoints.push(stepSpeed.toFixed(1)); // Limit to one decimal place
+                });
+              });
+            });
+
+            setSpeedAtPoint(speedPoints); // Set speed points for all points
+          } else {
+            console.error(`Directions request failed: ${status}`);
           }
-
-          const distanceInMeters = result.routes[0].legs[0].distance.value;
-          setDistance(distanceInMeters);
-        } else {
-          console.error(`Directions request failed: ${status}`);
         }
       }
     );
-  }, [item, pathIndex]);
+  }, [item]);
 
   useEffect(() => {
     if (aniActive) {
@@ -103,7 +92,13 @@ export default function MapLine({ aniActive, item, distance, setDistance }) {
       return () => clearInterval(interval);
     }
   }, [path, pathIndex, aniActive]);
-  // console.log(directions,"dirrr****************")
+
+  useEffect(() => {
+    if (speedAtPoint) {
+      const currentIndex = Math.min(pathIndex, speedAtPoint.length - 1);
+      setSpeed(speedAtPoint[currentIndex]);
+    }
+  }, [speedAtPoint, pathIndex]);
 
   return (
     <div>
@@ -129,21 +124,6 @@ export default function MapLine({ aniActive, item, distance, setDistance }) {
           key={item.id}
           position={{
             lat: parseFloat(item?.latestDocument?.lat),
-
-            lng: parseFloat(item?.latestDocument?.lng),
-          }}
-          onCloseClick={() => setSelectedMarker(null)}
-          options={{ maxWidth: 200 }}
-          visible={selectedMarker === item.id}
-        >
-          <MarkerItem2 item={item} />
-        </InfoWindow>
-      )}
-      {selectedMarker === item?.latestDocument?._id && (
-        <InfoWindow
-          key={item.id}
-          position={{
-            lat: parseFloat(item?.latestDocument?.lat),
             lng: parseFloat(item?.latestDocument?.lng),
           }}
           onCloseClick={() => setSelectedMarker(null)}
@@ -152,7 +132,8 @@ export default function MapLine({ aniActive, item, distance, setDistance }) {
         >
           <div>
             <MarkerItem2 item={item} />
-            {speedAtPoint && <p>Speed: {speedAtPoint} km/h</p>}
+            {speedAtPoint && <p>Speed: {speedAtPoint[pathIndex]} km/h</p>}{" "}
+            {/* Select speed for the current point */}
           </div>
         </InfoWindow>
       )}

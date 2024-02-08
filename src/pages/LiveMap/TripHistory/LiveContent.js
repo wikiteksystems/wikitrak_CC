@@ -26,7 +26,6 @@ const containerStyle = {
 const LiveContent = ({
   harshBreak,
   acceleration,
-  speed,
   selectCheckParam,
   tripHis,
 }) => {
@@ -41,6 +40,7 @@ const LiveContent = ({
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  const [speed, setSpeed] = useState(null);
 
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
@@ -56,6 +56,22 @@ const LiveContent = ({
       setSelectedTrip(selectCheckParam[0]); // Select the first trip by default
     }
   }, [selectCheckParam]);
+
+  useEffect(() => {
+    const calculateSpeed = () => {
+      // Calculate speed based on the last data point of the selected trip
+      if (selectedTrip && selectedTrip.data && selectedTrip.data.length > 0) {
+        const lastDataPoint = selectedTrip.data[selectedTrip.data.length - 1];
+        setSpeed(lastDataPoint.speed);
+      }
+    };
+
+    calculateSpeed(); // Initial calculation
+
+    const interval = setInterval(calculateSpeed, 5000); // Update speed every 5 seconds
+
+    return () => clearInterval(interval); // Clean up interval on component unmount
+  }, [selectedTrip]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -120,7 +136,9 @@ const LiveContent = ({
             marginRight: "10px",
           }}
         >
-          <b className="ms-3">Speed: {speed ? speed : "Loading..."}</b>
+          <b className="ms-3">
+            Speed: {speed !== null ? `${speed} km/h` : "Loading..."}
+          </b>
         </Box>
         <Box
           sx={{
@@ -262,6 +280,7 @@ const LiveContent = ({
                   item={item}
                   distance={distance}
                   setDistance={setDistance}
+                  setSpeed={setSpeed}
                 />
 
                 {harshBreak &&
