@@ -45,48 +45,82 @@ const LiveContent = ({
     id: "google-map-script",
     googleMapsApiKey: GMAP_API_KEY,
   });
-  // Function to generate PDF report
-  const generatePDFReport = (selectedTrip, speed) => {
+
+  const generatePDFReport = () => {
+    if (!selectedTrip || !selectedTrip.data || selectedTrip.data.length === 0) {
+      console.error("No trip data available.");
+      return;
+    }
+
+    // Extract trip details
+    const tripData = selectedTrip.data;
+    const startTime = new Date(tripData[0].createdAt).toLocaleString();
+    const endTime = new Date(
+      tripData[tripData.length - 1].createdAt
+    ).toLocaleString();
+    const startLocation = selectedTrip.startAddress.full_address;
+    const endLocation = selectedTrip.endAddress.full_address;
+    const totalDistance = distance
+      ? (distance / 1000).toFixed(2)
+      : "Calculating...";
+    // Calculate max and min voltage from trip data
+    const voltageData = tripData.map((item) => item.voltage);
+    const maxVoltage = Math.max(...voltageData);
+    const minVoltage = Math.min(...voltageData);
+    // Calculate travel time
+    const travelTimeInMilliseconds = new Date(endTime) - new Date(startTime);
+    const travelTime = {
+      hours: Math.floor(travelTimeInMilliseconds / (1000 * 60 * 60)),
+      minutes: Math.floor((travelTimeInMilliseconds / (1000 * 60)) % 60),
+    };
+    // Calculate average speed
+    const averageSpeed =
+      totalDistance / (travelTime.hours + travelTime.minutes / 60);
+
     // Create a new jsPDF instance
-    const pdf = new jsPDF();
+    const pdf = new jsPDF({
+      orientation: "landscape",
+      unit: "px",
+      format: [1100, 800], // Adjust the width and height as needed
+    });
 
     // Render the table content
     const tableContent = `
-    <table>
-      <thead>
-        <tr>
-          <th>Date & Time (Start)</th>
-          <th>Date & Time (End)</th>
-          <th>Start Point Location</th>
-          <th>End Point Location</th>
-          <th>Total Distance Travel</th>
-          <th>Max Min Voltage</th>
-          <th>Travel Time</th>
-          <th>Average Speed</th>
-          <th>Selected Parameter TBD</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${
-          selectedTrip
-            ? `
+      <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin: 0 auto;">
+        <thead>
           <tr>
-            <td>${selectedTrip.startTime}</td>
-            <td>${selectedTrip.endTime}</td>
-            <td>${selectedTrip.startLocation}</td>
-            <td>${selectedTrip.endLocation}</td>
-            <td>${selectedTrip.totalDistance}</td>
-            <td>${selectedTrip.maxMinVoltage}</td>
-            <td>${selectedTrip.travelTime}</td>
-            <td>${speed !== null ? `${speed} km/h` : "Loading..."}</td>
-            <td>${selectedTrip.selectedParameter}</td>
+            <th style="border: 1px solid black; padding: 8px; text-align: center;">Date & Time (Start)</th>
+            <th style="border: 1px solid black; padding: 8px; text-align: center;">Date & Time (End)</th>
+            <th style="border: 1px solid black; padding: 8px; text-align: center;">Start Point Location</th>
+            <th style="border: 1px solid black; padding: 8px; text-align: center;">End Point Location</th>
+            <th style="border: 1px solid black; padding: 8px; text-align: center;">Total Distance Travel</th>
+            <th style="border: 1px solid black; padding: 8px; text-align: center;">Max Voltage</th>
+            <th style="border: 1px solid black; padding: 8px; text-align: center;">Min Voltage</th>
+            <th style="border: 1px solid black; padding: 8px; text-align: center;">Travel Time</th>
+            <th style="border: 1px solid black; padding: 8px; text-align: center;">Average Speed</th>
+            <th style="border: 1px solid black; padding: 8px; text-align: center;">Selected Parameter</th>
           </tr>
-        `
-            : ""
-        }
-      </tbody>
-    </table>
-  `;
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${startTime}</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${endTime}</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${startLocation}</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${endLocation}</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${totalDistance} km</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${maxVoltage}</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${minVoltage}</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${
+              travelTime.hours
+            } hours ${travelTime.minutes} minutes</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${averageSpeed.toFixed(
+              2
+            )} km/h</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">TBD</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
 
     // Add the table content to the PDF
     pdf.html(tableContent, {
@@ -98,7 +132,7 @@ const LiveContent = ({
   };
 
   const handleClickDownloadPDF = () => {
-    generatePDFReport(selectedTrip, speed);
+    generatePDFReport();
   };
 
   const [selectedMarker, setSelectedMarker] = useState(null);
