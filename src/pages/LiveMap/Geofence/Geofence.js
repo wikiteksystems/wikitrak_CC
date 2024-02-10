@@ -16,7 +16,6 @@ import { Box, styled } from "@mui/system";
 import PlayArrowOutlined from "@mui/icons-material/PlayArrowOutlined";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Fab from "@mui/material/Fab";
-
 import { Button, Switch, Layout, message } from "antd";
 import AppMenu2 from "../../../components/Appmneu2";
 import LocationOnSharpIcon from "@mui/icons-material/LocationOnSharp";
@@ -53,6 +52,11 @@ const Geofence = () => {
   useEffect(() => {
     setGeofence({ ...geofences[activeMenu] });
   }, [geofences, activeMenu]);
+
+  useEffect(() => {
+    // Your logic to determine if the vehicle is entering or exiting the geofence
+    // Trigger an alert/notification accordingly
+  }, [geofence]);
 
   useEffect(() => {
     if (
