@@ -138,7 +138,7 @@ const Geofence = () => {
 
             <Layout>
             <div className="md:block hidden">
-                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+                <AppMenu activePage ={1} menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
                 </div>
 
                 <div className="md:hidden block">

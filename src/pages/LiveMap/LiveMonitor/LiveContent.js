@@ -46,6 +46,7 @@ import CombinedCharts from "./CombinedChart";
 import ZoomableLineChart from "./LineCharts";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import MultiChart from "./MultiChart";
+import './LiveMonitor.css'
 
 const CardWrapper = styled(Card)(
   ({ theme }) => `
@@ -650,17 +651,28 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam , setActive, active}
         <>
           <Box className="d-flex justify-content-center " mb={3}>
             {toggleView === "table_view" && (
-              <Card style={{ height: "auto", width: "800px" }}>
+              <Card style={{ height: "auto", width: "800px" , marginTop:"100px"}}>
                 {selectCheckParam.length === 0 ? (
                   <>
-                    <div
+                   <Typography
+                      sx={{
+                        py: 10
+                      }}
                       variant="h5"
                       fontWeight="normal"
                       color="text.secondary"
-                      align="center"
+                      // align="center"
+                      paddingLeft='225px'
+                     
                     >
-                      Please Select Parameters in side menu
+                       <div class="border">
+                      <div class="graph"></div>
+                      <div class="graph2"></div>
+                      <div class="graph3"></div>
+                      <div class="graph4"></div>
+                      <div class="graph5"></div>
                     </div>
+                    </Typography>
                   </>
                 ) : (
                   <>
@@ -1157,12 +1169,11 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam , setActive, active}
               }}
             >{
               chartValue.length>0 
-              ?
+             &&
 
               // <CombinedCharts combinedChartData={combinedChartData} />
               <MultiChart item ={chartValue}/>
-              :
-              <Typography>No data.</Typography>
+              
             }
             </Box>
           )}

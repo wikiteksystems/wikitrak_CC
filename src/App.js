@@ -53,10 +53,10 @@ function App() {
                         <RouteGuard path="/livemap/live_monitor" component={LiveMonitor} />
                         <RouteGuard path="/livemap/trip_history" component={TripHistory} />
                         <RouteGuard path="/livemap/geofence" component={Geofence} />
-                        <RouteGuard path="/livemap/dota" component={Dota} />
+                        {/* <RouteGuard path="/livemap/dota" component={Dota} /> */}
                         {/* <RouteGuard path="/livemap/device_config" component={DC} /> */}
                         <RouteGuard path="/livemap/:id?" component={LiveMap} />
-                        <RouteGuard path="/fota_campaign" component={FotaCampaign} />
+                        {/* <RouteGuard path="/fota_campaign" component={FotaCampaign} /> */}
                         <RouteGuard path="/profile" component={Profile} />
                         <RouteGuard path="/reports" component={Report} />
                         <Route path="/login" component={Login} />

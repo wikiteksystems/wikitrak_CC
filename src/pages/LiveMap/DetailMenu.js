@@ -1426,7 +1426,9 @@ const DetailMenu = ({
                     <div
                       className="flex justify-between items-center"
                       style={{
-                        backgroundColor: "#0F4C75",
+                        backgroundColor: "rgb(47, 115, 193)",
+                        background:
+                            "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
                         paddingBottom: "5px",
                       }}
                     >
@@ -1435,7 +1437,12 @@ const DetailMenu = ({
                           <Header
                             title={"Vehicle Group List"}
                             classes={"w-full"}
-                            style={{ fontSize: 20 }}
+                            style={{ 
+                              fontSize: 20,
+                              background: "rgb(47, 115, 193)",
+                              background:
+                                "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
+                               }}
                           />
                           <PlusCircleOutlined
                             className="cursor-pointer"
@@ -1493,8 +1500,11 @@ const DetailMenu = ({
                       theme="light"
                       mode="inline"
                       style={{
-                        color: "black",
+                        color: "white",
                         backgroundColor: "white",
+                        background: "rgb(47, 115, 193)", // Set the background color using rgb values
+                          background:
+                            "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
                         flexGrow: 1,
                       }}
                       selectable={false}
@@ -1599,11 +1609,11 @@ const DetailMenu = ({
               onClick={() => handleClick("vehicle_list")}
               style={
                 !vehicleGroupVisible && !showVehicleList
-                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2, color:'white' }
-                  : {color:'white'}
+                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2 }
+                  : {}
               }
             >
-              <Icon icon="ic:round-directions-car" width="35" height="25" />
+              <Icon icon="ic:round-directions-car" width="35" height="25" color="white"  />
             </Button>
             <Button
               className="w-[40px] flex justify-center items-center"
@@ -1612,11 +1622,11 @@ const DetailMenu = ({
               onClick={() => handleClick("vehicle_group")}
               style={
                 vehicleGroupVisible && !showVehicleList
-                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2, color:'white' }
-                  :{color:'white'}
+                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2 }
+                  : {}
               }
             >
-              <Icon icon="mdi:car-multiple" width="30" hegith="25" />
+              <Icon icon="mdi:car-multiple" width="30" hegith="25" color="white"  />
             </Button>
             {/* <CustomTooltip showTooltip={true} data={"aniket"}> */}
             {/* <div style={{marginTop:"-8px"}}> */}
@@ -1628,11 +1638,11 @@ const DetailMenu = ({
               onClick={() => setShowVehicleList(true)}
               style={
                 showVehicleList
-                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2, color:'white' }
-                  : {color:'white'}
+                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2 }
+                  : {}
               }
             >
-              <Icon icon="ant-design:sliders-outlined" width="30" hegith="25" />
+              <Icon icon="ant-design:sliders-outlined" width="30" hegith="25" color="white" />
             </Button>
             {/* </div> */}
             {/* </CustomTooltip> */}

@@ -26,6 +26,7 @@ import Home from '@mui/icons-material/Home';
 import PlayArrowOutlined from '@mui/icons-material/PlayArrowOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import ReportChart from "./ReportChart";
+import './Report.css';
 
 const CardWrapper = styled(Card)(
   ({ theme }) => `
@@ -519,7 +520,7 @@ const Report = ({ setActive, active }) => {
           <Layout style={{ flex: '1 1 auto' }} className="h-screen">
             <Header title={'Report'} showText={false} hideArrow={true} style={{ justifyContent: 'space-between', background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)' }} />
 
-            <div className="row gx-3" style={{ marginTop: "20px", marginBottom: "20px", marginLeft: "140px" }}>
+            <div className="row gx-3" style={{ marginTop: "20px", marginBottom: "20px", marginLeft: "30px" }}>
               <div className="col mt-3">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
@@ -676,7 +677,7 @@ const Report = ({ setActive, active }) => {
                   <thead>
                     <tr>
                       {selectCheckParam.map((param) => (
-                        <th key={param.id}>
+                        <th key={param.id} style={{color: 'white'}}>
                           <Typography>{param.label}</Typography>
                         </th>
                       ))}
@@ -690,7 +691,7 @@ const Report = ({ setActive, active }) => {
                         </td>
                       </tr>
                     ) : parameterValues.length > 0 ? (
-                      parameterValues[0]?.data.slice(0, 8).map((_, index) => (
+                      parameterValues[0]?.data.slice(0, 3).map((_, index) => (
                         <tr key={index}>
                           {parameterValues.map((paramData) => (
                             <td key={paramData.label}>

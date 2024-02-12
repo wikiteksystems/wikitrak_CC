@@ -23,7 +23,7 @@ const FirmwareUpdate = () => {
             {/* <Navbar /> */}
 
             <Layout>
-                <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
+                <AppMenu activePage ={1} menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
 
                 <Layout style={{ flex: "1 1 auto" }}>
                     <Header title={"Device Firmware Update"} showText={false} style={{justifyContent: "space-between"}} />

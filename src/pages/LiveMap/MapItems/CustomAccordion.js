@@ -390,8 +390,8 @@ function CustomAccordian({ vehicleList, gtVehi }) {
                     item.parameter_type === "Telematic"
                       ? param.short_name
                       : item.parameter_type === "IVN"
-                      ? param.pid_description
-                      : param.spn,
+                        ? param.pid_description
+                        : param.spn,
                   param_type: item.parameter_type,
                   param_header: param?.header?.device_header,
                   unit: param?.unit,
@@ -452,9 +452,9 @@ function CustomAccordian({ vehicleList, gtVehi }) {
     const parameterList = paramList.map((item) =>
       item.param_group_id === group.id
         ? {
-            ...item,
-            checked: true,
-          }
+          ...item,
+          checked: true,
+        }
         : { ...item }
     );
 
@@ -528,16 +528,19 @@ function CustomAccordian({ vehicleList, gtVehi }) {
 
     <>
       {!params && (
+        
         <Layout.Header
           style={{
             background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)',
             textAlign: "center",
             fontSize: "20px",
             fontWeight: "bold",
-            color:"white"
+            color: "white"
           }}
         >
+          
           Live Parameters
+          
         </Layout.Header>
       )}
       {!params && (
@@ -545,14 +548,14 @@ function CustomAccordian({ vehicleList, gtVehi }) {
           {vehicleList.map((item, index) => (
             <div
               key={index}
-              style={{ marginBottom: "20px", cursor: "pointer", display:"flex", flexDirection:"column", alignItems:"", marginTop:"10px", marginLeft:"10px", gap:"10px" }}
+              style={{ marginBottom: "20px", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "", marginTop: "10px", marginLeft: "10px", gap: "10px" }}
               onClick={() => getLMonitorParams(index)}
             >
-              <div style={{display:'flex',gap:"10px"}}> 
-              <div className="icon icon-shape bg-dark text-white text-lg rounded-circle">
-                                <ElectricCarIcon color="white" width="50" height="40" />
-                              </div>
-              <Typography style={{ color: "white", textAlign:'center', textAlign:"center", marginTop:"5px" }}>{item.registration_id}</Typography>
+              <div style={{ display: 'flex', gap: "10px" }}>
+                <div className="icon icon-shape bg-dark text-white text-lg rounded-circle">
+                  <ElectricCarIcon color="white" width="50" height="40" />
+                </div>
+                <Typography style={{ color: "white", textAlign: 'center', textAlign: "center", marginTop: "10px" }}>{item.registration_id}</Typography>
               </div>
             </div>
           ))}
@@ -566,18 +569,18 @@ function CustomAccordian({ vehicleList, gtVehi }) {
             fontSize: "20px",
             fontWeight: "bold",
             justifyContent: "space-between",
-            paddingRight: "20px", 
-            color:"white"
+            paddingRight: "20px",
+            color: "white"
           }}
         >
+    
           Live Parameters
+          <ArrowBackIcon onClick={() => setParams(false)} style={{ color: "white", cursor: "pointer"}} className="ms-5" />
         </Layout.Header>
       )}
       {params && (
         <div className="main-content">
-          <div style={{ display: 'flex', justifyContent: 'right', margin: '10px', color: 'black' }}>
-          <ArrowBackIcon onClick={() => setParams(false)} style={{color:"white", cursor:"pointer"}} />
-          </div>
+          
           <Tabs
             fill
             justify
@@ -586,14 +589,14 @@ function CustomAccordian({ vehicleList, gtVehi }) {
             className="mb-3 text-light"
           >
             <Tab
-          eventKey="Parameters_List"
-          style={{border:'none'}}
-          title={
-            <div className="d-flex" style={{justifyContent: 'center'}}>
-              <AcUnitIcon size={20} style={{ marginRight: '5px', color:"white" }} onClick={() => { setIsCreate(false); setIsCreateGroup(false); }} />
-            </div>
-          }
-        >
+              eventKey="Parameters_List"
+              style={{ border: 'none' }}
+              title={
+                <div className="d-flex" style={{ justifyContent: 'center' }}>
+                  <Icon icon="ant-design:sliders-outlined" width="30" hegith="25" color="white" onClick={() => { setIsCreate(false); setIsCreateGroup(false); }} />
+                </div>
+              }
+            >
               {isCreate && (
                 <CreateParameter
                   selectedParam={selectedParam}
@@ -601,68 +604,70 @@ function CustomAccordian({ vehicleList, gtVehi }) {
                 />
               )}
               {!isCreate &&
-              paramList &&
-              !detailMenuCollapsed &&
-              paramList.length > 0 ? (
+                paramList &&
+                !detailMenuCollapsed &&
+                paramList.length > 0 ? (
                 paramList.map((param, index) => (
                   <div className="text-white" key={index}>
-                    <Typography className="text-white" style={{textTransform:"capitalize", marginLeft:"10px"}}>
+                    <Typography className="text-white pb-4" style={{ textTransform: "capitalize", marginLeft: "10px" }}>
 
-                    {param.label}
-                    <Checkbox
-                      style={{ position: "absolute", right: 20 }}
-                      checked={param.checked}
-                      onChange={(e) =>
-                        handleParameterChange(
-                          e,
-                          param.label,
-                          vehicleList[selectedRegistration].imei[0].mac_id,
-                          param._id,
-                          vehicleList[selectedRegistration].registration_id
-                        )
-                      }
-                    />
+                      {param.label}
+                      <Checkbox
+                        style={{ position: "absolute", right: 20 }}
+                        checked={param.checked}
+                        onChange={(e) =>
+                          handleParameterChange(
+                            e,
+                            param.label,
+                            vehicleList[selectedRegistration].imei[0].mac_id,
+                            param._id,
+                            vehicleList[selectedRegistration].registration_id
+                          )
+                        }
+                      />
                     </Typography>
-                    
 
-                     
+
+
                   </div>
                 ))
               ) : (
                 <div className="text-white">No parameters found</div>
               )}
             </Tab>
+
             <Tab
-          eventKey="Parameter_Groups_List"
-          title={
-            <div className="d-flex" style={{justifyContent: 'center'}}>
-              <AcUnitIcon size={20} style={{ marginRight: '5px', color:"white" }} onClick={() => { setIsCreateGroup(false); setIsCreate(false); }} />
-              
-            </div>
-          }
-        >
+              eventKey="Parameter_Groups_List"
+              title={
+                <div className="d-flex" style={{ justifyContent: 'center' }}>
+                  {/* <AcUnitIcon size={20} style={{ marginRight: '5px', color: "white" }} onClick={() => { setIsCreateGroup(false); setIsCreate(false); }} /> */}
+                  <Icon icon="ant-design:sliders-outlined" width="30" hegith="25" color="white" onClick={() => { setIsCreateGroup(false); setIsCreate(false); }} />
+
+                </div>
+              }
+            >
               {/* Render parameter groups list here */}
               {!isCreateGroup &&
-              parameterGroupList &&
-              parameterGroupList.length > 0 ? (
+                parameterGroupList &&
+                parameterGroupList.length > 0 ? (
                 parameterGroupList.map((param, index) => (
                   <div className="text-white" key={index}>
-                     <Typography className="text-white" style={{textTransform:"capitalize", marginLeft:"10px"}}>
+                    <Typography className="text-white pb-4" style={{ textTransform: "capitalize", marginLeft: "10px" }}>
 
-                    {param.label}
-                    <Checkbox
-                      style={{ position: "absolute", right: 20 }}
-                      checked={param.checked}
-                      onChange={(e) =>
-                        handleParameterGroupChange(
-                          e,
-                          param.label,
-                          vehicleList[selectedRegistration].imei[0].mac_id,
-                          param.id
-                        )
-                      }
-                    />
-                     </Typography>
+                      {param.label}
+                      <Checkbox
+                        style={{ position: "absolute", right: 20 }}
+                        checked={param.checked}
+                        onChange={(e) =>
+                          handleParameterGroupChange(
+                            e,
+                            param.label,
+                            vehicleList[selectedRegistration].imei[0].mac_id,
+                            param.id
+                          )
+                        }
+                      />
+                    </Typography>
                   </div>
                 ))
               ) : (

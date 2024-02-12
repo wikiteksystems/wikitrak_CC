@@ -8,12 +8,12 @@ background: linear-gradient(155deg, rgba(47,115,193,1) 4%, rgba(0,134,145,1) 56%
 }
 
 :where(.css-dev-only-do-not-override-17a39f8).ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover{
-    background-color: rgb(213 232 255);
+    background-color: rgb(36 108 196);
     color: black;
 }
 
 :where(.css-17a39f8).ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover{
-    background-color: rgb(213 232 255);
+    background-color: rgb(36 108 196);
     color: black;
 
 }
