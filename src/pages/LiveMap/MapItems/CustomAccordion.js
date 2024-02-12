@@ -326,6 +326,7 @@ import {
   Popconfirm,
   Select,
   ColorPicker,
+  Typography,
 } from "antd";
 import { LiveMonitorUtils } from "../../../utils";
 import { matchColor } from "../../../utils/constants";
@@ -334,6 +335,7 @@ import CreateParameterGroup from "./createParameterGroup";
 import { LiveMonitorActions } from "../../../stores/actions";
 import "./CustomAccordian.css";
 import AcUnitIcon from '@mui/icons-material/AcUnit';
+import ElectricCarIcon from '@mui/icons-material/ElectricCar';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 const { Header } = Layout;
 
@@ -528,10 +530,11 @@ function CustomAccordian({ vehicleList, gtVehi }) {
       {!params && (
         <Layout.Header
           style={{
-            background: "red",
+            background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)',
             textAlign: "center",
             fontSize: "20px",
             fontWeight: "bold",
+            color:"white"
           }}
         >
           Live Parameters
@@ -542,10 +545,15 @@ function CustomAccordian({ vehicleList, gtVehi }) {
           {vehicleList.map((item, index) => (
             <div
               key={index}
-              style={{ marginBottom: "20px", cursor: "pointer" }}
+              style={{ marginBottom: "20px", cursor: "pointer", display:"flex", flexDirection:"column", alignItems:"", marginTop:"10px", marginLeft:"10px", gap:"10px" }}
               onClick={() => getLMonitorParams(index)}
             >
-              <p style={{ color: "white" }}>{item.registration_id}</p>
+              <div style={{display:'flex',gap:"10px"}}> 
+              <div className="icon icon-shape bg-dark text-white text-lg rounded-circle">
+                                <ElectricCarIcon color="white" width="50" height="40" />
+                              </div>
+              <Typography style={{ color: "white", textAlign:'center', textAlign:"center", marginTop:"5px" }}>{item.registration_id}</Typography>
+              </div>
             </div>
           ))}
         </div>
@@ -553,12 +561,13 @@ function CustomAccordian({ vehicleList, gtVehi }) {
       {params && (
         <Layout.Header
           style={{
-            background: "red",
+            background: 'linear-gradient(155deg, rgb(47, 115, 193) 4%, rgb(0, 134, 145) 56%)',
             textAlign: "center",
             fontSize: "20px",
             fontWeight: "bold",
             justifyContent: "space-between",
             paddingRight: "20px", 
+            color:"white"
           }}
         >
           Live Parameters
@@ -567,7 +576,7 @@ function CustomAccordian({ vehicleList, gtVehi }) {
       {params && (
         <div className="main-content">
           <div style={{ display: 'flex', justifyContent: 'right', margin: '10px', color: 'black' }}>
-          <ArrowBackIcon onClick={() => setParams(false)} />
+          <ArrowBackIcon onClick={() => setParams(false)} style={{color:"white", cursor:"pointer"}} />
           </div>
           <Tabs
             fill
@@ -578,9 +587,10 @@ function CustomAccordian({ vehicleList, gtVehi }) {
           >
             <Tab
           eventKey="Parameters_List"
+          style={{border:'none'}}
           title={
             <div className="d-flex" style={{justifyContent: 'center'}}>
-              <AcUnitIcon size={20} style={{ marginRight: '5px' }} onClick={() => { setIsCreate(false); setIsCreateGroup(false); }} />
+              <AcUnitIcon size={20} style={{ marginRight: '5px', color:"white" }} onClick={() => { setIsCreate(false); setIsCreateGroup(false); }} />
             </div>
           }
         >
@@ -596,6 +606,8 @@ function CustomAccordian({ vehicleList, gtVehi }) {
               paramList.length > 0 ? (
                 paramList.map((param, index) => (
                   <div className="text-white" key={index}>
+                    <Typography className="text-white" style={{textTransform:"capitalize", marginLeft:"10px"}}>
+
                     {param.label}
                     <Checkbox
                       style={{ position: "absolute", right: 20 }}
@@ -610,6 +622,10 @@ function CustomAccordian({ vehicleList, gtVehi }) {
                         )
                       }
                     />
+                    </Typography>
+                    
+
+                     
                   </div>
                 ))
               ) : (
@@ -620,7 +636,7 @@ function CustomAccordian({ vehicleList, gtVehi }) {
           eventKey="Parameter_Groups_List"
           title={
             <div className="d-flex" style={{justifyContent: 'center'}}>
-              <AcUnitIcon size={20} style={{ marginRight: '5px' }} onClick={() => { setIsCreateGroup(false); setIsCreate(false); }} />
+              <AcUnitIcon size={20} style={{ marginRight: '5px', color:"white" }} onClick={() => { setIsCreateGroup(false); setIsCreate(false); }} />
               
             </div>
           }
@@ -631,6 +647,8 @@ function CustomAccordian({ vehicleList, gtVehi }) {
               parameterGroupList.length > 0 ? (
                 parameterGroupList.map((param, index) => (
                   <div className="text-white" key={index}>
+                     <Typography className="text-white" style={{textTransform:"capitalize", marginLeft:"10px"}}>
+
                     {param.label}
                     <Checkbox
                       style={{ position: "absolute", right: 20 }}
@@ -644,6 +662,7 @@ function CustomAccordian({ vehicleList, gtVehi }) {
                         )
                       }
                     />
+                     </Typography>
                   </div>
                 ))
               ) : (

@@ -1599,8 +1599,8 @@ const DetailMenu = ({
               onClick={() => handleClick("vehicle_list")}
               style={
                 !vehicleGroupVisible && !showVehicleList
-                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2 }
-                  : {}
+                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2, color:'white' }
+                  : {color:'white'}
               }
             >
               <Icon icon="ic:round-directions-car" width="35" height="25" />
@@ -1612,8 +1612,8 @@ const DetailMenu = ({
               onClick={() => handleClick("vehicle_group")}
               style={
                 vehicleGroupVisible && !showVehicleList
-                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2 }
-                  : {}
+                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2, color:'white' }
+                  :{color:'white'}
               }
             >
               <Icon icon="mdi:car-multiple" width="30" hegith="25" />
@@ -1628,8 +1628,8 @@ const DetailMenu = ({
               onClick={() => setShowVehicleList(true)}
               style={
                 showVehicleList
-                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2 }
-                  : {}
+                  ? { filter: "drop-shadow(0 0 1px #ffffff)", borderWidth: 2, color:'white' }
+                  : {color:'white'}
               }
             >
               <Icon icon="ant-design:sliders-outlined" width="30" hegith="25" />
