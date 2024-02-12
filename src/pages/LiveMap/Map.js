@@ -717,7 +717,7 @@ function Map({
 
     fetchData();
   }, []);
-  console.log(imeiList, "testing for data");
+  // console.log(imeiList, "testing for data");
 
   const { showWeather, services, activeVehicle, cooridinates_obj } =
     useSelector(({ LiveMap }) => LiveMap);

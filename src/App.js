@@ -12,6 +12,7 @@ import 'react-notifications/lib/notifications.css';
 import './App.css';
 import { UserActions } from './stores/actions';
 import TripHistory from './pages/LiveMap/TripHistory/TripHistory';
+import Report from './pages/LiveMap/LiveMonitor/Report';
 
 function App() {
     const dispatch = useDispatch();
@@ -53,10 +54,11 @@ function App() {
                         <RouteGuard path="/livemap/trip_history" component={TripHistory} />
                         <RouteGuard path="/livemap/geofence" component={Geofence} />
                         <RouteGuard path="/livemap/dota" component={Dota} />
-                        <RouteGuard path="/livemap/device_config" component={DC} />
+                        {/* <RouteGuard path="/livemap/device_config" component={DC} /> */}
                         <RouteGuard path="/livemap/:id?" component={LiveMap} />
                         <RouteGuard path="/fota_campaign" component={FotaCampaign} />
                         <RouteGuard path="/profile" component={Profile} />
+                        <RouteGuard path="/reports" component={Report} />
                         <Route path="/login" component={Login} />
                         <Route exact path='/' render={() => <Redirect to='/login' />} />
                         <Redirect to="/login" />

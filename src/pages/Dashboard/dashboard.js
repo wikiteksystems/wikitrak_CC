@@ -482,6 +482,7 @@ import EmojiTransportationIcon from '@mui/icons-material/EmojiTransportation';
 import CarCrashIcon from '@mui/icons-material/CarCrash';
 import { locationsApi } from '../../mocks/location';
 import Item from 'antd/es/list/Item';
+import AppMenu2 from '../../components/Appmneu2';
 const Dashboard = () => {
   const dispatch = useDispatch();
   const userId = useSelector(({ User }) => User.userId);
@@ -755,7 +756,7 @@ useEffect(() => {
       <Layout className="flex h-screen">
         <Layout>
           <div className="md:block hidden">
-            <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
+            <AppMenu activePage={0} menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
           </div>
 
           <div className="md:hidden">

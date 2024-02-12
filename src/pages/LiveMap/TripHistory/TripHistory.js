@@ -162,6 +162,11 @@ const TripHistory = () => {
 
     fetchAddresses();
   }, [tripHis]);
+//   useEffect(() =>{
+//     getStartAddress(tripHis[0]?.data[0]?.lat,tripHis[0]?.data[tripHis[0]?.data.length-1]?.lng)
+//     getEndAddress(tripHis[0]?.data[0]?.lat,tripHis[0]?.data[tripHis[0]?.data.length-1]?.lng)
+//     console.log(tripHis) 
+// },[tripHis])
 
   const StyledFab = styled(Fab)({
     position: "absolute",

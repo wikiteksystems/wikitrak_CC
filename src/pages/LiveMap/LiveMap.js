@@ -141,7 +141,7 @@ const LiveMap = () => {
     <Layout className="flex h-screen">
       <Layout className="h-screen">
         <div className="md:block hidden">
-          <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
+          <AppMenu activePage={1} menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
         </div>
 
         <Layout style={{ flex: "1 1 auto" }} className="h-screen">
@@ -200,7 +200,7 @@ const LiveMap = () => {
               <MenuIcon onClick={handleMainMenuCollapse} />
             </IconButton>
             <StyledFab
-              style={{ background: ThemeColor.light_color, color: "white" }}
+              style={{ background: ThemeColor.light_color_1, color: "white" }}
               aria-label="add"
             >
               <Home />

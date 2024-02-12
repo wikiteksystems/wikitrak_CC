@@ -44,6 +44,8 @@ import { Spin } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import CombinedCharts from "./CombinedChart";
 import ZoomableLineChart from "./LineCharts";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import MultiChart from "./MultiChart";
 
 const CardWrapper = styled(Card)(
   ({ theme }) => `
@@ -69,7 +71,7 @@ const CardWrapper = styled(Card)(
     `
 );
 
-const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
+const LiveContent = ({ selectCheckParam, setSelecCheckParam , setActive, active}) => {
   //  1. Bydefault and actions apply query,filter,page,limit
 
   const [page, setPage] = useState(0);
@@ -97,8 +99,15 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
   const [locationData, setLocationData] = useState([]);
   const [healthData, setHealthData] = useState([]);
   const [emergencyData, setEmergencyData] = useState([]);
-  const [active, setActive] = useState(false);
+  const[date, setDate] = useState(false)
+  const { mainMenuCollapsed, detailMenuCollapsed } = useSelector(
+    ({ App }) => App
+  );
+  const { login, themeColor, userName } = useSelector(({ User }) => User);
 
+  const [chartValue, setChartValue] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [combinedChartData, setCombinedChartData] = useState([]);
   const handleChangeActive = (event) => {
     setLocationData([]);
     setLoginData([]);
@@ -110,13 +119,7 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
     setendDateValue(dayjs(new moment().toDate()));
   };
 
-  const { mainMenuCollapsed, detailMenuCollapsed } = useSelector(
-    ({ App }) => App
-  );
-  const { login, themeColor, userName } = useSelector(({ User }) => User);
-
-  const [chartValue, setChartValue] = useState([]);
-  const [loading, setLoading] = useState(false);
+ 
 
   const fetchData = async (type) => {
     try {
@@ -404,7 +407,7 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
     dispatch(AppActions.setDetailMenuCollapsed(!detailMenuCollapsed));
   };
 
-  const [combinedChartData, setCombinedChartData] = useState([]);
+  
 
   const combineChartData = () => {
     let combinedData = [];
@@ -495,11 +498,11 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
         </div>
       </Box>
 
-      <div className="d-flex" style={{ display: "flex" }}>
+      <div className="d-flex" style={{ display: "flex", justifyContent:"left", alignItems:"center" }}>
         {/* Your first Box content */}
         <Box
           sx={{
-            padding: "5px 5px",
+            // padding: "5px 5px",
             display: "flex",
             gap: "10px",
             alignItems: "center",
@@ -522,7 +525,7 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
               Live
             </Typography>
             <Switch
-              size="small"
+              size="md"
               checked={active}
               onChange={(event) => handleChangeActive(event)}
             />
@@ -593,21 +596,23 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
               justifyContent: "flex-end",
             }}
           >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                value={startDateValue}
-                label="From Date"
-                onChange={(newValue) => setstartDateValue(newValue.$d)}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              <DatePicker
-                value={endDateValue}
-                label="End Date"
-                onChange={(newValue) => setendDateValue(newValue.$d)}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DateTimePicker
+                      className="ms-5"
+                        value={startDateValue}
+                        label='From Date'
+                        onChange={(newValue) => {
+                          setstartDateValue(newValue.$d)
+                          setDate(true)
+                        }}
+                      />
+                      <DateTimePicker
+                        className="ms-5"
+                        value={endDateValue}
+                        label='End Date'
+                        onChange={(newValue) => setendDateValue(newValue.$d)}
+                      />
+          </LocalizationProvider> 
             <TextField
               label="Frequency"
               name="frequency"
@@ -616,6 +621,9 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
               value={frequency}
               variant="outlined"
             />
+            {
+              (selectCheckParam.length> 0 && date) 
+              &&
             <div
               onClick={() => fetchData("group")}
               style={{
@@ -631,6 +639,8 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
             >
               <KeyboardArrowRightIcon sx={{ color: "#fff" }} />
             </div>
+
+            }
           </Box>
         )}
       </div>
@@ -1143,10 +1153,17 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam }) => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "20px",
-                padding: "20px",
+                // padding: "20px",
               }}
-            >
-              <CombinedCharts combinedChartData={combinedChartData} />
+            >{
+              chartValue.length>0 
+              ?
+
+              // <CombinedCharts combinedChartData={combinedChartData} />
+              <MultiChart item ={chartValue}/>
+              :
+              <Typography>No data.</Typography>
+            }
             </Box>
           )}
         </Box>

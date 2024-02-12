@@ -26,6 +26,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TextField, Tooltip } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers";
 const { Sider } = Layout;
 
 const DetailMenu = ({
@@ -99,18 +100,18 @@ const DetailMenu = ({
   return (
     <div className="absolute md:relative z-30 md:z-0 right-0">
       <Sider
-        className="h-screen"
-        style={{
-          background: "white",
-          borderLeft: "1px solid black",
-          right: "0px",
-        }}
-        breakpoint="lg"
-        collapsedWidth={0}
-        trigger={null}
-        collapsible
-        collapsed={menuCollapsed}
-        width={300}
+      className="h-screen"
+      style={{
+        background: "white",
+        borderLeft: "1px solid black",
+        right: "0px",
+      }}
+      breakpoint="md"
+      collapsedWidth={0}
+      trigger={null}
+      collapsible
+      collapsed={menuCollapsed}
+      width={325}
       >
         <div className="detail-menu flex flex-col justify-between h-full">
           <>
@@ -132,8 +133,8 @@ const DetailMenu = ({
                 Select Trip {vehicle?.registration_id}
               </p>
             </div>
-            <div className="flex items-center ">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div className="">
+             {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   value={startDateValue}
                   label="From Date"
@@ -146,23 +147,47 @@ const DetailMenu = ({
                   onChange={(newValue) => setendDateValue(newValue.$d)}
                   renderInput={(params) => <TextField {...params} />}
                 />
-              </LocalizationProvider>
+              </LocalizationProvider>   */}
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DateTimePicker
+                      className="ms-5"
+                        value={startDateValue}
+                        label='From Date'
+                        onChange={(newValue) => setstartDateValue(newValue.$d)}
+                      />
+                      <DateTimePicker
+                        className="mt-5 ms-5"
+                        value={endDateValue}
+                        label='End Date'
+                        onChange={(newValue) => setendDateValue(newValue.$d)}
+                      />
+                    </LocalizationProvider> 
+
             </div>
 
-            {loading ? (
-              <Spin size="large" />
-            ) : (
+             
               <Menu
-                className="overflow-hidden overflow-y-auto"
-                theme="light"
-                mode="inline"
-                style={{
-                  color: "black",
-                  backgroundColor: "white",
-                  flexGrow: 1,
-                }}
-                selectable={false}
-                items={searchedMenuList.map((item, index) => {
+              className="overflow-y-auto mt-4"
+              theme="light"
+              mode="inline"
+              style={{
+                color: "black",
+                backgroundColor: "white",
+                flexGrow: 1,
+                height:'70vh',
+              }}
+              selectable={false}
+                items={
+                  loading
+                      ? [
+                          {
+                            key: 1,
+                            label: <div style={{ display:'flex', justifyContent:"center", padding: '2px'  }}><Spin size="large"  /> </div>,
+                          },
+                        ]
+                        
+                  :
+                searchedMenuList.map((item, index) => {
                   console.log(item, "triphistorydata");
                   return {
                     key: index,
@@ -194,7 +219,7 @@ const DetailMenu = ({
                   };
                 })}
               />
-            )}
+           
           </>
 
           <Footer

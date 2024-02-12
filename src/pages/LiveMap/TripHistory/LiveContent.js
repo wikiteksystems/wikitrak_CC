@@ -28,6 +28,9 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import tripHistoryImage from "./trip-history.png";
 import BgCar from "./newcar.gif";
+import PlayCircleFilledWhiteOutlinedIcon from '@mui/icons-material/PlayCircleFilledWhiteOutlined';
+import PauseCircleOutlineOutlinedIcon from '@mui/icons-material/PauseCircleOutlineOutlined';
+
 
 const { GMAP_API_KEY, ThemeColor } = require("../../../utils/constants");
 
@@ -149,6 +152,7 @@ function LiveContent({ harshBreak, acceleration, speed, selectCheckParam }) {
         lng: parseFloat(selectCheckParam[0]?.data[0]?.lng),
       });
     }
+    setAniActive(false)
   }, [selectCheckParam]);
 
   const startblinking = (data) => {
@@ -239,52 +243,19 @@ function LiveContent({ harshBreak, acceleration, speed, selectCheckParam }) {
           <b className="ms-3">Battery Voltage:</b>
         </Box>
 
-        <Button
-          aria-describedby={id}
-          style={{
-            background: ThemeColor.light_color_2,
-            color: "black",
-            fontSize: "12px", // Decrease the size of the button
-            width: "80px", // Decrease the width of the button
-          }}
-          onClick={handleClick}
-        >
-          Playback
-        </Button>
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-        >
-          <Box
-            sx={{
-              background: ThemeColor.light_color_2,
-              padding: "5px 30px",
-              color: "#fff",
-              fontWeight: "600",
-            }}
-          >
-            Trip Playback
-          </Box>
-          <Box
-            sx={{ padding: "15px", display: "flex", justifyContent: "center" }}
-          >
-            {!aniActive ? (
-              <div onClick={() => setAniActive(!aniActive)}>
-                <PlayCircleIcon sx={{ fontSize: "30px", cursor: "pointer" }} />
-              </div>
-            ) : (
-              <div onClick={() => setAniActive(!aniActive)}>
-                <PauseCircleIcon sx={{ fontSize: "30px", cursor: "pointer" }} />
-              </div>
-            )}
-          </Box>
-        </Popover>
+        { !aniActive ? (
+          <div onClick={() => setAniActive(!aniActive)}>
+            <Typography>
+              <PlayCircleFilledWhiteOutlinedIcon sx={{ fontSize: "40px", cursor: "pointer" }} /> Playback Trip
+            </Typography>
+          </div>
+        ) : (
+          <div onClick={() => setAniActive(!aniActive)}>
+            <Typography>
+              <PauseCircleOutlineOutlinedIcon sx={{ fontSize: "40px", cursor: "pointer" }} /> Pause Trip
+            </Typography>
+          </div>
+        )}
       </Box>}
 
       {selectCheckParam.length > 0 ? (

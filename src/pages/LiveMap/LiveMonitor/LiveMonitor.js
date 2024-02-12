@@ -31,6 +31,8 @@ const LiveMonitor = () => {
     const { activeVehicle: vehicle } = useSelector( ({LiveMap}) => LiveMap );
     const { mainMenuCollapsed, detailMenuCollapsed } = useSelector( ({App}) => App );
     const [selectCheckParam,setSelecCheckParam] = useState([])
+    const [active, setActive] = useState(false)
+
 
     useEffect( () => {
         if (Object.keys(vehicle).length === 0) {
@@ -84,11 +86,11 @@ const StyledFab = styled(Fab)({
                    
 
                     <Content style={{width: '100%', height: '100%'}}>
-                     <LiveContent selectCheckParam={selectCheckParam} setSelecCheckParam={setSelecCheckParam} />
+                     <LiveContent selectCheckParam={selectCheckParam} setSelecCheckParam={setSelecCheckParam}active={active} setActive= {setActive} />
                     </Content>
                 </Layout>
 
-                <DetailMenu menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} />
+                <DetailMenu menuList={lMonitorParams} menuCollapsed={detailMenuCollapsed} setSelecCheckParam={setSelecCheckParam} active = {active}/>
             </Layout>
 
             <div className="hidden">

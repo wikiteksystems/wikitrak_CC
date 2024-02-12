@@ -1097,10 +1097,10 @@ const DetailMenu = ({
                           value={searchText}
                           onChange={(e) => setSearchText(e.target.value)}
                         />
-                        <Checkbox
+                        {/* <Checkbox
                           style={{ position: "absolute", right: 20 }}
                           onClick={(e) => handleCheckboxClick(e, "select-all")}
-                        />
+                        /> */}
                       </div>
 
                       <Menu
@@ -1157,7 +1157,7 @@ const DetailMenu = ({
                                     {" "}
                                     {item?.registration_id}
                                   </span>
-                                  <Checkbox
+                                  {/* <Checkbox
                                     checked={item.checked}
                                     onClick={(e) =>
                                       handleCheckboxClick(
@@ -1166,7 +1166,7 @@ const DetailMenu = ({
                                         item.id
                                       )
                                     }
-                                  />
+                                  /> */}
                                 </div>
                               ),
                           }))

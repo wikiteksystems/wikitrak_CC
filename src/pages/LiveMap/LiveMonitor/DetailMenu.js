@@ -12,36 +12,13 @@ import { Layout, Avatar, Menu, Input, Button, Checkbox, Popconfirm, Select, Colo
 import { liveMonitorApi } from "../../../mocks/liveMonitor";
 const { Sider } = Layout;
 
-const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
+const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam, active }) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const { userId, themeColor } = useSelector( ({User}) => User );
     const { lMonitorParamGroups, telematicParams, ivnParams, j1939Params } = useSelector( ({LiveMonitor}) => LiveMonitor );
     const { activeVehicle } = useSelector( ({LiveMap}) => LiveMap );
     const [telematicData,setTelematicData] = useState([]);
-
-    const fetchTelematic = async () =>{
-            const result = await liveMonitorApi.getTelematicParam();
-            let arr = []
-           
-            for(let k of result?.results){
-                  for(let i of k.params)
-                  arr.push(i)
-            }
-        
-            setTelematicData([...arr])
-    }
-
-    useEffect(() =>{
-         fetchTelematic();
-    },[])
-
-
-    useEffect(() =>{
-        // console.log(menuList)
-        // console.log(lMonitorParamGroups)
-    },[menuList,lMonitorParamGroups])
-
     const [searchText, setSearchText] = useState('');
     const [searchedMenuList, setSearchedMenuList] = useState([...menuList]);
     const [paramDetailEditable, setParamDetailEditable] = useState(false);
@@ -58,6 +35,35 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
 
     const [newParam, setNewParam] = useState(false);
     const [newParamGroup, setNewParamGroup] = useState(false);
+
+    const fetchTelematic = async () =>{
+            const result = await liveMonitorApi.getTelematicParam();
+            let arr = []
+           
+            for(let k of result?.results){
+                  for(let i of k.params)
+                  arr.push(i)
+            }
+        
+            setTelematicData([...arr])
+    }
+
+    useEffect(() =>{
+         fetchTelematic();
+    },[])
+    useEffect(() =>{
+        // console.log(menuList)
+        // console.log(lMonitorParamGroups)
+        setSearchedMenuList([...menuList])
+    },[active])
+
+
+    useEffect(() =>{
+        // console.log(menuList)
+        // console.log(lMonitorParamGroups)
+    },[menuList,lMonitorParamGroups])
+
+   
 
     const paramTypes = [
         { key: 0, id: 'Telematic', label: 'Telematic' },
@@ -310,7 +316,7 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
             collapsedWidth={0}
             trigger={null}
             collapsible collapsed={menuCollapsed}
-            width={250}
+            width={300}
         >
             <div className="detail-menu flex flex-col justify-between h-full">
             { !paramGroupVisible ? 
@@ -323,8 +329,8 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam }) => {
                         <PlusCircleOutlined title="aniket" className='pr-2' style={{fontSize: 20, color:'white'}} onClick={ () => handleClick('add-param') } />
                     </div>
                     <div className="flex items-center m-1">
-                        <Input className='w-5/6' placeholder={'Search'} style={{marginRight: 8}} value={searchText} onChange={e => setSearchText(e.target.value)} />
-                        <Checkbox style={{position: 'absolute', right: 20}} onClick={ e => handleCheckboxClick(e, 'select-all') } />
+                        <Input className='w-5/6' placeholder={'Search'} style={{marginLeft: 18}} value={searchText} onChange={e => setSearchText(e.target.value)} />
+                        {/* <Checkbox style={{position: 'absolute', right: 20}} onClick={ e => handleCheckboxClick(e, 'select-all') } /> */}
                     </div>
 
                     <Menu
