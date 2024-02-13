@@ -55,6 +55,7 @@ const CardWrapper = styled(Card)(
 
 const Report = ({ setActive, active }) => {
   //  1. Bydefault and actions apply query,filter,page,limit
+  //Report 
 
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(10);
