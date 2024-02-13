@@ -4,7 +4,7 @@ import { Avatar, Button, Input, Popconfirm, message } from 'antd';
 import { EyeTwoTone, EyeInvisibleOutlined, LockOutlined } from '@ant-design/icons';
 import VehicleItem from './VehicleItem';
 import { LiveMapActions, UserActions } from '../../stores/actions';
-import { PASSWORD_MSG, ThemeColor, getFullName } from '../../utils/constants';
+import { PASSWORD_MSG, Theme, ThemeColor, getFullName } from '../../utils/constants';
 import './Profile.css';
 
 const PageContent = () => {
@@ -63,7 +63,7 @@ const PageContent = () => {
             <div className="user-info w-full h-[200px] flex items-center justify-center p-2">
                 <div className='md:w-1/2 flex justify-center items-center w-full'>
                     { avatar === null ?
-                    <Avatar size={100} style={{background: ThemeColor.light_color_2, fontSize: 50}}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
+                    <Avatar size={100} style={{background: Theme.dark_color, fontSize: 50}}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
                     :
                     <Avatar size={100} src={avatar} />
                     }
@@ -96,7 +96,7 @@ const PageContent = () => {
                         }
                         onConfirm={handleChangePassword}
                         onCancel={() => setConfirmVisible(false)}
-                        okButtonProps={{ style: {backgroundColor: '#4096ff'} }}
+                        okButtonProps={{ style: {backgroundColor: Theme.light_color} }}
                         okText="Change"
                         cancelText="Cancel"
                     >

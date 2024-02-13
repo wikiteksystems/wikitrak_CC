@@ -95,6 +95,11 @@ export const matchColor = (color) => {
     //return '#' + (theme - delta).toString(16);
     return color;
 }
+export const Theme = {
+    dark_color:'#0C356A',
+    // light_color:'#19A7CE',
+    light_color:'#007ba7'
+}
 
 export const getFullName = (name) => name.first + ' ' + name.last
 

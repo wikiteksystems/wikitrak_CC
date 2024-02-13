@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import { UserActions } from '../stores/actions';
-import { ThemeColor, getFullName } from "../utils/constants";
+import { Theme, ThemeColor, getFullName } from "../utils/constants";
 import { Layout, Menu, Avatar } from 'antd';
 import { Footer } from ".";
 import "./menu.css"
@@ -20,8 +20,7 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
             <Sider
                 className="h-screen"
                 style={{
-                    background: 'rgb(47, 115, 193)', // Set the background color using rgb values
-                    background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)', // Set the linear gradient
+                    background: Theme.light_color, // Set the linear gradient
                     borderRight: '1px solid black',
                 }}
                 breakpoint="md"
@@ -35,8 +34,7 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
                 <div className="flex flex-col justify-between h-full ">
                     <div className="flex flex-col">
                         <div style={{
-                            background: 'rgb(47, 115, 193)', // Set the background color using rgb values
-                            background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)', padding: "15px 0 15px 15px", color: "white", letterSpacing: "2px"
+                            background: Theme.dark_color, padding: "15px 0 15px 15px", color: "white", letterSpacing: "2px"
                         }}>
 
                             <span style={{ fontSize: 25 }} className="font-bold">WIKITRACK</span>
@@ -44,7 +42,7 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
                         {!menuCollapsed &&
                             <div className="w-full flex flex-col items-center py-5">
                                 {avatar === null ?
-                                    <Avatar size={100} style={{ background: ThemeColor.light_color_1, fontSize: 60 }}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
+                                    <Avatar size={100} style={{ background: Theme.dark_color, fontSize: 60 }}> {userName.first.charAt(0).toUpperCase() + userName.last.charAt(0).toUpperCase()} </Avatar>
                                     :
                                     <Avatar size={100} src={avatar} />
                                 }
@@ -57,8 +55,8 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
                             mode="inline"
                             defaultSelectedKeys={[activePage ? activePage.toString() : '0']}
                             style={{
-                                color: 'black', background: 'rgb(47, 115, 193)', // Set the background color using rgb values
-                                background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)'
+                                color: 'black',
+                                background: Theme.light_color
                             }}
                             items={menuList.map((item, index) => ({
                                 key: index,
@@ -78,8 +76,7 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
 
                     {!menuCollapsed &&
                         <Footer style={{
-                            background: 'rgb(47, 115, 193)', // Set the background color using rgb values
-                            background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)', padding: '20px 0px', display: 'flex', flexDirection: 'column', color: "white"
+                            background: Theme.dark_color, padding: '20px 0px', display: 'flex', flexDirection: 'column', color: "white"
                         }}>
                             <div>App Version: 1.0.0</div>
                             <div>

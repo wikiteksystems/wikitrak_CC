@@ -2,7 +2,7 @@ import React from 'react';
 import "./NetworkStrength.css"
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { ThemeColor } from '../../utils/constants';
+import { Theme, ThemeColor } from '../../utils/constants';
 
 const NetworkStrength = ({ locationData, item}) => {
   // Calculate the filling percentage based on the value
@@ -18,7 +18,7 @@ const NetworkStrength = ({ locationData, item}) => {
   return (
     <div className="network-strength">
       <div className="network-icon">
-        <div className="network-bar" style={{ width: `${fillColorPer}%`, backgroundColor:ThemeColor.light_color_2 }}></div>
+        <div className="network-bar" style={{ width: `${fillColorPer}%`, backgroundColor:Theme.dark_color }}></div>
       </div>
     </div>
   );

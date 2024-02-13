@@ -33,7 +33,7 @@ import moment from "moment";
 import dayjs from "dayjs";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { ThemeColor } from "../../../utils/constants";
+import { Theme, ThemeColor } from "../../../utils/constants";
 import {
   LeftCircleOutlined,
   MenuOutlined,
@@ -444,13 +444,13 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam , setActive, active}
         flexDirection: "column",
         gap: "20px",
         maxHeight: "1000px",
-        overflowY: "scroll",
+        // overflowY: "scroll",
       }}
     >
       <Box
         sx={{
-          background: ThemeColor.light_color_1,
-          padding: "10px 10px",
+          background: Theme.dark_color,
+          padding: "19px",
           display: "flex",
           gap: "30px",
           alignItems: "center",

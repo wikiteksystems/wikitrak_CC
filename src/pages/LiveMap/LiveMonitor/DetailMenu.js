@@ -6,7 +6,7 @@ import { LeftCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Footer, Header } from "../../../components";
 import { LiveMonitorUtils } from "../../../utils";
 import { LiveMonitorActions } from "../../../stores/actions";
-import { matchColor } from "../../../utils/constants";
+import { Theme, matchColor } from "../../../utils/constants";
 
 import { Layout, Avatar, Menu, Input, Button, Checkbox, Popconfirm, Select, ColorPicker } from 'antd';
 import { liveMonitorApi } from "../../../mocks/liveMonitor";
@@ -323,7 +323,7 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam, active }) => {
             <>
                 { !menuCollapsed && !paramDetailVisible && 
                 <>
-                    <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
+                    <div className="flex justify-between items-center pb-1" style={{background: Theme.dark_color}}>
                         <LeftCircleOutlined className='px-2' style={{fontSize: 20, color:"white"}} onClick={ () => history.goBack() } />
                         <Header title={'Select Parameters'} style={{paddingInline: 0, fontSize: 18}} />
                         <PlusCircleOutlined title="aniket" className='pr-2' style={{fontSize: 20, color:'white'}} onClick={ () => handleClick('add-param') } />
@@ -358,14 +358,14 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam, active }) => {
                 
                 { !menuCollapsed && paramDetailVisible &&
                 <>
-                    <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
-                        <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ () => handleClick('param_list') }/>
+                    <div className="flex justify-between items-center pb-2" style={{background: Theme.dark_color}}>
+                        <LeftCircleOutlined className='px-2' style={{fontSize: 20, color:'white'}} onClick={ () => handleClick('param_list') }/>
                         <Header title={'Parameter Detail'} style={{fontSize: 19, paddingInline: 0}} />
                         <div className="h-full flex items-center cursor-pointer pr-2" onClick={ () => handleClick(paramDetailEditable ? 'save-detail' : 'edit-detail') }>
                             { paramDetailEditable ?
-                            <Icon icon="akar-icons:save" width="22" height="22" />
+                            <Icon icon="akar-icons:save" width="22" height="22" color='white'/>
                             :
-                            <Icon icon="fa:edit" width="22" height="22" /> }
+                            <Icon icon="fa:edit" width="22" height="22" color='white'/> }
                         </div>
                     </div>
 
@@ -457,22 +457,22 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam, active }) => {
             :
             <>
                 <>
-                    <div className="flex justify-between items-center" style={{background: matchColor(themeColor)}}>
+                    <div className="flex justify-between items-center pb-1" style={{background: Theme.dark_color}}>
                     { !paramGroupDetailVisible ?
                     <>
-                        <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ () => history.goBack() }/>
-                        <Header title={'Parameter Grou'} style={{fontSize: 19, paddingInline: 0}} />
-                        <PlusCircleOutlined className='cursor-pointer pr-2' style={{fontSize: 18}} onClick={ () => handleClick('add-param-group') } />
+                        <LeftCircleOutlined className='px-2' style={{fontSize: 20, color:'white'}} onClick={ () => history.goBack() }/>
+                        <Header title={'Parameter Group'} style={{fontSize: 19, paddingInline: 0}} />
+                        <PlusCircleOutlined className='cursor-pointer pr-2' style={{fontSize: 18, color:'white'}} onClick={ () => handleClick('add-param-group') } />
                     </>
                     :
                     <>
-                        <LeftCircleOutlined className='px-2' style={{fontSize: 20}} onClick={ () => handleClick('param_group_list') }/>
+                        <LeftCircleOutlined className='px-2' style={{fontSize: 20, color:'white'}} onClick={ () => handleClick('param_group_list') }/>
                         <Header title={'Parameter Group Detail'} style={{fontSize: 19, paddingInline: 0}} />
                         <div className="h-full flex items-center cursor-pointer pr-2" onClick={ () => handleClick(paramGroupDetailEditable ? 'save-group-detail' : 'edit-group-detail') }>
                             { paramGroupDetailEditable ?
-                            <Icon icon="akar-icons:save" width="22" height="22" />
+                            <Icon icon="akar-icons:save" width="22" height="22" color='white'/>
                             :
-                            <Icon icon="fa:edit" width="22" height="22" /> }
+                            <Icon icon="fa:edit" width="22" height="22" color='white'/> }
                         </div>
                     </> }
                     </div>
@@ -527,12 +527,12 @@ const DetailMenu = ({ menuList, menuCollapsed,setSelecCheckParam, active }) => {
                 </>
             </> }
 
-                <Footer style={{background: matchColor(themeColor), height: 40}} classes={'justify-evenly'}>
+                <Footer style={{background: Theme.dark_color, height: 40}} classes={'justify-evenly'}>
                     <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={ () => handleClick('param_list') } style={!paramGroupVisible ? {filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2} : {}}>
-                        <Icon icon="icon-park-solid:setting-two" width={25} height={25} />
+                        <Icon icon="icon-park-solid:setting-two" width={25} height={25} color="white" />
                     </Button>
                     <Button className="w-[40px] flex justify-center items-center" shape='circle' size="large" onClick={ () => handleClick('param_group') } style={paramGroupVisible ? {filter: 'drop-shadow(0 0 1px #ffffff)', borderWidth: 2} : {}}>
-                        <Icon icon="ic:round-settings-suggest" width={30} height={30} />
+                        <Icon icon="ic:round-settings-suggest" width={30} height={30} color="white" />
                     </Button>
                 </Footer>
             </div>
