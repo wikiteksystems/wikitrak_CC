@@ -1,4 +1,3 @@
-// Import the useState hook from React
 import React, { useState, useEffect, useRef } from "react";
 // Import the necessary icons and components
 import AtmIcon from "@mui/icons-material/Atm";
@@ -141,6 +140,11 @@ function Map({
     } else {
       console.error("Google Maps API not loaded");
     }
+  };
+
+  const handleSpeedAlert = () => {
+    // Implement your logic for handling speed alerts here
+    alert("Speed alert triggered!");
   };
 
   useEffect(() => {

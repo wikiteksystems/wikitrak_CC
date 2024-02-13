@@ -57,9 +57,40 @@ const Geofence = () => {
   }, [geofences, activeMenu]);
 
   useEffect(() => {
-    // Your logic to determine if the vehicle is entering or exiting the geofence
-    // Trigger an alert/notification accordingly
-  }, [geofence]);
+    if (geofences.length > 0 && geofence) {
+      // Check if the vehicle is inside any active geofence
+      const isInsideAnyGeofence = geofences.some((item) => {
+        if (item.status === "Active") {
+          const distance = LiveMapUtils.calculateDistance(
+            vehicle.lat,
+            vehicle.lng,
+            item.center.lat,
+            item.center.lng
+          );
+          return distance <= item.radius;
+        }
+        return false;
+      });
+
+      if (isInsideAnyGeofence) {
+        // Handle alert for vehicle entering geofence
+        console.log("Vehicle entered a geofence");
+        // You can trigger an alert/notification here
+      } else {
+        // Handle alert for vehicle exiting geofence
+        console.log("Vehicle exited a geofence");
+        // You can trigger an alert/notification here
+      }
+    }
+  }, [vehicle, geofence, geofences]);
+
+  useEffect(() => {
+    if (vehicle.speed > speedAlert.threshold) {
+      // Handle speed alert
+      console.log("Vehicle exceeded speed limit");
+      // You can trigger an alert/notification here
+    }
+  }, [vehicle, speedAlert]);
 
   useEffect(() => {
     if (
@@ -68,7 +99,6 @@ const Geofence = () => {
       geofence &&
       geofence.center
     ) {
-      console.log("My geofence", geofence);
       const { center, radius, type, status } = geofence;
 
       const {

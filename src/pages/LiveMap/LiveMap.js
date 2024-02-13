@@ -14,6 +14,10 @@ import { AppMenuList, ThemeColor } from "../../utils/constants";
 import { locationsApi } from "../../mocks/location";
 import { socket } from "../../services/Socket";
 import { DetailMenu, MapSection } from "./";
+import { geofences } from "../../utils/liveMapUtils";
+import { calculateDistance } from "../../utils/liveMapUtils";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const { Content } = Layout;
 
@@ -31,6 +35,29 @@ const LiveMap = () => {
   const [wikitekVehi, setwikitekVehi] = useState();
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [locationData, setLocationData] = useState([]);
+  const { geofences } = useSelector(({ LiveMap }) => LiveMap);
+  useEffect(() => {
+    socket.on("locationinfo", (data) => {
+      geofences.forEach((geofence) => {
+        if (geofence.isActive) {
+          const distance = calculateDistance(
+            data.lat,
+            data.lng,
+            geofence.center.lat,
+            geofence.center.lng
+          );
+          if (distance <= geofence.radius) {
+            toast.success(`Vehicle entered ${geofence.label} geofence`);
+          } else {
+            toast.warn(`Vehicle exited ${geofence.label} geofence`);
+          }
+        }
+      });
+    });
+    return () => {
+      socket.off("locationinfo");
+    };
+  }, [socket, geofences]);
 
   const { vehicleList, vehicleGroupList } = useSelector(
     ({ LiveMap }) => LiveMap
