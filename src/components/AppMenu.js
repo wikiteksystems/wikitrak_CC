@@ -61,7 +61,7 @@ const AppMenu = ({ activePage, menuList, menuCollapsed }) => {
                             items={menuList.map((item, index) => ({
                                 key: index,
                                 icon: item.icon,
-                                style: { paddingLeft: 0 },
+                                style: { paddingLeft: 0, fontSize:"15px", fontWeight:"600", color:"white" },
                                 label:
                                     (item.label !== 'Log Out' ?
                                         <Link to={item.link}> {item.label} </Link>

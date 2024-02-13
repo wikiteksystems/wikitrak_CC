@@ -8,11 +8,11 @@
 
 :where(.css-dev-only-do-not-override-17a39f8).ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover{
     background-color: #0C356A;
-    color: black;
+    color: white;
 }
 
 :where(.css-17a39f8).ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover{
     background-color: #0C356A;
-    color: black;
+    color: white;
 
 }

@@ -514,7 +514,7 @@ const LiveContent = ({
               </>
             ))}
           </GoogleMap>
-          <div style={{ position: "absolute", bottom: 0, left: 0 }}>
+          <div style={{ position: "absolute", bottom: 15, left: 0 }}>
             {selectedTrip && selectedTrip.data && (
               <ApexChart
                 speedData={selectedTrip.data.map((item) => item.speed)} // Pass speed data of the selected trip

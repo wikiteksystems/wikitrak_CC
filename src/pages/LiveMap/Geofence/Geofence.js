@@ -197,14 +197,19 @@ const Geofence = () => {
             key: item.key,
             label: (
               <div className="flex justify-between items-center">
+                {
+                  item.geofence=== "geofence 1"
+                  && 
+                <>
                 <span className="w-full"> {item.geofence} </span>
                 <Button
                   className="border-none bg-transparent"
                   onClick={handleEdit}
                   disabled={editable || item.key !== activeMenu}
-                >
+                  >
                   <Icon icon="fa:edit" width="22" height="22" />
                 </Button>
+                 
                 <Switch
                   disabled={item.key !== activeMenu}
                   onChange={(checked, e) => handleSwitch(checked, e, "status")}
@@ -214,6 +219,8 @@ const Geofence = () => {
                       : item.status === "Active"
                   }
                 />
+                 </>
+                }
               </div>
             ),
           }))}
