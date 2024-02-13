@@ -14,6 +14,7 @@ import { AppMenuList, ThemeColor } from "../../utils/constants";
 import { locationsApi } from "../../mocks/location";
 import { socket } from "../../services/Socket";
 import { DetailMenu, MapSection } from "./";
+import AppMenu2 from "../../components/Appmneu2";
 
 const { Content } = Layout;
 
@@ -67,6 +68,7 @@ const LiveMap = () => {
 
   useEffect(() => {
     socket.on("locationinfo", (data) => {
+      console.log("locationinfo", data)
       const gt06Data = locationData.filter(
         (item) =>
           item.latestDocument.venderId === "WTK4G06" ||
@@ -143,7 +145,9 @@ const LiveMap = () => {
         <div className="md:block hidden">
           <AppMenu activePage={1} menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
         </div>
-
+        <div className="md:hidden">
+                <AppMenu2 activePage={1} menuList={AppMenuList} menuCollapsed={mainMenuCollapsed}/>
+          </div>
         <Layout style={{ flex: "1 1 auto" }} className="h-screen">
           <Header
             title={"Live Map"}

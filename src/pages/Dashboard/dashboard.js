@@ -760,7 +760,7 @@ useEffect(() => {
           </div>
 
           <div className="md:hidden">
-            {/* <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} /> */}
+            <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
           </div>
 
           <Layout style={{ flex: '1 1 auto' }} className="h-screen">

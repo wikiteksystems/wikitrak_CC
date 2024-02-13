@@ -104,7 +104,7 @@ const PageContent = () => {
                     </Popconfirm>
                 </div>
             </div>
-            <div className="w-full  h-auto flex  items-center justify-center  p-5 pt-0">
+            <div className="w-full  h-auto flex  items-center justify-center  p-5 pt-0 flex-wrap">
                 { vehicleList.map( (vehicle, index) =>
                     <div key={index} className="vehicle-item m-3">
                         <VehicleItem vehicle={vehicle} />

@@ -57,11 +57,31 @@ export const getGeofences = (vehicleId) => {
 };
 
 export const SAVE_GEOFENCE = '[LIVEMAP / GEOFENCE PAGE] SAVE_GEOFENCE';
-export const saveGeofence = (data) => {
+export const saveGeofence = (data, imei) => {
     let request = null;
-    if (data.isNew)
+    let tes_req = null;
+    let tes_payload = {
+        "imei": imei,
+        "area_type": "circular",
+        "type": data.type,
+        "lat": data?.center?.lat,
+        "long": data?.center?.lng,
+        "radius": data.radius,
+        "isActive_Geofance": data?.status === "Active"? true : false
+    }
+    if (data.isNew){
+
         request = axios.post(`${API_VEHICLE_URL}/create-geofence/`, data);
-    else request = axios.put(`${API_VEHICLE_URL}/update-geofence/${data.id}/`, data);
+        tes_req = axios.post(`${process.env.REACT_APP_API2_URL}/api/geofences`, tes_payload)
+    }
+    else {
+        request = axios.put(`${API_VEHICLE_URL}/update-geofence/${data.id}/`, data);
+        console.log(data, "data..")
+        
+        console.log(tes_payload, "tes_payload")
+        tes_req = axios.post(`${process.env.REACT_APP_API2_URL}/api/geofences`, tes_payload)
+        console.log(tes_req, "tes_req")
+    }
 
     return (dispatch, getState) => {
         dispatch(setLoading(true));
@@ -72,6 +92,14 @@ export const saveGeofence = (data) => {
             Promise.all([
                 dispatch(getGeofences(LiveMap.activeVehicle.id))
             ]).then( () => dispatch(setLoading(false)) );
+        }).catch(error => {
+            handleAxiosError(error, dispatch);
+            dispatch(setLoading(false));
+        })
+        tes_req.then(response => {
+            notification('success', 'Success', 'Geofence saved ON TES successfully.');
+
+           
         }).catch(error => {
             handleAxiosError(error, dispatch);
             dispatch(setLoading(false));

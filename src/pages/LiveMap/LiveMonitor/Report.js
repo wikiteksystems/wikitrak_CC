@@ -27,6 +27,7 @@ import PlayArrowOutlined from '@mui/icons-material/PlayArrowOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import ReportChart from "./ReportChart";
 import './Report.css';
+import AppMenu2 from "../../../components/Appmneu2";
 
 const CardWrapper = styled(Card)(
   ({ theme }) => `
@@ -514,7 +515,7 @@ const Report = ({ setActive, active }) => {
           </div>
 
           <div className="md:hidden">
-            {/* <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} /> */}
+            <AppMenu2 menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
           </div>
 
           <Layout style={{ flex: '1 1 auto' }} className="h-screen">

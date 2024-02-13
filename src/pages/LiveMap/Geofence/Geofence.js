@@ -45,6 +45,7 @@ const Geofence = () => {
     }, [history, vehicle]);
 
     useEffect( () => {
+        console.log(vehicle, "vehicle..")
         dispatch(GeofenceActions.getGeofences(vehicle.id));
     }, [dispatch, vehicle]);
 
@@ -110,7 +111,7 @@ const Geofence = () => {
             if (status !== orgStatus)
                 dispatch(GeofenceActions.setGeofenceState(id, status));
             else if (modified) {
-                dispatch(GeofenceActions.saveGeofence({...geofence, vehicle: vehicle.id}));
+                dispatch(GeofenceActions.saveGeofence({...geofence, vehicle: vehicle.id}, vehicle?.imei[0].mac_id));
             }
         }
     };
@@ -168,16 +169,23 @@ const Geofence = () => {
                     items={geofences.map( item => ({
                         key: item.key,
                         label: 
-                            <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center">
+                          {
+                            item.geofence ==="geofence 1"
+
+                            &&
+                            <>
                                 <span className="w-full"> {item.geofence} </span>
                                 <Button className="border-none bg-transparent" onClick={handleEdit} disabled={editable || item.key !== activeMenu}>
                                     <Icon icon="fa:edit" width="22" height="22" />
                                 </Button>
                                 <Switch
-                                    disabled={item.key !== activeMenu}
-                                    onChange={(checked, e) => handleSwitch(checked, e, 'status')}
-                                    checked={item.key === activeMenu ? geofence.status === 'Active' : item.status === 'Active'}
+                                disabled={item.key !== activeMenu}
+                                onChange={(checked, e) => handleSwitch(checked, e, 'status')}
+                                checked={item.key === activeMenu ? geofence.status === 'Active' : item.status === 'Active'}
                                 />
+                            </>
+                            }
                             </div>
                     })) }
                     activeMenu={activeMenu}
