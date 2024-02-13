@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { LiveMapActions } from "../../stores/actions";
 import { Button } from "antd";
 //new change//up
-import Geofence from "../LiveMap/Geofence/Geofence";
+// import Geofence from "../LiveMap/Geofence/Geofence";
 import React, { useState, useEffect, useRef } from "react";
 import {
   GoogleMap,
@@ -64,7 +64,7 @@ function Map({
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://139.59.37.47:3031/api/vehicle/status"
+          "http://127.0.0.1:3031:3031/api/vehicle/status"
         );
         const data = await response.json();
         setApiData(data);
@@ -141,25 +141,25 @@ function Map({
     setServicesLocation(services);
     // console.log(servicesLocation, "services");
   }, [services]);
-  const [google, setGoogle] = useState(null);
+  // const [google, setGoogle] = useState(null);
 
-  const handleGeofenceAlert = (vehicleLocation) => {
-    // Iterate through each geofence
-    Geofence.forEach((geofence) => {
-      // This line is likely causing the error
-      // Check if the vehicle location is within the geofence radius
-      const distanceFromCenter =
-        google.maps.geometry.spherical.computeDistanceBetween(
-          new google.maps.LatLng(geofence.center.lat, geofence.center.lng),
-          new google.maps.LatLng(vehicleLocation.lat, vehicleLocation.lng)
-        );
+  // const handleGeofenceAlert = (vehicleLocation) => {
+  //   // Iterate through each geofence
+  //   Geofence.forEach((geofence) => {
+  //     // This line is likely causing the error
+  //     // Check if the vehicle location is within the geofence radius
+  //     const distanceFromCenter =
+  //       google.maps.geometry.spherical.computeDistanceBetween(
+  //         new google.maps.LatLng(geofence.center.lat, geofence.center.lng),
+  //         new google.maps.LatLng(vehicleLocation.lat, vehicleLocation.lng)
+  //       );
 
-      if (distanceFromCenter <= geofence.radius) {
-        // Vehicle is inside the geofence, trigger alert
-        alert(`Vehicle entered geofence: ${geofence.name}`);
-      }
-    });
-  };
+  //     if (distanceFromCenter <= geofence.radius) {
+  //       // Vehicle is inside the geofence, trigger alert
+  //       alert(`Vehicle entered geofence: ${geofence.name}`);
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
     if (activeVehicle && locationData.length > 0) {
@@ -172,14 +172,18 @@ function Map({
 
         return false;
       });
+      setActive_vehiLocation({
+        lat: active_vehicle[0].latestDocument.lat,
+        lng: active_vehicle[0].latestDocument.lng,
+      });
 
-      const vehicleLocation = {
-        lat: parseFloat(active_vehicle[0].latestDocument.lat),
-        lng: parseFloat(active_vehicle[0].latestDocument.lng),
-      };
+      // const vehicleLocation = {
+      //   lat: parseFloat(active_vehicle[0].latestDocument.lat),
+      //   lng: parseFloat(active_vehicle[0].latestDocument.lng),
+      // };
 
-      // Check for geofence alert
-      handleGeofenceAlert(vehicleLocation);
+      // // Check for geofence alert
+      // handleGeofenceAlert(vehicleLocation);
     }
   }, [activeVehicle]);
   useEffect(() => {

@@ -501,7 +501,7 @@ const Dashboard = () => {
     dispatch(LiveMapActions.getVehicleList(userId));
     dispatch(LiveMapActions.getVehicleGroupList(userId));
 
-    axios.get('http://139.59.37.47:3031/api/vehicle/status')
+    axios.get('http://127.0.0.1:3031/api/vehicle/status')
       .then(response => {
         const onlineDevicesCount = response.data['onlineDevices'];
         setOnlineDevices(onlineDevicesCount);
