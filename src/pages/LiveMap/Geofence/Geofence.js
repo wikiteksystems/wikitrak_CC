@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Icon } from "@iconify/react";
-
 import { AppMenu, Navbar, Header, Footer, SideMenu } from "../../../components";
 import { AppMenuList, ThemeColor, matchColor } from "../../../utils/constants";
 import { LiveMapUtils } from "../../../utils";
@@ -37,6 +36,10 @@ const Geofence = () => {
   const [geofence, setGeofence] = useState({ ...geofences[activeMenu] });
   const [circleSelected, setCircleSelected] = useState(false);
   const [modified, setModified] = useState(false);
+  const [speedAlert, setSpeedAlert] = useState({
+    enabled: false,
+    threshold: 60, // default threshold value
+  });
 
   useEffect(() => {
     if (Object.keys(vehicle).length === 0) {
@@ -95,16 +98,18 @@ const Geofence = () => {
     const menu = parseInt(key);
     setActiveMenu(menu);
     if (geofences[menu].radius === 0)
-      message.warning("No geofence data. Plese right click to create.");
+      message.warning("No geofence data. Please right click to create.");
 
     if (menu !== activeMenu) {
       setEditable(false);
       setCircleSelected(false);
     }
   };
+
   const handleEdit = () => {
     setEditable(true);
   };
+
   const handleSwitch = (checked, e, type) => {
     if (type === "status") {
       setGeofence({ ...geofence, [type]: checked ? "Active" : "Inactive" });
@@ -112,6 +117,7 @@ const Geofence = () => {
       setGeofence({ ...geofence, [type]: checked ? "inward" : "outward" });
     }
   };
+
   const handleSubmit = () => {
     const { status, isNew } = geofence;
     const { status: orgStatus, id } = geofences[activeMenu];
@@ -122,6 +128,8 @@ const Geofence = () => {
           ...geofence,
           vehicle: vehicle.id,
           geofence_history: [],
+          speedAlertEnabled: speedAlert.enabled,
+          speedAlertThreshold: speedAlert.threshold,
         })
       );
     } else {
@@ -129,10 +137,23 @@ const Geofence = () => {
         dispatch(GeofenceActions.setGeofenceState(id, status));
       else if (modified) {
         dispatch(
-          GeofenceActions.saveGeofence({ ...geofence, vehicle: vehicle.id })
+          GeofenceActions.saveGeofence({
+            ...geofence,
+            vehicle: vehicle.id,
+            speedAlertEnabled: speedAlert.enabled,
+            speedAlertThreshold: speedAlert.threshold,
+          })
         );
       }
     }
+  };
+
+  const handleSpeedAlertSwitch = (checked) => {
+    setSpeedAlert({ ...speedAlert, enabled: checked });
+  };
+
+  const handleSpeedAlertThresholdChange = (value) => {
+    setSpeedAlert({ ...speedAlert, threshold: value });
   };
 
   const StyledFab = styled(Fab)({
@@ -147,14 +168,13 @@ const Geofence = () => {
   const handleMainMenuCollapse = () => {
     dispatch(AppActions.setMainMenuCollapsed(!mainMenuCollapsed));
   };
+
   const handleDetailMenuCollapse = () => {
     dispatch(AppActions.setDetailMenuCollapsed(!detailMenuCollapsed));
   };
 
   return (
     <Layout className="flex h-screen">
-      {/* <Navbar /> */}
-
       <Layout>
         <div className="md:block hidden">
           <AppMenu menuList={AppMenuList} menuCollapsed={mainMenuCollapsed} />
@@ -165,13 +185,11 @@ const Geofence = () => {
         </div>
 
         <Layout style={{ flex: "1 1 auto" }}>
-          {/* <Header title={'Live Map'} /> */}
           <Header
             title={"Geofence"}
             showText={false}
             style={{ justifyContent: "space-between" }}
           />
-
           <Content style={{ width: "100%", height: "100%" }}>
             <MapSection
               location={LiveMapUtils.centerLocation}
@@ -261,6 +279,38 @@ const Geofence = () => {
                   />
                 </div>
               </div>
+              <div className="w-full h-1/3 flex flex-col justify-center items-center">
+                <div className="flex items-center">
+                  <Switch
+                    checked={speedAlert.enabled}
+                    onChange={handleSpeedAlertSwitch}
+                    style={{ marginRight: "10px" }}
+                  />
+                  <span style={{ fontSize: "18px" }}>Enable Speed Alert</span>
+                </div>
+                {speedAlert.enabled && (
+                  <div className="flex items-center mt-4">
+                    <span style={{ fontSize: "18px", marginRight: "10px" }}>
+                      Set Speed Limit:
+                    </span>
+                    <input
+                      type="number"
+                      value={speedAlert.threshold}
+                      onChange={(e) =>
+                        handleSpeedAlertThresholdChange(
+                          parseInt(e.target.value)
+                        )
+                      }
+                      style={{ width: "100px", color: "black" }}
+                    />
+
+                    <span style={{ fontSize: "18px", marginLeft: "5px" }}>
+                      km/h
+                    </span>
+                  </div>
+                )}
+              </div>
+
               <div className="w-full h-1/3 flex flex-col justify-center items-center">
                 <Button
                   className="w-1/2 text-white"

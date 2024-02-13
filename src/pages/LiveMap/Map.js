@@ -1,3 +1,6 @@
+// Import the useState hook from React
+import React, { useState, useEffect, useRef } from "react";
+// Import the necessary icons and components
 import AtmIcon from "@mui/icons-material/Atm";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import HotelIcon from "@mui/icons-material/Hotel";
@@ -7,9 +10,7 @@ import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import { useDispatch, useSelector } from "react-redux";
 import { LiveMapActions } from "../../stores/actions";
 import { Button } from "antd";
-//new change//up
-// import Geofence from "../LiveMap/Geofence/Geofence";
-import React, { useState, useEffect, useRef } from "react";
+import Geofence from "../LiveMap/Geofence/Geofence";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -18,7 +19,6 @@ import {
   InfoWindow,
   Polyline,
 } from "@react-google-maps/api";
-// import { CarOutlined } from '@ant-design/icons';
 import { CarOutlined } from "@ant-design/icons";
 import DirectionsCarFilledIcon from "@mui/icons-material/DirectionsCarFilled";
 import MarkerItem1 from "./MapItems/MarkerItem1";
@@ -31,7 +31,6 @@ const containerStyle = {
   width: "100%",
   height: "100%",
 };
-//new change//
 const servicesState = {
   atm: false,
   gas_station: false,
@@ -40,6 +39,7 @@ const servicesState = {
   hospital: false,
   car_repair: false,
 };
+
 function Map({
   locationData,
   vehicleGroupList,
@@ -58,8 +58,12 @@ function Map({
   const [filterd_in_activeVehi, setFilterdInActiveD] = useState([]);
   const [stopVehicleList, setStopVehicleList] = useState([]);
   const [runningVehicleList, setRunningVehicleList] = useState([]);
+  const [icon_path, setIconPath] = useState("default-svg-path");
   let { id } = useParams();
-  // console.log(gtVehi,"gtvehiheading")
+
+  // Declare active_vehiLocation and setActive_vehiLocation
+  const [active_vehiLocation, setActive_vehiLocation] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,53 +80,31 @@ function Map({
 
     fetchData();
   }, []);
-  console.log(imeiList, "testing for data");
+
+  // Define n_service
+  const [n_service, setServices] = useState(servicesState); // Add your logic to define n_service
 
   const { showWeather, services, activeVehicle, cooridinates_obj } =
     useSelector(({ LiveMap }) => LiveMap);
-  // console.log(gtVehi, "gtLocation map component1212",cooridinates_obj)
-
-  // console.log(locationData, "our location data")
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: GMAP_API_KEY,
-  });
-  //new change//
-  const [n_service, setServices] = useState(servicesState);
-  const [active_vehiLocation, setActive_vehiLocation] = useState();
-  // const [center, setCenter] = useState({ lat: 0, lng: 0 });
-  const [icon_path, setIconPath] = useState("default-svg-path");
-  const [servicesLocation, setServicesLocation] = useState(null);
-  const [showService, setShowservice] = useState(false);
 
   const dispatch = useDispatch();
 
   const [selectedMarker, setSelectedMarker] = useState(null);
 
   const toggleInfoWindow = (markerId) => {
-    console.log(markerId);
     if (selectedMarker === markerId) {
-      // If the same marker is clicked again, close its InfoWindow
       setSelectedMarker(null);
     } else {
-      // Otherwise, open the InfoWindow for the clicked marker
       setSelectedMarker(markerId);
     }
   };
 
   const [map, setMap] = React.useState(null);
-  const [users, setUsers] = useState([]);
-  const [cleaners, setCleaners] = useState([]);
-  const radius = 5000; // 5km in meters
+  const [servicesLocation, setServicesLocation] = useState(null);
+  const [showService, setShowservice] = useState(false);
 
-  // const [center, setCenter] = useState({ lat: 0, lng: 0 })
-  const iconStyle = {
-    fontSize: "36px", // Adjust the font size as needed to increase the icon size
-  };
   useEffect(() => {
-    // console.log(gtVehi, "gtLocation map component12133",cooridinates_obj)
     if (locationData?.length > 0) {
-      console.log(locationData[0]?.latestDocument);
       setCenter({
         lat: parseFloat(locationData[0]?.latestDocument?.lat),
         lng: parseFloat(locationData[0]?.latestDocument?.lng),
@@ -130,36 +112,36 @@ function Map({
     }
   }, [locationData]);
 
-  //new change//
   const shouldRenderMarker = () => {
     return Object.values(n_service).some((value) => value === true);
   };
+
   useEffect(() => {
-    // console.log(showWeather.show, "showWeather.show");
-    // console.log(showWeather.item, "showWeather.item");
-    // console.log(services, "services");
     setServicesLocation(services);
-    // console.log(servicesLocation, "services");
   }, [services]);
-  // const [google, setGoogle] = useState(null);
 
-  // const handleGeofenceAlert = (vehicleLocation) => {
-  //   // Iterate through each geofence
-  //   Geofence.forEach((geofence) => {
-  //     // This line is likely causing the error
-  //     // Check if the vehicle location is within the geofence radius
-  //     const distanceFromCenter =
-  //       google.maps.geometry.spherical.computeDistanceBetween(
-  //         new google.maps.LatLng(geofence.center.lat, geofence.center.lng),
-  //         new google.maps.LatLng(vehicleLocation.lat, vehicleLocation.lng)
-  //       );
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: GMAP_API_KEY,
+  });
+  const [google, setGoogle] = useState(null);
+  const handleGeofenceAlert = (vehicleLocation) => {
+    if (typeof google !== "undefined" && google.maps && google.maps.geometry) {
+      Geofence.forEach((geofence) => {
+        const distanceFromCenter =
+          google.maps.geometry.spherical.computeDistanceBetween(
+            new google.maps.LatLng(geofence.center.lat, geofence.center.lng),
+            new google.maps.LatLng(vehicleLocation.lat, vehicleLocation.lng)
+          );
 
-  //     if (distanceFromCenter <= geofence.radius) {
-  //       // Vehicle is inside the geofence, trigger alert
-  //       alert(`Vehicle entered geofence: ${geofence.name}`);
-  //     }
-  //   });
-  // };
+        if (distanceFromCenter <= geofence.radius) {
+          alert(`Vehicle entered geofence: ${geofence.name}`);
+        }
+      });
+    } else {
+      console.error("Google Maps API not loaded");
+    }
+  };
 
   useEffect(() => {
     if (activeVehicle && locationData.length > 0) {
@@ -176,16 +158,9 @@ function Map({
         lat: active_vehicle[0].latestDocument.lat,
         lng: active_vehicle[0].latestDocument.lng,
       });
-
-      // const vehicleLocation = {
-      //   lat: parseFloat(active_vehicle[0].latestDocument.lat),
-      //   lng: parseFloat(active_vehicle[0].latestDocument.lng),
-      // };
-
-      // // Check for geofence alert
-      // handleGeofenceAlert(vehicleLocation);
     }
   }, [activeVehicle]);
+
   useEffect(() => {
     if (active_vehiLocation) {
       setShowservice(true);
@@ -194,19 +169,16 @@ function Map({
 
   const handleServices = (type) => {
     dispatch(LiveMapActions.getServices(type, active_vehiLocation));
-    // dispatch(LiveMapActions.getServices("atm", {lat:"18.578100", lng:"73.970062"}));
   };
 
   const getColor = (regNo) => {
     let vechialFilter = vehicleList.filter(
       (item) => item?.registration_id === regNo
     );
-    console.log(vechialFilter);
     if (vechialFilter?.length > 0) {
       let vechialGroupFilter = vehicleGroupList.filter(
         (item) => item?.id === vechialFilter[0]?.vehicle_group
       );
-      console.log(vechialGroupFilter[0]?.color);
       if (vechialGroupFilter?.length > 0)
         return `#${vechialGroupFilter[0]?.color}`;
     }
@@ -216,16 +188,9 @@ function Map({
   const calculateAngleFromEast = (lat, lng) => {
     const latRadians = (lat * Math.PI) / 180;
     const lngRadians = (lng * Math.PI) / 180;
-
-    // Calculate the angle from the East direction in radians
     const angleRadians = Math.atan2(latRadians, lngRadians);
-
-    // Convert the angle to degrees
     const angleDegrees = (angleRadians * 180) / Math.PI;
-
-    // Ensure the angle is positive and between 0 and 360 degrees
     const positiveAngle = (angleDegrees + 360) % 360;
-
     return positiveAngle;
   };
 
@@ -233,12 +198,11 @@ function Map({
     let today = moment();
     let createdAt = moment(data?.createdAt);
     const diff = today.diff(createdAt, "minutes");
-    return diff < 5; // Example: return true if the time difference is less than 5 minutes
+    return diff < 5;
   };
 
   const defaultLocaiton = { lat: 20.593683, lng: 78.962883 };
 
-  //new change//
   const buttonStyle = {
     background: ThemeColor.light_color_1,
     color: "white",
@@ -252,15 +216,10 @@ function Map({
 
   const getOnlineVehicles = () => {
     const onlineVehicle = vehicleList.filter((vehicle) => {
-      // Assuming imeiList is an array of numbers
       return imeiList.includes(parseInt(vehicle.imei[0].mac_id, 10));
     });
 
-    console.log(vehicleList, "vehicleList............");
-    console.log(imeiList, "imeiList............");
-    console.log(onlineVehicle, "onlineVehicle............");
     SetActiveDevices(onlineVehicle);
-    // return onlineVehicle
   };
 
   useEffect(() => {
@@ -270,9 +229,6 @@ function Map({
   }, [imeiList, vehicleList]);
 
   useEffect(() => {
-    console.log(activeDevices, "activeDevices");
-    console.log(locationData, "locationData");
-
     if (
       locationData &&
       locationData.length > 0 &&
@@ -282,7 +238,7 @@ function Map({
       const activeImeis = activeDevices.map(
         (device) => device.imei && device.imei[0] && device.imei[0].mac_id
       );
-      console.log(activeImeis, "activeImeis");
+
       const matchingLocationData = [];
       const nonMatchingLocationData = [];
 
@@ -296,13 +252,10 @@ function Map({
       });
       setFilterdActiveD(matchingLocationData);
       setFilterdInActiveD(nonMatchingLocationData);
-      console.log(matchingLocationData, "matchingLocationData");
-      console.log(nonMatchingLocationData, "nonMatchingLocationData");
     }
   }, [locationData, activeDevices]);
 
   useEffect(() => {
-    // Filter data based on ignition status
     const ignitionFalseData = locationData.filter(
       (entry) => entry.latestDocument.ignition === false
     );
@@ -311,9 +264,6 @@ function Map({
     );
     setRunningVehicleList(ignitionTrueData);
     setStopVehicleList(ignitionFalseData);
-    // Print or use the filtered arrays as needed
-    console.log("Ignition False Data:", ignitionFalseData);
-    console.log("Ignition True Data:", ignitionTrueData);
   }, [locationData]);
 
   return isLoaded ? (
@@ -736,52 +686,6 @@ function Map({
                       )}
                     </Marker>
                   ))}
-                {/* {wikitekVehi?.length > 0 &&
-                  wikitekVehi.map((item, index) => (
-                    <Marker
-                      key={index}
-                      onClick={() => toggleInfoWindow(item.latestDocument._id)}
-                      position={{
-                        lat: parseFloat(item.latestDocument.lat),
-                        lng: parseFloat(item.latestDocument.lng),
-                      }}
-                      animation="BOUNCE"
-                      icon={{
-                        path:
-                          startblinking() &&
-                          "M29.395,0H17.636c-3.117,0-5.643,3.467-5.643,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759c3.116,0,5.644-2.527,5.644-5.644V6.584C35.037,3.467,32.511,0,29.395,0z M34.05,14.188v11.665l-2.729,0.351v-4.806L34.05,14.188z M32.618,10.773c-1.016,3.9-2.219,8.51-2.219,8.51H16.631l-2.222-8.51C14.41,10.773,23.293,7.755,32.618,10.773z M15.741,21.713v4.492l-2.73-0.349V14.502L15.741,21.713z M13.011,37.938V27.579l2.73,0.343v8.196L13.011,37.938z M14.568,40.882l2.218-3.336h13.771l2.219,3.336H14.568z M31.321,35.805v-7.872l2.729-0.355v10.048L31.321,35.805",
-                        fillColor: apiData?.imeiList.includes(
-                          parseFloat(item.latestDocument.imei)
-                        )
-                          ? "red"
-                          : "grey",
-                        fillOpacity: 2,
-                        strokeWeight: 1,
-                        // rotation: item?.latestDocument?.heading,
-                        rotation:
-                          (item?.latestDocument?.heading * 180) / Math.PI,
-                        // rotation: calculateAngleFromEast(
-                        //   item?.latestDocument?.lat,
-                        //   item?.latestDocument?.lng
-                        // ),
-                        scale: 1,
-                      }}
-                    >
-                      {selectedMarker === item.latestDocument._id && (
-                        <InfoWindow
-                          key={item.id}
-                          position={{
-                            lat: parseFloat(item.latestDocument.lat),
-                            lng: parseFloat(item.latestDocument.lng),
-                          }}
-                          onCloseClick={() => setSelectedMarker(null)}
-                          visible={selectedMarker === item.id}
-                        >
-                          <MarkerItem1 item={item} />
-                        </InfoWindow>
-                      )}
-                    </Marker>
-                  ))} */}
               </>
             )}
           {activeParametersList[0].reg_id && (
