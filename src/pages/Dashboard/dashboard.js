@@ -460,7 +460,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppMenu, Header, Footer } from '../../components';
-import { AppMenuList, ThemeColor } from '../../utils/constants';
+import { AppMenuList, Theme, ThemeColor } from '../../utils/constants';
 import { AppActions, LiveMapActions } from '../../stores/actions';
 import { Card, Row, Col, Layout } from 'antd';
 import { AppBar, IconButton, Toolbar } from '@mui/material';
@@ -764,7 +764,7 @@ useEffect(() => {
           </div>
 
           <Layout style={{ flex: '1 1 auto' }} className="h-screen">
-            <Header title={'Dashboard'} showText={false} hideArrow={true} style={{ justifyContent: 'space-between', background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)' }} />
+            <Header title={'Dashboard'} showText={false} hideArrow={true} style={{ justifyContent: 'space-between', background: Theme.dark_color }} />
             <div className="row no-gutters m-5">
               <div className="col">
                 <div className="card shadow border-0">
@@ -778,7 +778,8 @@ useEffect(() => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 text-white text-sm d-block mb-2">Registered: <b>{vehicleList.length}</b></span>                        
+                        <span className="h6 text-white text-sm d-block mb-2">Registered</span>  
+                        <div className='h5 text-white ps-3'>{vehicleList.length}</div>                      
                       </div>
                     </div>
                   </div>
@@ -799,7 +800,8 @@ useEffect(() => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Online: <b>{onlineDevices}</b></span>                        
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Online</span>   
+                        <div className='h5 text-white ps-3'>{onlineDevices}</div>                     
                       </div>
                       
                     </div>
@@ -821,7 +823,8 @@ useEffect(() => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Offline: <b>{vehicleList.length - onlineDevices}</b></span>
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Offline</span>
+                        <div className='h5 text-white ps-3'>{vehicleList.length - onlineDevices}</div>
                         <span className="h3 font-bold mb-0"></span>
                       </div>                      
                     </div>
@@ -845,7 +848,8 @@ useEffect(() => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Running: <b>{runningVehicleList.length}</b></span>
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Running</span>
+                        <div className='h5 text-white ps-3'>{runningVehicleList.length}</div>
                       </div>
                     </div>
                   </div>
@@ -867,7 +871,8 @@ useEffect(() => {
                         </div>
                       </div>
                       <div className="col-auto">
-                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Idel: <b>{stopVehicleList.length}</b></span>
+                        <span className="h6 font-semibold text-white text-sm d-block mb-2">Idel</span>
+                        <div className='h5 text-white ps-3'>{stopVehicleList.length}</div>
                         <span className="h3 font-bold mb-0"></span>
                       </div>
                     </div>
@@ -884,7 +889,7 @@ useEffect(() => {
             <div className="row mb-7 m-2" style={{ overflowX: 'auto', maxHeight: '1000px' }} >
               <div className="col-md-12">
                 <div className="card shadow border-0 mb-7">
-                  <div className="card-header" style={{ background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)', }}>
+                  <div className="card-header" style={{ background: Theme.light_color }}>
                     <h5 className="mb-0 text-white">
                       {/* <TwoWheelerIcon className='me-2' /> */}
                       <i class="bi bi-bar-chart-fill me-2 fs-3"></i>
@@ -910,7 +915,7 @@ useEffect(() => {
                               </div>
                               <div className="text-heading font-semibold ps-4 pt-2">
                                 {/* <Link to="/livemap" >{item?.registration_id}</Link>  */}
-                                <Link to={`/livemap/${item?.imei[0]?.mac_id}`}>{item?.registration_id}</Link>
+                                <Link to={`/livemap/${item?.imei[0]?.mac_id}`} >{item?.registration_id}</Link>
 
                               </div>
                             </td>

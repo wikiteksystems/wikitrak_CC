@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Layout } from "antd";
 import { useDispatch, useSelector } from 'react-redux';
-import { matchColor } from '../utils/constants';
+import { Theme, matchColor } from '../utils/constants';
 import { AppActions, UserActions } from '../stores/actions';
 import { LeftCircleOutlined, MenuOutlined, RightCircleOutlined } from '@ant-design/icons';
 const { Header } = Layout;
@@ -20,7 +20,7 @@ export default function HeaderBar({title, classes, style, showText, hideArrow}) 
     };
 
     return(
-        <Header className={classNames("flex justify-center items-center text-white text-[24px]", classes)} style={{paddingInline: 0,  padding:'0 20px', background: matchColor(themeColor), ...style}}>
+        <Header className={classNames("flex justify-center items-center text-white text-[24px]", classes)} style={{paddingInline: 0,  padding:'0 20px', background: Theme.dark_color, ...style}}>
            
            {
             showText === false &&

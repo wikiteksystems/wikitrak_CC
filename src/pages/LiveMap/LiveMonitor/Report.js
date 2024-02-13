@@ -15,7 +15,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import dayjs from "dayjs";
-import { AppMenuList, ThemeColor } from "../../../utils/constants";
+import { AppMenuList, Theme, ThemeColor } from "../../../utils/constants";
 import { AppActions, UserActions } from "../../../stores/actions";
 import { Layout, Spin } from "antd";
 import { DateTimePicker } from "@mui/x-date-pickers";
@@ -520,7 +520,7 @@ const Report = ({ setActive, active }) => {
           </div>
 
           <Layout style={{ flex: '1 1 auto' }} className="h-screen">
-            <Header title={'Report'} showText={false} hideArrow={true} style={{ justifyContent: 'space-between', background: 'rgb(47, 115, 193)', background: 'linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)' }} />
+            <Header title={'Report'} showText={false} hideArrow={true} style={{ justifyContent: 'space-between', background: Theme.dark_color}} />
 
             <div className="row gx-3" style={{ marginTop: "20px", marginBottom: "20px", marginLeft: "30px" }}>
               <div className="col mt-3">
@@ -595,7 +595,7 @@ const Report = ({ setActive, active }) => {
                 <Button
                   className="text-white"
                   style={{
-                    background: ThemeColor.light_color_2,
+                    background: Theme.light_color,
                     width: 150,
                     height: 50,
                   }}

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Button, Input } from 'antd';
-import { matchColor } from '../../utils/constants';
+import { Button, Input, theme } from 'antd';
+import { Theme, matchColor } from '../../utils/constants';
 
 const PageContent = ({ vehicle }) => {
     // const dispatch = useDispatch();
@@ -36,10 +36,10 @@ const PageContent = ({ vehicle }) => {
             <div className='w-2/5 h-1/4 m-10 flex flex-col items-center justify-evenly' style={{border: '1px solid ' + matchColor(themeColor), borderRadius: 15}}>
                 <div className='text-2xl'> Device needs an update. </div>
                 <div className='flex items-center justify-center'>
-                    <Button className='text-white mr-5' style={{background: themeColor, border: '1px solid ' + matchColor(themeColor), width: 150, height: 50}}>
+                    <Button className='text-white mr-5' style={{background: Theme.dark_color, border: '1px solid ' + matchColor(themeColor), width: 150, height: 50}}>
                         Update
                     </Button>
-                    <Button className='text-white' style={{background: themeColor, border: '1px solid ' + matchColor(themeColor), width: 150, height: 50}}>
+                    <Button className='text-white' style={{background: Theme.dark_color, border: '1px solid ' + matchColor(themeColor), width: 150, height: 50}}>
                         Cancel
                     </Button>
                 </div>

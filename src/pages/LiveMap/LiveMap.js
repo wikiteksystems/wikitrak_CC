@@ -10,7 +10,7 @@ import PlayArrowOutlined from "@mui/icons-material/PlayArrowOutlined";
 import { Fab } from "@mui/material";
 import { AppActions, LiveMapActions, UserActions } from "../../stores/actions";
 import { AppMenu, Header, Footer, Navbar } from "../../components";
-import { AppMenuList, ThemeColor } from "../../utils/constants";
+import { AppMenuList, Theme, ThemeColor } from "../../utils/constants";
 import { locationsApi } from "../../mocks/location";
 import { socket } from "../../services/Socket";
 import { DetailMenu, MapSection } from "./";
@@ -154,9 +154,7 @@ const LiveMap = () => {
             showText={false}
             style={{
               justifyContent: "space-between",
-              background: "rgb(47, 115, 193)",
-              background:
-                "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
+              background:Theme.dark_color,
             }}
           />
           <Content style={{ width: "100%" }} className="h-screen">
@@ -197,14 +195,14 @@ const LiveMap = () => {
       <div className="block md:hidden">
         <AppBar
           position="fixed"
-          sx={{ top: "auto", bottom: 0, background: ThemeColor.dark_color }}
+          sx={{ top: "auto", bottom: 0, background: Theme.dark_color }}
         >
           <Toolbar>
             <IconButton color="inherit" aria-label="open drawer">
               <MenuIcon onClick={handleMainMenuCollapse} />
             </IconButton>
             <StyledFab
-              style={{ background: ThemeColor.light_color_1, color: "white" }}
+              style={{ background: Theme.light_color, color: "white" }}
               aria-label="add"
             >
               <Home />

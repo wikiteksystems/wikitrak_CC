@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { LeftCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Footer, Header } from "../../../components";
-import { matchColor } from "../../../utils/constants";
+import { Theme, matchColor } from "../../../utils/constants";
 import ShutterSpeedIcon from "@mui/icons-material/ShutterSpeed";
 import WifiTetheringErrorIcon from "@mui/icons-material/WifiTetheringError";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -116,22 +116,22 @@ const DetailMenu = ({
         <div className="detail-menu flex flex-col justify-between h-full">
           <>
             <div
-              className="flex justify-between items-center"
+              className="flex"
               style={{
-                background: matchColor(themeColor),
-                padding: "17px 5px",
+                background: Theme.dark_color,
                 marginBottom: "20px",
                 color: "white",
               }}
             >
               <LeftCircleOutlined
-                className="px-2"
+                className="pt-5 ps-4"
                 style={{ fontSize: 20 }}
                 onClick={() => history.goBack()}
               />
-              <p style={{ fontSize: "20px", fontWeight: "600" }}>
-                Select Trip {vehicle?.registration_id}
-              </p>
+              <Header
+              title={vehicle?.registration_id}
+              style={{ fontSize: 19, paddingInline: 0 }}
+              />
             </div>
             <div className="">
              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -223,7 +223,7 @@ const DetailMenu = ({
           </>
 
           <Footer
-            style={{ background: matchColor(themeColor), height: 40 }}
+            style={{ background: Theme.dark_color, height: 40 }}
             classes={"justify-evenly"}
           >
             <Tooltip title="Harsh Braking">

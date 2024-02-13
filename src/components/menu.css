@@ -1,19 +1,18 @@
 :where(.css-dev-only-do-not-override-17a39f8).ant-menu-dark .ant-menu-item-selected, :where(.css-dev-only-do-not-override-17a39f8).ant-menu-dark>.ant-menu .ant-menu-item-selected{
-    background-color: #0F4C75;
+    background-color: #0C356A;
 }
 
 .middlebarbg{
-    background: rgb(47,115,193);
-background: linear-gradient(155deg, rgba(47,115,193,1) 4%, rgba(0,134,145,1) 56%);
+    background-color: #0C356A;
 }
 
 :where(.css-dev-only-do-not-override-17a39f8).ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover{
-    background-color: rgb(36 108 196);
+    background-color: #0C356A;
     color: black;
 }
 
 :where(.css-17a39f8).ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover{
-    background-color: rgb(36 108 196);
+    background-color: #0C356A;
     color: black;
 
 }

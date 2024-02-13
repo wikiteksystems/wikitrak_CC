@@ -625,7 +625,7 @@ import Battery90Icon from "@mui/icons-material/Battery90";
 import NetworkCellIcon from "@mui/icons-material/NetworkCell";
 import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
-import { ThemeColor } from "../../utils/constants";
+import { Theme, ThemeColor } from "../../utils/constants";
 
 import {
   Layout,
@@ -1038,9 +1038,7 @@ const DetailMenu = ({
       <Sider
         className="h-screen"
         style={{
-          background: "rgb(47, 115, 193)", // Set the background color using rgb values
-          background:
-            "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
+          background:'white',
           borderLeft: "1px solid black",
           right: "0px",
         }}
@@ -1062,9 +1060,7 @@ const DetailMenu = ({
                       <div
                         className="flex justify-between items-center"
                         style={{
-                          background: "rgb(47, 115, 193)", // Set the background color using rgb values
-                          background:
-                            "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
+                          background:'whte',
                           paddingBottom: "5px",
                         }}
                       >
@@ -1073,9 +1069,7 @@ const DetailMenu = ({
                           classes="w-full"
                           style={{
                             fontSize: 20,
-                            background: "rgb(47, 115, 193)",
-                            background:
-                              "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
+                            background:Theme.dark_color,
                           }}
                         />
                         <PlusCircleOutlined
@@ -1091,7 +1085,7 @@ const DetailMenu = ({
                       </div>
                       <div className="flex items-center m-1">
                         <Input
-                          className="w-5/6"
+                          className="w-5/6 ms-5"
                           placeholder={"Search"}
                           style={{ marginRight: 8 }}
                           value={searchText}
@@ -1108,10 +1102,8 @@ const DetailMenu = ({
                         theme="light"
                         mode="inline"
                         style={{
-                          color: "white",
-                          background: "rgb(47, 115, 193)", // Set the background color using rgb values
-                          background:
-                            "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
+                          color: "black",
+                          background:'white',
                           flexGrow: 1,
                         }}
                         selectable={false}
@@ -1180,7 +1172,7 @@ const DetailMenu = ({
                       <div
                         className="flex justify-between items-center"
                         style={{
-                          backgroundColor: "#0F4C75",
+                          backgroundColor: Theme.dark_color,
                           paddingBottom: "5px",
                         }}
                       >
@@ -1235,8 +1227,8 @@ const DetailMenu = ({
                             setVehiDetail(!Vehi);
                           }}
                         >
-                          <ToggleOnIcon className="text-light" />
-                          <b className="ps-2 text-light">Features</b>
+                          <ToggleOnIcon className="text-dark" />
+                          <b className="ps-2 text-dark">Features</b>
                         </Button>
                       ) : (
                         <Button
@@ -1250,8 +1242,8 @@ const DetailMenu = ({
                             setVehiDetail(!Vehi);
                           }}
                         >
-                          <ToggleOffIcon className="text-light" />
-                          <b className="ps-2 text-light"> Vehicle Details</b>
+                          <ToggleOffIcon className="text-dark" />
+                          <b className="ps-2 text-dark"> Vehicle Details</b>
                         </Button>
                       )}
 
@@ -1309,7 +1301,7 @@ const DetailMenu = ({
                                     handleClick("delete-vehicle")
                                   }
                                   okButtonProps={{
-                                    style: { backgroundColor: "#4096ff" },
+                                    style: { backgroundColor: Theme.light_color },
                                   }}
                                   okText="Yes"
                                   cancelText="No"
@@ -1426,9 +1418,7 @@ const DetailMenu = ({
                     <div
                       className="flex justify-between items-center"
                       style={{
-                        backgroundColor: "rgb(47, 115, 193)",
-                        background:
-                            "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
+                        background:Theme.dark_color,
                         paddingBottom: "5px",
                       }}
                     >
@@ -1439,9 +1429,7 @@ const DetailMenu = ({
                             classes={"w-full"}
                             style={{ 
                               fontSize: 20,
-                              background: "rgb(47, 115, 193)",
-                              background:
-                                "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
+                              background: Theme.dark_color,
                                }}
                           />
                           <PlusCircleOutlined
@@ -1500,11 +1488,8 @@ const DetailMenu = ({
                       theme="light"
                       mode="inline"
                       style={{
-                        color: "white",
+                        color: "black",
                         backgroundColor: "white",
-                        background: "rgb(47, 115, 193)", // Set the background color using rgb values
-                          background:
-                            "linear-gradient(155deg, rgba(47, 115, 193, 1) 4%, rgba(0, 134, 145, 1) 56%)",
                         flexGrow: 1,
                       }}
                       selectable={false}
@@ -1534,7 +1519,7 @@ const DetailMenu = ({
                                 handleClick("delete-vehicle-group")
                               }
                               okButtonProps={{
-                                style: { backgroundColor: "#4096ff" },
+                                style: { backgroundColor: Theme.light_color },
                               }}
                               okText="Yes"
                               cancelText="No"
@@ -1599,7 +1584,7 @@ const DetailMenu = ({
           )}
           {/* <Modal></Modal> */}
           <Footer
-            style={{ background: matchColor(themeColor), height: 40 }}
+            style={{ background: Theme.dark_color, height: 40 }}
             classes={"justify-evenly"}
           >
             <Button
