@@ -24,6 +24,7 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { GMAP_API_KEY, ThemeColor } from "../../../utils/constants";
 import './animation.css'
+import MultiChart from "../LiveMonitor/MultiChart";
 const filters = {
   harshBreak: "HB",
   harshAcceleration: "HA",
@@ -110,12 +111,11 @@ const LiveContent = ({
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${totalDistance} km</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${maxVoltage}</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${minVoltage}</td>
-            <td style="border: 1px solid black; padding: 8px; text-align: center;">${
-              travelTime.hours
-            } hours ${travelTime.minutes} minutes</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${travelTime.hours
+      } hours ${travelTime.minutes} minutes</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${averageSpeed.toFixed(
-              2
-            )} km/h</td>
+        2
+      )} km/h</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">TBD</td>
           </tr>
         </tbody>
@@ -142,6 +142,7 @@ const LiveContent = ({
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [speed, setSpeed] = useState(null);
+  const [multiTrip, setMultiTrip] = useState([]);
 
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
@@ -149,6 +150,7 @@ const LiveContent = ({
         lat: parseFloat(selectCheckParam[0]?.data[0]?.lat),
         lng: parseFloat(selectCheckParam[0]?.data[0]?.lng),
       });
+      setMultiTrip(selectCheckParam);
     }
   }, [selectCheckParam]);
 
@@ -157,6 +159,7 @@ const LiveContent = ({
       setSelectedTrip(selectCheckParam[0]); // Select the first trip by default
     }
   }, [selectCheckParam]);
+  console.log(selectedTrip, "SSelected Trip...........")
 
   useEffect(() => {
     const calculateSpeed = () => {
@@ -174,6 +177,11 @@ const LiveContent = ({
     return () => clearInterval(interval); // Clean up interval on component unmount
   }, [selectedTrip]);
 
+  const handleSelectTrip = (trip) => {
+    setSelectedTrip(trip); // Set selected trip
+    setMultiTrip(prevState => [...prevState, trip]); // Add trip to multiTrip array
+  };
+  console.log(multiTrip, "multitripp....................")
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -183,14 +191,14 @@ const LiveContent = ({
     setAniActive(false);
   };
 
-  const markerIcon = {
-    url: `http://maps.google.com/mapfiles/ms/icons/green.png`, // You can replace 'blue' with the desired color
-    scaledSize: new window.google.maps.Size(30, 30), // Adjust the size of the marker icon as needed
-  };
-  const markerIcon2 = {
-    url: `http://maps.google.com/mapfiles/ms/icons/yellow.png`, // You can replace 'blue' with the desired color
-    scaledSize: new window.google.maps.Size(30, 30), // Adjust the size of the marker icon as needed
-  };
+  // const markerIcon = {
+  //   url: `http://maps.google.com/mapfiles/ms/icons/green.png`, // You can replace 'blue' with the desired color
+  //   scaledSize: new window.google.maps.Size(30, 30), // Adjust the size of the marker icon as needed
+  // };
+  // const markerIcon2 = {
+  //   url: `http://maps.google.com/mapfiles/ms/icons/yellow.png`, // You can replace 'blue' with the desired color
+  //   scaledSize: new window.google.maps.Size(30, 30), // Adjust the size of the marker icon as needed
+  // };
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -213,133 +221,111 @@ const LiveContent = ({
       }}
     >
       {
-            selectCheckParam.length > 0  &&
-     
-      <Box
-        sx={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          zIndex: 1000,
-          display: "flex",
-          flexDirection: "row",
-          padding: "10px",
-          alignItems: "center",
-        }}
-      >
-        <Button
+        selectCheckParam.length > 0 &&
+
+        <Box
+          sx={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            zIndex: 1000,
+            display: "flex",
+            flexDirection: "row",
+            padding: "10px",
+            alignItems: "center",
+          }}
+        >
+          {/* <Button
           variant="contained"
           onClick={handleClickDownloadPDF}
           style={{ marginRight: "10px" }}
         >
           Download PDF
-        </Button>
-        <Box
-          sx={{
-            backdropFilter: "blur(8px)",
-            background: "rgba(255, 255, 255, 0.6)",
-            padding: "10px",
-            borderRadius: "8px",
-            marginRight: "10px",
-          }}
-        >
-          <b>
-            Total Distance:-
-            {distance ? `${(distance / 1000).toFixed(2)} km` : "Calculating..."}
-          </b>
-        </Box>
-        <Box
-          sx={{
-            backdropFilter: "blur(8px)",
-            background: "rgba(255, 255, 255, 0.6)",
-            padding: "10px",
-            borderRadius: "8px",
-            marginRight: "10px",
-          }}
-        >
-          <b className="ms-3">
-            Speed: {speed !== null ? `${speed} km/h` : "Loading..."}
-          </b>
-        </Box>
-        <Box
-          sx={{
-            backdropFilter: "blur(8px)",
-            background: "rgba(255, 255, 255, 0.6)",
-            padding: "10px",
-            borderRadius: "8px",
-            marginRight: "10px",
-          }}
-        >
-          <b className="ms-3">
-            Ignition:{" "}
-            {selectedTrip && selectedTrip.data && selectedTrip.data.length > 0
-              ? selectedTrip.data[0].ignition
-                ? "On"
-                : "Off"
-              : "Loading..."}
-          </b>
-        </Box>
+        </Button> */}
+          <Box
+            sx={{
+              backdropFilter: "blur(8px)",
+              background: "rgba(255, 255, 255, 0.6)",
+              padding: "10px",
+              borderRadius: "8px",
+              marginRight: "10px",
+            }}
+          >
+            <b>
+              Total Distance:-
+              {distance ? `${(distance / 1000).toFixed(2)} km` : "Calculating..."}
+            </b>
+          </Box>
+          <Box
+            sx={{
+              backdropFilter: "blur(8px)",
+              background: "rgba(255, 255, 255, 0.6)",
+              padding: "10px",
+              borderRadius: "8px",
+              marginRight: "10px",
+            }}
+          >
+            <b className="ms-3">
+              Speed: {speed !== null ? `${speed} km/h` : "Loading..."}
+            </b>
+          </Box>
+          <Box
+            sx={{
+              backdropFilter: "blur(8px)",
+              background: "rgba(255, 255, 255, 0.6)",
+              padding: "10px",
+              borderRadius: "8px",
+              marginRight: "10px",
+            }}
+          >
+            <b className="ms-3">
+              Ignition:{" "}
+              {selectedTrip && selectedTrip.data && selectedTrip.data.length > 0
+                ? selectedTrip.data[0].ignition
+                  ? "On"
+                  : "Off"
+                : "Loading..."}
+            </b>
+          </Box>
 
-        <Box
-          sx={{
-            backdropFilter: "blur(8px)",
-            background: "rgba(255, 255, 255, 0.6)",
-            padding: "10px",
-            borderRadius: "8px",
-            marginRight: "10px",
-          }}
-        >
-          <b className="ms-3">Battery Voltage:</b>
-        </Box>
+          <Box
+            sx={{
+              backdropFilter: "blur(8px)",
+              background: "rgba(255, 255, 255, 0.6)",
+              padding: "10px",
+              borderRadius: "8px",
+              marginRight: "10px",
+            }}
+          >
+            <b className="ms-3">Battery Voltage:</b>
+          </Box>
 
+       
         <Button
           aria-describedby={id}
           style={{
             background: ThemeColor.light_color_2,
-            color: "black",
-            fontSize: "12px",
-            width: "80px",
+            color: 'white',
+            fontSize: '12px',
+            width: '100px',
           }}
           onClick={handleClick}
         >
           Playback
+          {!aniActive ? (
+          <div onClick={() => setAniActive(!aniActive)} className="ps-1 pb-1">
+            <PlayCircleIcon sx={{ fontSize: '25px', cursor: 'pointer' }} />
+          </div>
+        ) : (
+          <div onClick={() => setAniActive(!aniActive)} className="ps-1 pb-1">
+            <PauseCircleIcon sx={{ fontSize: '25px', cursor: 'pointer' }} />
+          </div>
+        )}
         </Button>
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-        >
-          <Box
-            sx={{
-              background: ThemeColor.light_color_2,
-              padding: "5px 30px",
-              color: "#fff",
-              fontWeight: "600",
-            }}
-          >
-            Trip Playback
-          </Box>
-          <Box
-            sx={{ padding: "15px", display: "flex", justifyContent: "center" }}
-          >
-            {!aniActive ? (
-              <div onClick={() => setAniActive(!aniActive)}>
-                <PlayCircleIcon sx={{ fontSize: "30px", cursor: "pointer" }} />
-              </div>
-            ) : (
-              <div onClick={() => setAniActive(!aniActive)}>
-                <PauseCircleIcon sx={{ fontSize: "30px", cursor: "pointer" }} />
-              </div>
-            )}
-          </Box>
-        </Popover>
-      </Box>
- }
+        
+
+        </Box>
+      }
       {selectCheckParam && selectCheckParam.length > 0 ? (
         <Box
           sx={{
@@ -522,6 +508,7 @@ const LiveContent = ({
               />
             )}
           </div>
+
         </Box>
       ) : (
         <Box
