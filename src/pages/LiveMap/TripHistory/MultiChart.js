@@ -12,7 +12,7 @@ import {
 } from "chart.js";
 import "rc-slider/assets/index.css";
 import { Range } from "react-range";
-import { ThemeColor } from "../../../utils/constants";
+import { Theme, ThemeColor } from "../../../utils/constants";
 
 Chart.register(
   CategoryScale,
@@ -95,7 +95,8 @@ const MultiChart = ({ item }) => {
       <div
         style={{
           width: "650px",
-          border: "2px solid black",
+          border: `2px solid ${Theme.light_color}`,
+          borderRadius:"8px",
           background: "whiteSmoke",
           opacity: "0.8",
           padding: "20px",
