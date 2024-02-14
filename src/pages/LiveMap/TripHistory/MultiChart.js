@@ -13,23 +13,6 @@ import {
 import "rc-slider/assets/index.css";
 import { Range } from "react-range";
 import { ThemeColor } from "../../../utils/constants";
-import {
-  Layout,
-  Avatar,
-  Menu,
-  Input,
-  Button,
-  Popconfirm,
-  ColorPicker,
-} from "antd";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import ListItemText from "@mui/material/ListItemText";
-import Select from "@mui/material/Select";
-import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
 
 Chart.register(
   CategoryScale,
@@ -47,12 +30,6 @@ const MultiChart = ({ item }) => {
   const [hiddenDatasets, setHiddenDatasets] = useState(
     Array(item.length).fill(false)
   );
-  const [params, setParams] = useState([]);
-  const [operator, setOperators] = useState([]);
-  const [equation, setEquation] = useState("");
-  const [inputVal, setInputVal] = useState(null);
-  const [betweenOp, setBtOp] = useState([]);
-  const [equationArray, setEquationArray] = useState([]);
 
   useEffect(() => {
     console.log(item, "in multi chart");
@@ -94,10 +71,14 @@ const MultiChart = ({ item }) => {
   const datasets = item.map((dataset, index) => ({
     label: dataset.label,
     data: dataset.data.map((item) => item.value),
-    borderColor: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`,
-    backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`,
+    borderColor: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${
+      Math.random() * 255
+    })`,
+    backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${
+      Math.random() * 255
+    }, 0.5)`,
     hidden: hiddenDatasets[index], // Hide or show dataset based on state
-}));
+  }));
   const data = {
     labels: slicedData.map((item) => item.Date),
     datasets: datasets,
@@ -108,18 +89,16 @@ const MultiChart = ({ item }) => {
     setStartIndex(sortedValues[0]);
     setEndIndex(sortedValues[1]);
   };
- 
-  
- 
+
   return (
     <>
       <div
         style={{
-          // width: "500px",
+          width: "800px",
           border: "2px solid black",
           background: "whiteSmoke",
           opacity: "0.8",
-          padding:'20px'
+          padding: "20px",
         }}
       >
         <Line options={options} data={data} />
@@ -146,6 +125,7 @@ const MultiChart = ({ item }) => {
                     height: "36px",
                     display: "flex",
                     width: "100%",
+                    position: "relative",
                   }}
                 >
                   <div
@@ -153,6 +133,7 @@ const MultiChart = ({ item }) => {
                     style={{
                       height: "5px",
                       width: "100%",
+                      maxWidth: "100%", // Set maximum width to 100%
                       borderRadius: "4px",
                       background: `linear-gradient(to right, #ccc ${
                         (startIndex / (item[0].data.length - 1)) * 100
@@ -164,6 +145,7 @@ const MultiChart = ({ item }) => {
                         (endIndex / (item[0].data.length - 1)) * 100
                       }%)`,
                       alignSelf: "center",
+                      position: "absolute",
                     }}
                   >
                     {children}

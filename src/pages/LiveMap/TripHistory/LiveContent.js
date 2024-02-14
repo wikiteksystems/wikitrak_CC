@@ -145,6 +145,7 @@ const LiveContent = ({
   const [speed, setSpeed] = useState(null);
   const [graphData, setGraphData] = useState([]);
   const [multiTrip, setMultiTrip] = useState([]);
+  const [showGraph, setShowGraph] = useState(false);
 
   useEffect(()=>{
     console.log(speed, "speed...livecontent")
@@ -182,6 +183,7 @@ const LiveContent = ({
 
     console.log(selectCheckParam, "selectCheckParam...");
     setAniActive(false)
+    setShowGraph(false)
   }, [selectCheckParam]);
   console.log(selectedTrip, "SSelected Trip...........")
 
@@ -354,6 +356,12 @@ const LiveContent = ({
           </div>
         )}
         </Button>
+
+        <Button style={{
+          background: "#800e0e",
+          color: 'white',
+          marginLeft:"8px"
+        }} onClick={()=>{setShowGraph(!showGraph)}}>{!showGraph ? 'Show Graph' : "Hide Graph"}</Button>
         
 
         </Box>
@@ -539,7 +547,7 @@ const LiveContent = ({
                 ignitionData={selectedTrip.data.map((item) => item.ignition)} // Pass ignition data of the selected trip
               />
             )} */}
-            {graphData[0]?.data?.length > 0 && <MultiChart item={graphData} />}
+            {(graphData[0]?.data?.length > 0 && showGraph)&& <MultiChart item={graphData} />}
           </div>
 
         </Box>
