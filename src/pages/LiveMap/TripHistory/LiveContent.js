@@ -23,7 +23,8 @@ import MapLine from "./MapLine";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { GMAP_API_KEY, ThemeColor } from "../../../utils/constants";
-import './animation.css'
+import "./animation.css";
+import MultiChart from "./MultiChart";
 const filters = {
   harshBreak: "HB",
   harshAcceleration: "HA",
@@ -142,6 +143,7 @@ const LiveContent = ({
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [speed, setSpeed] = useState(null);
+  const [graphData, setGraphData] = useState([]);
 
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
@@ -153,9 +155,27 @@ const LiveContent = ({
   }, [selectCheckParam]);
 
   useEffect(() => {
+    console.log(graphData[0]?.data?.length, "graphData....");
+  }, [graphData]);
+  useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
-      setSelectedTrip(selectCheckParam[0]); // Select the first trip by default
+      const newData = selectCheckParam[0]?.data.map((item) => ({
+        Date: item.createdAt.substring(0, 10), // Extracting date part
+        Time: item.createdAt.substring(11, 23), // Extracting time part
+        value: item.speed,
+      }));
+
+      console.log(newData, "newData.."); // Logging newData for debugging
+
+      // Update the state with the new data
+      setGraphData([{ data: [...newData], label: "Speed" }]);
+    } else {
+      // Handle the case when selectCheckParam is empty
+      // Reset the graph data if necessary
+      setGraphData({ data: [], label: "Speed" });
     }
+
+    console.log(selectCheckParam, "selectCheckParam...");
   }, [selectCheckParam]);
 
   useEffect(() => {
@@ -203,7 +223,6 @@ const LiveContent = ({
     }
   };
 
-
   return isLoaded ? (
     <Box
       sx={{
@@ -212,134 +231,142 @@ const LiveContent = ({
         flexDirection: "row",
       }}
     >
-      {
-            selectCheckParam.length > 0  &&
-     
-      <Box
-        sx={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          zIndex: 1000,
-          display: "flex",
-          flexDirection: "row",
-          padding: "10px",
-          alignItems: "center",
-        }}
-      >
-        <Button
-          variant="contained"
-          onClick={handleClickDownloadPDF}
-          style={{ marginRight: "10px" }}
-        >
-          Download PDF
-        </Button>
+      {selectCheckParam.length > 0 && (
         <Box
           sx={{
-            backdropFilter: "blur(8px)",
-            background: "rgba(255, 255, 255, 0.6)",
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            zIndex: 1000,
+            display: "flex",
+            flexDirection: "row",
             padding: "10px",
-            borderRadius: "8px",
-            marginRight: "10px",
+            alignItems: "center",
           }}
         >
-          <b>
-            Total Distance:-
-            {distance ? `${(distance / 1000).toFixed(2)} km` : "Calculating..."}
-          </b>
-        </Box>
-        <Box
-          sx={{
-            backdropFilter: "blur(8px)",
-            background: "rgba(255, 255, 255, 0.6)",
-            padding: "10px",
-            borderRadius: "8px",
-            marginRight: "10px",
-          }}
-        >
-          <b className="ms-3">
-            Speed: {speed !== null ? `${speed} km/h` : "Loading..."}
-          </b>
-        </Box>
-        <Box
-          sx={{
-            backdropFilter: "blur(8px)",
-            background: "rgba(255, 255, 255, 0.6)",
-            padding: "10px",
-            borderRadius: "8px",
-            marginRight: "10px",
-          }}
-        >
-          <b className="ms-3">
-            Ignition:{" "}
-            {selectedTrip && selectedTrip.data && selectedTrip.data.length > 0
-              ? selectedTrip.data[0].ignition
-                ? "On"
-                : "Off"
-              : "Loading..."}
-          </b>
-        </Box>
-
-        <Box
-          sx={{
-            backdropFilter: "blur(8px)",
-            background: "rgba(255, 255, 255, 0.6)",
-            padding: "10px",
-            borderRadius: "8px",
-            marginRight: "10px",
-          }}
-        >
-          <b className="ms-3">Battery Voltage:</b>
-        </Box>
-
-        <Button
-          aria-describedby={id}
-          style={{
-            background: ThemeColor.light_color_2,
-            color: "black",
-            fontSize: "12px",
-            width: "80px",
-          }}
-          onClick={handleClick}
-        >
-          Playback
-        </Button>
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-        >
+          <Button
+            variant="contained"
+            onClick={handleClickDownloadPDF}
+            style={{ marginRight: "10px" }}
+          >
+            Download PDF
+          </Button>
           <Box
             sx={{
-              background: ThemeColor.light_color_2,
-              padding: "5px 30px",
-              color: "#fff",
-              fontWeight: "600",
+              backdropFilter: "blur(8px)",
+              background: "rgba(255, 255, 255, 0.6)",
+              padding: "10px",
+              borderRadius: "8px",
+              marginRight: "10px",
             }}
           >
-            Trip Playback
+            <b>
+              Total Distance:-
+              {distance
+                ? `${(distance / 1000).toFixed(2)} km`
+                : "Calculating..."}
+            </b>
           </Box>
           <Box
-            sx={{ padding: "15px", display: "flex", justifyContent: "center" }}
+            sx={{
+              backdropFilter: "blur(8px)",
+              background: "rgba(255, 255, 255, 0.6)",
+              padding: "10px",
+              borderRadius: "8px",
+              marginRight: "10px",
+            }}
           >
-            {!aniActive ? (
-              <div onClick={() => setAniActive(!aniActive)}>
-                <PlayCircleIcon sx={{ fontSize: "30px", cursor: "pointer" }} />
-              </div>
-            ) : (
-              <div onClick={() => setAniActive(!aniActive)}>
-                <PauseCircleIcon sx={{ fontSize: "30px", cursor: "pointer" }} />
-              </div>
-            )}
+            <b className="ms-3">
+              Speed: {speed !== null ? `${speed} km/h` : "Loading..."}
+            </b>
           </Box>
-        </Popover>
-      </Box>
- }
+          <Box
+            sx={{
+              backdropFilter: "blur(8px)",
+              background: "rgba(255, 255, 255, 0.6)",
+              padding: "10px",
+              borderRadius: "8px",
+              marginRight: "10px",
+            }}
+          >
+            <b className="ms-3">
+              Ignition:{" "}
+              {selectedTrip && selectedTrip.data && selectedTrip.data.length > 0
+                ? selectedTrip.data[0].ignition
+                  ? "On"
+                  : "Off"
+                : "Loading..."}
+            </b>
+          </Box>
+
+          <Box
+            sx={{
+              backdropFilter: "blur(8px)",
+              background: "rgba(255, 255, 255, 0.6)",
+              padding: "10px",
+              borderRadius: "8px",
+              marginRight: "10px",
+            }}
+          >
+            <b className="ms-3">Battery Voltage:</b>
+          </Box>
+
+          <Button
+            aria-describedby={id}
+            style={{
+              background: ThemeColor.light_color_2,
+              color: "black",
+              fontSize: "12px",
+              width: "80px",
+            }}
+            onClick={handleClick}
+          >
+            Playback
+          </Button>
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+          >
+            <Box
+              sx={{
+                background: ThemeColor.light_color_2,
+                padding: "5px 30px",
+                color: "#fff",
+                fontWeight: "600",
+              }}
+            >
+              Trip Playback
+            </Box>
+            <Box
+              sx={{
+                padding: "15px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              {!aniActive ? (
+                <div onClick={() => setAniActive(!aniActive)}>
+                  <PlayCircleIcon
+                    sx={{ fontSize: "30px", cursor: "pointer" }}
+                  />
+                </div>
+              ) : (
+                <div onClick={() => setAniActive(!aniActive)}>
+                  <PauseCircleIcon
+                    sx={{ fontSize: "30px", cursor: "pointer" }}
+                  />
+                </div>
+              )}
+            </Box>
+          </Popover>
+        </Box>
+      )}
       {selectCheckParam && selectCheckParam.length > 0 ? (
         <Box
           sx={{
@@ -514,13 +541,14 @@ const LiveContent = ({
               </>
             ))}
           </GoogleMap>
-          <div style={{ position: "absolute", bottom: 15, left: 0 }}>
-            {selectedTrip && selectedTrip.data && (
+          <div style={{ position: "absolute", bottom: 80, left: 15 }}>
+            {/* {selectedTrip && selectedTrip.data && (
               <ApexChart
                 speedData={selectedTrip.data.map((item) => item.speed)} // Pass speed data of the selected trip
                 ignitionData={selectedTrip.data.map((item) => item.ignition)} // Pass ignition data of the selected trip
               />
-            )}
+            )} */}
+            {graphData[0]?.data?.length > 0 && <MultiChart item={graphData} />}
           </div>
         </Box>
       ) : (

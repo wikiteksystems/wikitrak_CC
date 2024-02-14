@@ -124,7 +124,7 @@ const DetailMenu = ({
               }}
             >
               <LeftCircleOutlined
-                className="ps-4"
+                className="ps-4 pt-5"
                 style={{ fontSize: 20 }}
                 onClick={() => history.goBack()}
               />
