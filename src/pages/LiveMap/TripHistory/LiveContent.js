@@ -165,26 +165,44 @@ const LiveContent = ({
   }, [graphData]);
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
-      const newData = selectCheckParam[0]?.data.map((item) => ({
-        Date: item.createdAt.substring(0, 10), // Extracting date part
-        Time: item.createdAt.substring(11, 23), // Extracting time part
-        value: item.speed,
-      }));
+        const speedData = selectCheckParam[0]?.data.map((item) => ({
+            Date: item.createdAt.substring(0, 10), // Extracting date part
+            Time: item.createdAt.substring(11, 23), // Extracting time part
+            value: item.speed,
+        }));
 
-      console.log(newData, "newData.."); // Logging newData for debugging
+        const voltageData = selectCheckParam[0]?.data.map((item) => ({
+            Date: item.createdAt.substring(0, 10), // Extracting date part
+            Time: item.createdAt.substring(11, 23), // Extracting time part
+            value: item.mainInputVoltage,
+        }));
+        const ignition = selectCheckParam[0]?.data.map((item) => ({
+            Date: item.createdAt.substring(0, 10), // Extracting date part
+            Time: item.createdAt.substring(11, 23), // Extracting time part
+            value: item.ignition,
+        }));
 
-      // Update the state with the new data
-      setGraphData([{ data: [...newData], label: "Speed" }]);
+        console.log(speedData, "speedData.."); // Logging speedData for debugging
+        console.log(voltageData, "voltageData.."); // Logging voltageData for debugging
+        console.log(ignition, "ignition.."); // Logging voltageData for debugging
+
+        // Update the state with the new data
+        setGraphData([
+            { data: [...speedData], label: "Speed" },
+            { data: [...voltageData], label: "MainInputVoltage" },
+            { data: [...ignition], label: "Ignition" }
+        ]);
     } else {
-      // Handle the case when selectCheckParam is empty
-      // Reset the graph data if necessary
-      setGraphData({ data: [], label: "Speed" });
+        // Handle the case when selectCheckParam is empty
+        // Reset the graph data if necessary
+        setGraphData([]);
     }
 
     console.log(selectCheckParam, "selectCheckParam...");
-    setAniActive(false)
-    setShowGraph(false)
-  }, [selectCheckParam]);
+    setAniActive(false);
+    setShowGraph(false);
+}, [selectCheckParam]);
+
   console.log(selectedTrip, "SSelected Trip...........")
 
   useEffect(() => {

@@ -94,7 +94,7 @@ const MultiChart = ({ item }) => {
     <>
       <div
         style={{
-          width: "800px",
+          width: "650px",
           border: "2px solid black",
           background: "whiteSmoke",
           opacity: "0.8",

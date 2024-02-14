@@ -178,6 +178,10 @@ function Map({
         lng: parseFloat(active_vehicle[0].latestDocument.lng),
       };
 
+      setActive_vehiLocation({
+        lat: active_vehicle[0].latestDocument.lat,
+        lng: active_vehicle[0].latestDocument.lng,
+      });
       // Check for geofence alert
       handleGeofenceAlert(vehicleLocation);
     }
