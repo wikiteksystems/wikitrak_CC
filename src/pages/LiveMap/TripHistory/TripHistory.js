@@ -223,7 +223,7 @@ const TripHistory = () => {
             style={{ justifyContent: "space-between" }}
           />
 
-          <Content style={{ width: "100%" }} className="h-screen">
+          <Content style={{ width: "100%",overflowY:"hidden" }} className="h-screen">
             <LiveContent
               harshBreak={harshBreak}
               acceleration={acceleration}

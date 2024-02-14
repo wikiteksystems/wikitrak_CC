@@ -22,9 +22,10 @@ import ApexChart from "./ApexChart"; // Import the ApexChart component
 import MapLine from "./MapLine";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
-import { GMAP_API_KEY, ThemeColor } from "../../../utils/constants";
+import { GMAP_API_KEY, Theme, ThemeColor } from "../../../utils/constants";
 import "./animation.css";
 import MultiChart from "./MultiChart";
+import './animation.css'
 const filters = {
   harshBreak: "HB",
   harshAcceleration: "HA",
@@ -111,12 +112,11 @@ const LiveContent = ({
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${totalDistance} km</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${maxVoltage}</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${minVoltage}</td>
-            <td style="border: 1px solid black; padding: 8px; text-align: center;">${
-              travelTime.hours
-            } hours ${travelTime.minutes} minutes</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${travelTime.hours
+      } hours ${travelTime.minutes} minutes</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${averageSpeed.toFixed(
-              2
-            )} km/h</td>
+        2
+      )} km/h</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">TBD</td>
           </tr>
         </tbody>
@@ -144,13 +144,18 @@ const LiveContent = ({
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [speed, setSpeed] = useState(null);
   const [graphData, setGraphData] = useState([]);
+  const [multiTrip, setMultiTrip] = useState([]);
 
+  useEffect(()=>{
+    console.log(speed, "speed...livecontent")
+  },[speed])
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
       setCenter({
         lat: parseFloat(selectCheckParam[0]?.data[0]?.lat),
         lng: parseFloat(selectCheckParam[0]?.data[0]?.lng),
       });
+      setMultiTrip(selectCheckParam);
     }
   }, [selectCheckParam]);
 
@@ -176,7 +181,9 @@ const LiveContent = ({
     }
 
     console.log(selectCheckParam, "selectCheckParam...");
+    setAniActive(false)
   }, [selectCheckParam]);
+  console.log(selectedTrip, "SSelected Trip...........")
 
   useEffect(() => {
     const calculateSpeed = () => {
@@ -194,6 +201,11 @@ const LiveContent = ({
     return () => clearInterval(interval); // Clean up interval on component unmount
   }, [selectedTrip]);
 
+  const handleSelectTrip = (trip) => {
+    setSelectedTrip(trip); // Set selected trip
+    setMultiTrip(prevState => [...prevState, trip]); // Add trip to multiTrip array
+  };
+  console.log(multiTrip, "multitripp....................")
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -203,14 +215,14 @@ const LiveContent = ({
     setAniActive(false);
   };
 
-  const markerIcon = {
-    url: `http://maps.google.com/mapfiles/ms/icons/green.png`, // You can replace 'blue' with the desired color
-    scaledSize: new window.google.maps.Size(30, 30), // Adjust the size of the marker icon as needed
-  };
-  const markerIcon2 = {
-    url: `http://maps.google.com/mapfiles/ms/icons/yellow.png`, // You can replace 'blue' with the desired color
-    scaledSize: new window.google.maps.Size(30, 30), // Adjust the size of the marker icon as needed
-  };
+  // const markerIcon = {
+  //   url: `http://maps.google.com/mapfiles/ms/icons/green.png`, // You can replace 'blue' with the desired color
+  //   scaledSize: new window.google.maps.Size(30, 30), // Adjust the size of the marker icon as needed
+  // };
+  // const markerIcon2 = {
+  //   url: `http://maps.google.com/mapfiles/ms/icons/yellow.png`, // You can replace 'blue' with the desired color
+  //   scaledSize: new window.google.maps.Size(30, 30), // Adjust the size of the marker icon as needed
+  // };
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -231,7 +243,9 @@ const LiveContent = ({
         flexDirection: "row",
       }}
     >
-      {selectCheckParam.length > 0 && (
+      {
+        selectCheckParam.length > 0 &&
+
         <Box
           sx={{
             position: "absolute",
@@ -244,33 +258,34 @@ const LiveContent = ({
             alignItems: "center",
           }}
         >
-          <Button
-            variant="contained"
-            onClick={handleClickDownloadPDF}
-            style={{ marginRight: "10px" }}
-          >
-            Download PDF
-          </Button>
+          {/* <Button
+          variant="contained"
+          onClick={handleClickDownloadPDF}
+          style={{ marginRight: "10px" }}
+        >
+          Download PDF
+        </Button> */}
           <Box
             sx={{
               backdropFilter: "blur(8px)",
-              background: "rgba(255, 255, 255, 0.6)",
+              background: Theme.light_color,
               padding: "10px",
               borderRadius: "8px",
               marginRight: "10px",
+              color:"white",
+              
             }}
           >
             <b>
               Total Distance:-
-              {distance
-                ? `${(distance / 1000).toFixed(2)} km`
-                : "Calculating..."}
+              {distance ? `${(distance / 1000).toFixed(2)} km` : "Calculating..."}
             </b>
           </Box>
           <Box
             sx={{
               backdropFilter: "blur(8px)",
-              background: "rgba(255, 255, 255, 0.6)",
+              background: Theme.light_color,
+              color:"white",
               padding: "10px",
               borderRadius: "8px",
               marginRight: "10px",
@@ -283,7 +298,8 @@ const LiveContent = ({
           <Box
             sx={{
               backdropFilter: "blur(8px)",
-              background: "rgba(255, 255, 255, 0.6)",
+              background: Theme.light_color,
+              color:"white",
               padding: "10px",
               borderRadius: "8px",
               marginRight: "10px",
@@ -291,82 +307,57 @@ const LiveContent = ({
           >
             <b className="ms-3">
               Ignition:{" "}
-              {selectedTrip && selectedTrip.data && selectedTrip.data.length > 0
-                ? selectedTrip.data[0].ignition
+              {selectCheckParam  && selectCheckParam[0].data.length > 0
+                && selectCheckParam[0]?.data[0]?.ignition
                   ? "On"
                   : "Off"
-                : "Loading..."}
+               }
             </b>
           </Box>
 
           <Box
             sx={{
               backdropFilter: "blur(8px)",
-              background: "rgba(255, 255, 255, 0.6)",
+              background: Theme.light_color,
+              color:"white",
               padding: "10px",
               borderRadius: "8px",
               marginRight: "10px",
             }}
           >
-            <b className="ms-3">Battery Voltage:</b>
+            <b className="ms-3">Battery Voltage:
+            
+            {selectCheckParam  && selectCheckParam[0].data.length > 0
+                && selectCheckParam[0]?.data[0]?.mainInputVoltage
+            }
+            </b>
           </Box>
+       
+        <Button
+          aria-describedby={id}
+          style={{
+            background: ThemeColor.light_color_2,
+            color: 'white',
+            fontSize: '12px',
+            width: '100px',
+          }}
+          onClick={handleClick}
+        >
+          Playback
+          {!aniActive ? (
+          <div onClick={() => setAniActive(true)} className="ps-1 pb-1">
+            <PlayCircleIcon sx={{ fontSize: '25px', cursor: 'pointer' }} />
+          </div>
+        ) : (
+          <div onClick={() => setAniActive(false)} className="ps-1 pb-1">
+            <PauseCircleIcon sx={{ fontSize: '25px', cursor: 'pointer' }} />
+          </div>
+        )}
+        </Button>
+        
 
-          <Button
-            aria-describedby={id}
-            style={{
-              background: ThemeColor.light_color_2,
-              color: "black",
-              fontSize: "12px",
-              width: "80px",
-            }}
-            onClick={handleClick}
-          >
-            Playback
-          </Button>
-          <Popover
-            id={id}
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "left",
-            }}
-          >
-            <Box
-              sx={{
-                background: ThemeColor.light_color_2,
-                padding: "5px 30px",
-                color: "#fff",
-                fontWeight: "600",
-              }}
-            >
-              Trip Playback
-            </Box>
-            <Box
-              sx={{
-                padding: "15px",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              {!aniActive ? (
-                <div onClick={() => setAniActive(!aniActive)}>
-                  <PlayCircleIcon
-                    sx={{ fontSize: "30px", cursor: "pointer" }}
-                  />
-                </div>
-              ) : (
-                <div onClick={() => setAniActive(!aniActive)}>
-                  <PauseCircleIcon
-                    sx={{ fontSize: "30px", cursor: "pointer" }}
-                  />
-                </div>
-              )}
-            </Box>
-          </Popover>
         </Box>
-      )}
+      }
       {selectCheckParam && selectCheckParam.length > 0 ? (
         <Box
           sx={{
@@ -383,7 +374,7 @@ const LiveContent = ({
               width: "100%",
               height: "100%",
             }}
-            zoom={10}
+            zoom={15}
             center={center}
             clickableIcons={false}
             options={{
@@ -550,6 +541,7 @@ const LiveContent = ({
             )} */}
             {graphData[0]?.data?.length > 0 && <MultiChart item={graphData} />}
           </div>
+
         </Box>
       ) : (
         <Box
