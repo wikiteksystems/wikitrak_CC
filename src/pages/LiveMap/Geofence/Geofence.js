@@ -157,9 +157,9 @@ const Geofence = () => {
         GeofenceActions.saveGeofence({
           ...geofence,
           vehicle: vehicle.id,
-          geofence_history: [],
           speedAlertEnabled: speedAlert.enabled,
-          speedAlertThreshold: speedAlert.threshold,
+          speedAlertThreshold: speedAlert.threshold, // Make sure speedAlertThreshold is included here
+          geofence_history: [],
         })
       );
     } else {
@@ -171,7 +171,7 @@ const Geofence = () => {
             ...geofence,
             vehicle: vehicle.id,
             speedAlertEnabled: speedAlert.enabled,
-            speedAlertThreshold: speedAlert.threshold,
+            speedAlertThreshold: speedAlert.threshold, // Also include speedAlertThreshold here
           })
         );
       }

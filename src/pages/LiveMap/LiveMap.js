@@ -53,6 +53,11 @@ const LiveMap = () => {
           }
         }
       });
+
+      // Check if vehicle speed exceeds 80 km/hr
+      if (data.speed > 80) {
+        toast.error(`Speed Alert: Vehicle ${data.imei} is exceeding 80 km/hr!`);
+      }
     });
     return () => {
       socket.off("locationinfo");
@@ -72,23 +77,21 @@ const LiveMap = () => {
     dispatch(LiveMapActions.getVehicleGroupList(userId));
   }, [dispatch, userId]);
 
-  const fetchImeiData = async () => {
-    let imei = [];
-    for (let k of vehicleList) {
-      for (let i of k?.imei) {
-        imei.push(i?.mac_id);
-      }
-    }
-    let data = { imei, type: "one" };
-    let result = await locationsApi.getImeiToReg(data);
-    if (result?.status === "SUCCESS") {
-      setLocationData(result?.data);
-    } else {
-      setLocationData([]);
-    }
-  };
-
   useEffect(() => {
+    // Fetch and set location data based on vehicle list
+    const fetchImeiData = async () => {
+      let imei = vehicleList.flatMap((item) =>
+        item?.imei?.map((i) => i?.mac_id)
+      );
+      let data = { imei, type: "one" };
+      let result = await locationsApi.getImeiToReg(data);
+      if (result?.status === "SUCCESS") {
+        setLocationData(result?.data);
+      } else {
+        setLocationData([]);
+      }
+    };
+
     if (vehicleList && vehicleList?.length > 0) fetchImeiData();
   }, [vehicleList, vehicleGroupList]);
 
