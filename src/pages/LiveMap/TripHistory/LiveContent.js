@@ -25,6 +25,9 @@ import html2canvas from "html2canvas";
 import { GMAP_API_KEY, Theme, ThemeColor } from "../../../utils/constants";
 import "./animation.css";
 import MultiChart from "./MultiChart";
+import MovingIcon from '@mui/icons-material/Moving';
+import SpeedIcon from '@mui/icons-material/Speed';
+import AccessTimeSharpIcon from '@mui/icons-material/AccessTimeSharp';
 import './animation.css'
 const filters = {
   harshBreak: "HB",
@@ -248,6 +251,8 @@ const LiveContent = ({
   const id = open ? "simple-popover" : undefined;
 
   const toggleInfoWindow = (markerId) => {
+    console.log(markerId, "markerId...")
+    console.log(selectedMarker, "selectedMarker...")
     if (selectedMarker === markerId) {
       setSelectedMarker(null);
     } else {
@@ -532,29 +537,45 @@ const LiveContent = ({
                   animation="BOUNCE"
                 />
 
-                {selectedMarker === index && (
-                  <InfoWindow
-                    key={index}
-                    position={{
-                      lat: parseFloat(item?.data[0]?.lat),
-                      lng: parseFloat(item?.data[0]?.lng),
-                    }}
-                    onCloseClick={() => setSelectedMarker(null)}
-                    options={{ maxWidth: 200 }}
-                    visible={selectedMarker === index}
-                  >
-                    <div>
-                      Distance:{" "}
-                      {distance
-                        ? `${(distance / 1000).toFixed(2)} km`
-                        : "Calculating..."}
-                    </div>
-                    <div>Speed: {item?.data[0]?.speed} km/h</div>
-                    <div>
-                      Ignition: {item?.data[0]?.ignition ? "On" : "Off"}
-                    </div>
-                  </InfoWindow>
-                )}
+{selectedMarker === index && (
+    <InfoWindow
+        key={index}
+        position={{
+            lat: parseFloat(item?.data[0]?.lat),
+            lng: parseFloat(item?.data[0]?.lng),
+        }}
+        onCloseClick={() => setSelectedMarker(null)}
+        options={{ maxWidth: 300 }}
+        visible={selectedMarker === index}
+    >
+        <div>
+          <div>
+            {/* <AccessTimeSharpIcon /> */}
+            <b style={{fontSize:15, fontWeight:600}}>Start Date&Time: </b> {new Date(item?.data[0]?.createdAt.slice(0, 16)).toLocaleString()}
+
+          </div>
+          <div>
+            {/* <AccessTimeSharpIcon /> */}
+            <b style={{fontSize:15, fontWeight:600}}>End Date&Time: </b> {new Date(item?.data[item?.data.length - 1]?.createdAt.slice(0, 16)).toLocaleString()}
+
+          </div>
+            <div>
+                {/* <MovingIcon /> */}
+                <b style={{fontSize:15, fontWeight:600}}> Total Distance: </b>{" "}
+                {distance
+                    ? `${(distance / 1000).toFixed(2)} km`
+                    : "Calculating..."}
+            </div>
+            <div>
+              {/* <SpeedIcon /> */}
+              <b style={{fontSize:15, fontWeight:600}}> Speed: </b>{item?.data[0]?.speed} km/h</div>
+            <div>
+                <b style={{fontSize:15, fontWeight:600}}> Ignition: </b>{item?.data[0]?.ignition ? "On" : "Off"}
+            </div>
+        </div>
+    </InfoWindow>
+)}
+
               </>
             ))}
           </GoogleMap>
