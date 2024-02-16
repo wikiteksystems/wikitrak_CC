@@ -279,8 +279,12 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam , setActive, active}
             }
           }
 
-          arr.push({ data: [...innerArr, k?.label], label: k?.label });
-        }
+          // arr.push({ data: [...innerArr, k?.label], label: k?.label });
+
+          const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+
+        arr.push({ data: [...innerArr], label: k?.label,randomColor: randomColor});
+        }    
         arr.sort((a, b) => a.date - b.date);
         setChartValue([...arr]);
         console.log(arr, "arrrrrdatatatatatatatat");
@@ -1172,7 +1176,8 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam , setActive, active}
              &&
 
               // <CombinedCharts combinedChartData={combinedChartData} />
-              <MultiChart item ={chartValue}/>
+              // <MultiChart item ={chartValue}/>
+              <MultiChart graphData = {chartValue} setGraphData={setChartValue}  />
               
             }
             </Box>

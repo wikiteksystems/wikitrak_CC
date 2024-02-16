@@ -177,6 +177,7 @@ export default function MapLine({
   distance,
   setDistance,
   setSpeed, // Include setSpeed as a prop
+  setAniActive
 }) {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [directions, setDirections] = useState(null);
@@ -189,6 +190,7 @@ export default function MapLine({
   const [startToCurrentPath, setStartToCurrentPath] = useState([]); // Path from start to current location
 
   useEffect(() => {
+    setAniActive(false)
     console.log(item, "MapLine Item data...............");
     const Speed = []
 
@@ -294,6 +296,7 @@ export default function MapLine({
               strokeColor: "green",
               strokeOpacity: 1,
               strokeWeight: 4,
+              zIndex:1000
             }}
           />
 

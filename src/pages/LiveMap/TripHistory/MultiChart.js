@@ -13,6 +13,7 @@ import {
 import "rc-slider/assets/index.css";
 import { Range } from "react-range";
 import { Theme, ThemeColor } from "../../../utils/constants";
+import RangeFilter from "../LiveMonitor/RangeFilter";
 
 Chart.register(
   CategoryScale,
@@ -26,7 +27,7 @@ Chart.register(
 
 const MultiChart = ({ item }) => {
   const [startIndex, setStartIndex] = useState(0);
-  const [endIndex, setEndIndex] = useState(item[0].data.length - 1);
+  const [endIndex, setEndIndex] = useState(4);
   const [hiddenDatasets, setHiddenDatasets] = useState(
     Array(item.length).fill(false)
   );
@@ -40,12 +41,12 @@ const MultiChart = ({ item }) => {
     plugins: {
       legend: {
         position: "top",
-        onClick: (e, legendItem) => {
-          const index = legendItem.datasetIndex;
-          const newHiddenDatasets = Array(item.length).fill(true);
-          newHiddenDatasets[index] = !hiddenDatasets[index];
-          setHiddenDatasets(newHiddenDatasets);
-        },
+        // onClick: (e, legendItem) => {
+        //   const index = legendItem.datasetIndex;
+        //   const newHiddenDatasets = Array(item.length).fill(true);
+        //   newHiddenDatasets[index] = !hiddenDatasets[index];
+        //   setHiddenDatasets(newHiddenDatasets);
+        // },
       },
     },
     scales: {
@@ -71,12 +72,8 @@ const MultiChart = ({ item }) => {
   const datasets = item.map((dataset, index) => ({
     label: dataset.label,
     data: dataset.data.map((item) => item.value),
-    borderColor: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${
-      Math.random() * 255
-    })`,
-    backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${
-      Math.random() * 255
-    }, 0.5)`,
+    borderColor:dataset.randomColor,
+    // backgroundColor: dataset.randomColor,
     hidden: hiddenDatasets[index], // Hide or show dataset based on state
   }));
   const data = {
@@ -110,7 +107,9 @@ const MultiChart = ({ item }) => {
             marginTop: "10px",
           }}
         >
-          {item[0].data.length > 0 && (
+          <RangeFilter graphData={item} setEndIndex={setEndIndex} setStartIndex={setStartIndex} endIndex={endIndex} startIndex={startIndex}/>
+
+          {/* {item[0].data.length > 0 && (
             <Range
               step={1}
               min={0}
@@ -167,7 +166,7 @@ const MultiChart = ({ item }) => {
                 />
               )}
             />
-          )}
+          )} */}
         </div>
       </div>
     </>

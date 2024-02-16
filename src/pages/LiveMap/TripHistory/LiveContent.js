@@ -27,8 +27,11 @@ import "./animation.css";
 import MultiChart from "./MultiChart";
 import MovingIcon from '@mui/icons-material/Moving';
 import SpeedIcon from '@mui/icons-material/Speed';
+import SettingsPowerIcon from '@mui/icons-material/SettingsPower';
 import AccessTimeSharpIcon from '@mui/icons-material/AccessTimeSharp';
+import BoltSharpIcon from '@mui/icons-material/BoltSharp';
 import './animation.css'
+import axios from "axios";
 const filters = {
   harshBreak: "HB",
   harshAcceleration: "HA",
@@ -140,6 +143,7 @@ const LiveContent = ({
   };
 
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [showLast_info, setLastInfo] = useState(false);
   const [distance, setDistance] = useState(null);
   const [aniActive, setAniActive] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -149,6 +153,8 @@ const LiveContent = ({
   const [graphData, setGraphData] = useState([]);
   const [multiTrip, setMultiTrip] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
+  const[EndAddress, setEndAddress]= useState()
+  const[startAddress, setStartAddress]= useState()
 
   useEffect(()=>{
     console.log(speed, "speed...livecontent")
@@ -166,6 +172,18 @@ const LiveContent = ({
   useEffect(() => {
     console.log(graphData[0]?.data?.length, "graphData....");
   }, [graphData]);
+  const getColor = () => {
+    // Generate random intensity values for red, green, and blue components
+    const red = Math.floor(Math.random() * 128); // 0-127
+    const green = Math.floor(Math.random() * 128); // 0-127
+    const blue = Math.floor(Math.random() * 128); // 0-127
+
+    // Convert the RGB components to a hexadecimal color code
+    const color = '#' + Math.floor(Math.random()*16777215).toString(16);;
+
+    return color;
+};
+
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
         const speedData = selectCheckParam[0]?.data.map((item) => ({
@@ -190,10 +208,11 @@ const LiveContent = ({
         console.log(ignition, "ignition.."); // Logging voltageData for debugging
 
         // Update the state with the new data
+       
         setGraphData([
-            { data: [...speedData], label: "Speed" },
-            { data: [...voltageData], label: "MainInputVoltage" },
-            { data: [...ignition], label: "Ignition" }
+            { data: [...speedData], label: "Speed",randomColor: getColor() },
+            { data: [...voltageData], label: "MainInputVoltage",randomColor: getColor() },
+            { data: [...ignition], label: "Ignition",randomColor: getColor() }
         ]);
     } else {
         // Handle the case when selectCheckParam is empty
@@ -259,6 +278,36 @@ const LiveContent = ({
       setSelectedMarker(markerId);
     }
   };
+  const showLastInfo = ()=>{
+    setLastInfo(!showLast_info)
+
+  }
+  const getStartAddress = async (lat, lng) => {
+    try {
+      const result = await axios(
+        `${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`
+      );
+      console.log(result.data?.data, "result.data?.data..")
+      setStartAddress(result.data?.data)
+      return result.data?.data;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  };
+  const getEndAddress = async (lat, lng) => {
+    try {
+      const result = await axios(
+        `${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`
+      );
+      setEndAddress(result.data?.data)
+      return result.data?.data;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  };
+
 
   return isLoaded ? (
     <Box
@@ -301,9 +350,9 @@ const LiveContent = ({
               
             }}
           >
+             <MovingIcon />{"  "}
             <b>
-              Total Distance:
-              {distance ? `${(distance / 1000).toFixed(2)} km` : "Calculating..."}
+              Total Distance: {distance ? `${(distance / 1000).toFixed(2)} km` : "Calculating..."}
             </b>
           </Box>
           <Box
@@ -316,6 +365,7 @@ const LiveContent = ({
               marginRight: "10px",
             }}
           >
+             <SpeedIcon />
             <b className="ms-3">
               Speed: {speed !== null ? `${speed} km/h` : "Loading..."}
             </b>
@@ -330,6 +380,7 @@ const LiveContent = ({
               marginRight: "10px",
             }}
           >
+            <SettingsPowerIcon />
             <b className="ms-3">
               Ignition:{" "}
               {selectCheckParam  && selectCheckParam[0].data.length > 0
@@ -350,6 +401,7 @@ const LiveContent = ({
               marginRight: "10px",
             }}
           >
+            <BoltSharpIcon />
             <b className="ms-3">Battery Voltage:
             
             {selectCheckParam  && selectCheckParam[0].data.length > 0
@@ -442,7 +494,10 @@ const LiveContent = ({
               <>
                 <Marker
                   key={index}
-                  onClick={() => toggleInfoWindow(index)}
+                  onClick={() => {
+                    toggleInfoWindow(index)
+                    getStartAddress(item?.data[0]?.lat, item?.data[0]?.lng)
+                  }}
                   position={{
                     lat: parseFloat(item?.data[0]?.lat),
                     lng: parseFloat(item?.data[0]?.lng),
@@ -459,6 +514,7 @@ const LiveContent = ({
                   distance={distance}
                   setDistance={setDistance}
                   setSpeed={setSpeed}
+                  setAniActive={setAniActive}
                 />
 
                 {harshBreak &&
@@ -530,6 +586,10 @@ const LiveContent = ({
 
                 <Marker
                   key={index}
+                  onClick={()=>{
+                    showLastInfo()
+                    getEndAddress(item?.data[item?.data.length - 1]?.lat,item?.data[item?.data.length - 1]?.lng)
+                  }}
                   position={{
                     lat: parseFloat(item?.data[item?.data.length - 1]?.lat),
                     lng: parseFloat(item?.data[item?.data.length - 1]?.lng),
@@ -554,28 +614,38 @@ const LiveContent = ({
             <b style={{fontSize:15, fontWeight:600}}>Start Date&Time: </b> {new Date(item?.data[0]?.createdAt.slice(0, 16)).toLocaleString()}
 
           </div>
+          
           <div>
-            {/* <AccessTimeSharpIcon /> */}
-            <b style={{fontSize:15, fontWeight:600}}>End Date&Time: </b> {new Date(item?.data[item?.data.length - 1]?.createdAt.slice(0, 16)).toLocaleString()}
-
+          <b style={{fontSize:15, fontWeight:600}}>Start Address: </b>
+            {startAddress?.full_address}
           </div>
+           
+        </div>
+    </InfoWindow>
+)}
+{showLast_info && ( 
+    <InfoWindow
+        key={index}
+        position={{
+            lat: parseFloat(item?.data[item?.data?.length - 1]?.lat),
+            lng: parseFloat(item?.data[item?.data?.length - 1]?.lng),
+        }}
+        onCloseClick={() => showLastInfo()} // Call showLastInfo function here
+        options={{ maxWidth: 300 }}
+        // visible={selectedMarker === index} 
+    >
+        <div>
+            
             <div>
-                {/* <MovingIcon /> */}
-                <b style={{fontSize:15, fontWeight:600}}> Total Distance: </b>{" "}
-                {distance
-                    ? `${(distance / 1000).toFixed(2)} km`
-                    : "Calculating..."}
+                <b style={{ fontSize: 15, fontWeight: 600 }}>End Date&Time: </b> {new Date(item?.data[item?.data.length - 1]?.createdAt.slice(0, 16)).toLocaleString()}
             </div>
             <div>
-              {/* <SpeedIcon /> */}
-              <b style={{fontSize:15, fontWeight:600}}> Speed: </b>{item?.data[0]?.speed} km/h</div>
-            <div>
-                <b style={{fontSize:15, fontWeight:600}}> Ignition: </b>{item?.data[0]?.ignition ? "On" : "Off"}
+            <b style={{ fontSize: 15, fontWeight: 600 }}>End Address: </b>
+            {EndAddress?.full_address}
             </div>
         </div>
     </InfoWindow>
 )}
-
               </>
             ))}
           </GoogleMap>
