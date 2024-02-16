@@ -68,46 +68,101 @@ const LiveMap = () => {
 
   useEffect(() => {
     socket.on("locationinfo", (data) => {
-      console.log("locationinfo", data)
-      const gt06Data = locationData.filter(
-        (item) =>
-          item.latestDocument.venderId === "WTK4G06" ||
-          item.latestDocument.venderId === "WTK2G06"
-      );
+        console.log("locationinfo", data);
+        const updatedData = locationData.map((item) => {
+            if (item.latestDocument.imei === data.imei) {
+                const prevPosition = {
+                    lat: item.latestDocument.lat,
+                    lng: item.latestDocument.lng,
+                };
 
-      locationData.forEach((item) => {
-        if (item.latestDocument.imei === data.imei) {
-          const prevPosition = {
-            lat: item.latestDocument.lat,
-            lng: item.latestDocument.lng,
-          };
-          const duration = 500; // Duration of the animation in milliseconds
-          const fps = 60; // Frames per second
-          const steps = duration / (1000 / fps); // Number of steps
-          const latStep = (data.lat - prevPosition.lat) / steps;
-          const lngStep = (data.lng - prevPosition.lng) / steps;
+                const duration = 500; // Duration of the animation in milliseconds
+                const fps = 60; // Frames per second
+                const steps = duration / (1000 / fps); // Number of steps
+                const latStep = (data.lat - prevPosition.lat) / steps;
+                const lngStep = (data.lng - prevPosition.lng) / steps;
 
-          let stepCount = 0;
+                let stepCount = 0;
 
-          const moveVehicle = setInterval(() => {
-            const newLat = prevPosition.lat + latStep * stepCount;
-            const newLng = prevPosition.lng + lngStep * stepCount;
+                const moveVehicle = setInterval(() => {
+                    const newLat = prevPosition.lat + latStep * stepCount;
+                    const newLng = prevPosition.lng + lngStep * stepCount;
 
-            item.latestDocument.lat = newLat;
-            item.latestDocument.lng = newLng;
+                    item.latestDocument.lat = newLat;
+                    item.latestDocument.lng = newLng;
 
-            stepCount++;
+                    stepCount++;
 
-            if (stepCount >= steps) {
-              clearInterval(moveVehicle);
+                    if (stepCount >= steps) {
+                        clearInterval(moveVehicle);
+                    }
+
+                    setGtVehi((prevGtVehi) =>
+                        prevGtVehi.map((prevItem) =>
+                            prevItem.latestDocument.imei === data.imei ? item : prevItem
+                        )
+                    );
+                }, 1000 / fps);
             }
-
-            setGtVehi([...locationData]);
-          }, 1000 / fps);
-        }
-      });
+            return item;
+        });
     });
-  }, [socket, locationData, activeParametersList]);
+
+    // Clean up the event listener
+    return () => {
+        socket.off("locationinfo");
+    };
+}, [socket, locationData, setGtVehi]);
+
+  //Previous Socket Connection
+//   useEffect(() => {
+//     socket.on("locationinfo", (data) => {
+//       console.log("live data=>",data , "data parameter==>",activeParametersList,'live =>imei',data.imei,'selected imei--->',activeParametersList[0].imei)
+//       if(data.imei===activeParametersList[0].imei){
+//         activeParametersList[0].params.map((param) => {
+//           let par=param.label
+          
+//           param.value=data[par]
+//         })
+//       dispatch(LiveMapActions.addParameter(activeParametersList))
+//       }
+//  // const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'GT-06');
+//  const gt06Data = locationData.filter((item) => item.latestDocument.venderId === 'WTK4G06');
+
+//     gt06Data.map((item) => {
+      
+//       // let c_data={};
+//       // if(Object.keys(cooridinates_obj).length === 0){
+//       //   let obj={lat:item.latestDocument.lat,lng:item.latestDocument.lng};
+//       //   data[item.latestDocument.imei]=[obj]
+//       // }
+//       // dispatch(LiveMapActions.add_cooridinates_to_obj(data));
+//        if (item.latestDocument.imei===data.imei)
+//        {
+//         item.latestDocument.lat=data.lat;
+//         item.latestDocument.lng=data.lng;
+//         // item.latestDocument.lat=18.566526;
+//         // item.latestDocument.lng=73.912239;
+//        }
+//       //  console.log('activeParameters list',activeParametersList);
+  
+//       });
+//    setGtVehi(gt06Data)
+
+
+//     // console.log('coordinates1',cooridinates_obj,gt06Data);
+//     // let coordinates=cooridinates_obj
+//     // if(coordinates.hasOwnProperty(data.imei)){
+//     //   let obj={lat:data.lat,lng:data.lng};
+//     //   // let obj={lat:18.566526,lng:73.912239};
+//     //   coordinates[data.imei].push(obj)
+//     //  }
+//     //  dispatch(LiveMapActions.add_cooridinates_to_obj(coordinates));
+//     //  console.log('updated coordinates1',cooridinates_obj,gt06Data);
+
+//   });
+// }, [socket, locationData,activeParametersList]);
+
 
   useEffect(() => {
     const gt06Data = locationData.filter(

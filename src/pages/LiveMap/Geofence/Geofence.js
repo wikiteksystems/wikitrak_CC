@@ -129,7 +129,7 @@ const Geofence = () => {
         dispatch(GeofenceActions.setGeofenceState(id, status));
       else if (modified) {
         dispatch(
-          GeofenceActions.saveGeofence({ ...geofence, vehicle: vehicle.id })
+          GeofenceActions.saveGeofence({ ...geofence, vehicle: vehicle.id },vehicle.imei)
         );
       }
     }

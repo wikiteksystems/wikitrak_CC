@@ -61,14 +61,15 @@ export const saveGeofence = (data, imei) => {
     let request = null;
     let tes_req = null;
     let tes_payload = {
-        "imei": imei,
+        "imei": imei[0]?.mac_id,
         "area_type": "circular",
         "type": data.type,
         "lat": data?.center?.lat,
         "long": data?.center?.lng,
-        "radius": data.radius,
+        "radius": parseInt(data.radius),
         "isActive_Geofance": data?.status === "Active"? true : false
     }
+    console.log(tes_payload)
     if (data.isNew){
 
         request = axios.post(`${API_VEHICLE_URL}/create-geofence/`, data);

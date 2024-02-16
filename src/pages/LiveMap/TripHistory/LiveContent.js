@@ -302,7 +302,7 @@ const LiveContent = ({
             }}
           >
             <b>
-              Total Distance:-
+              Total Distance:
               {distance ? `${(distance / 1000).toFixed(2)} km` : "Calculating..."}
             </b>
           </Box>
