@@ -483,6 +483,8 @@ import CarCrashIcon from '@mui/icons-material/CarCrash';
 import { locationsApi } from '../../mocks/location';
 import Item from 'antd/es/list/Item';
 import AppMenu2 from '../../components/Appmneu2';
+import { socket } from '../../services/Socket'
+import { NotificationManager } from 'react-notifications';
 const Dashboard = () => {
   const dispatch = useDispatch();
   const userId = useSelector(({ User }) => User.userId);
@@ -727,7 +729,48 @@ useEffect(() => {
     })
   }
 
+  //alert notifications
+  const [geofancenotificationShown, setgeofanceNotificationShown] = useState(false);
+  const [speednotificationShown, setspeednotificationShown] = useState(false);
   
+
+//---------- alert notifications-------------//
+  useEffect(() => {
+    socket.on("geofenceAlert", (data) => {
+      if (!geofancenotificationShown) {
+        console.log(data, "geofence alert ");
+        let imei = data?.imei;
+        if (imei !== null) {
+          const vehicleWithImei = allVehiclesList.find(vehicle => vehicle.imei[0].mac_id == imei);
+          if (vehicleWithImei) {
+            const registrationId = vehicleWithImei.registration_id;
+            notification('warning', `${registrationId}-${data.msg}`);
+            setgeofanceNotificationShown(true);
+          }
+        }
+      }
+    });
+
+    socket.on("speedAlert", (data) => {
+      if (!speednotificationShown) {
+        console.log(data, " speedAlert ");
+        let imei = data?.imei;
+        if (imei !== null) {
+          const vehicleWithImei = allVehiclesList.find(vehicle => vehicle.imei[0].mac_id == imei);
+          if (vehicleWithImei) {
+            const registrationId = vehicleWithImei.registration_id;
+            notification('warning', `${registrationId}-${data.msg}`);
+            setspeednotificationShown(true);
+          }
+        }
+      }
+    });
+  }, [allVehiclesList, geofancenotificationShown]);
+
+  const notification = (type, title, content) => {
+    NotificationManager[type](content, title, 3000);
+  };
+  //---------- alert notifications close-------------//
 
 
   // console.log(extractedData,"extracteddata")
