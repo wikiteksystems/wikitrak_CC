@@ -457,7 +457,7 @@ for (let innerK of location) {
         flexDirection: "column",
         gap: "20px",
         maxHeight: "1000px",
-        // overflowY: "scroll",
+        overflowY: "scroll",
       }}
     >
       <Box
