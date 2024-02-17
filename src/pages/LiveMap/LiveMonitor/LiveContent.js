@@ -664,7 +664,7 @@ for (let innerK of location) {
         <>
           <Box className="d-flex justify-content-center " mb={3}>
             {toggleView === "table_view" && (
-              <Card style={{ height: "auto", width: "800px" , marginTop:"100px"}}>
+              <Card style={{ height: "auto", width: "90%" , marginTop:"100px"}}>
                 {selectCheckParam.length === 0 ? (
                   <>
                    <Typography
@@ -766,7 +766,7 @@ for (let innerK of location) {
                                           <tbody>
                                             <tr
                                               style={{
-                                                border: "1px solid black",
+                                                border: `1px solid ${Theme.light_color}`,
                                               }}
                                               className="mb-3"
                                             >

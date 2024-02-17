@@ -295,8 +295,8 @@ const MultiChart = ({ graphData, setGraphData }) => {
           />
         </div>
       </div>
+      {/* This is table of min, max and avg of each selected params */}
       {/* <div style={{width:"75%", margin:'auto'}}>
-
     {paramsValues.length > 0 && (
   <TableContainer style={{border:`2px solid ${Theme.light_color}`, borderRadius:"5px"}}>
     <Table sx={{ minWidth: 650 }} aria-label="simple table">
