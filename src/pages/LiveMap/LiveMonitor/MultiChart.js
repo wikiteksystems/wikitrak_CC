@@ -103,7 +103,7 @@ const MultiChart = ({ graphData, setGraphData }) => {
   });
 
   const data = {
-    labels: slicedData.map((item) => item.Time),
+    labels: slicedData.map((item) => item.Date_Time),
     datasets: datasets,
   };
 

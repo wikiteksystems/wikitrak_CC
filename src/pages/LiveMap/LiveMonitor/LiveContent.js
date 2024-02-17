@@ -215,7 +215,6 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam , setActive, active}
           } else if (k.param_header === "NRM") {
             console.log("location packet");
             const result = await locationsApi.getImeiToReg(data);
-            console.log(result, "bhushanlocatongraph");
             if (result.status === "SUCCESS") {
               location = result.data;
               setLocationData(result.data);
@@ -258,25 +257,35 @@ const LiveContent = ({ selectCheckParam, setSelecCheckParam , setActive, active}
               }
             }
           } else if (k?.param_header === "NRM") {
-            for (let innerK of location) {
-              for (let i of innerK?.data) {
-                innerArr.push({
-                  Date: dayjs(i?.createdAt).format("YYYY-MM-DD"),
-                  // value: i[k?.label],
-                  value:
-                    i[k?.label] === true
-                      ? 1
-                      : i[k?.label] === false
-                      ? 0
-                      : i[k?.label],
-                  Time: dayjs(i?.createdAt).format("hh:mm:ss A"),
-                  label: k?.label,
-                  DateTime: dayjs(i?.createdAt).format("YYYY-MM-DD hh:mm:ss A"),
-                  // DateTime: `${dayjs(i?.createdAt).format('YYYY-MM-DD')} [${dayjs(i?.createdAt).format('hh:mm:ss A')}]`,
-                  // DateTime: `[${dayjs(i?.createdAt).format('hh:mm:ss A')}] ${dayjs(i?.createdAt).format('YYYY-MM-DD')}`,
-                });
-              }
-            }
+            let prevDate = null; // Keep track of the previous date
+for (let innerK of location) {
+    for (let i of innerK?.data) {
+        const currentDate = dayjs(i?.createdAt).format("YYYY-MM-DD");
+
+        // If the current date is different from the previous date, add the date
+        if (currentDate !== prevDate) {
+            innerArr.push({
+                Date_Time: currentDate, // Add the date only once
+                value: i[k?.label] === true ? 1 : i[k?.label] === false ? 0 : i[k?.label],
+                Time: dayjs(i?.createdAt).format("hh:mm:ss A"),
+                label: k?.label,
+                DateTime: dayjs(i?.createdAt).format("YYYY-MM-DD hh:mm:ss A"),
+            });
+            prevDate = currentDate; // Update the previous date
+        } else {
+            // If the current date is the same as the previous date, add only the time
+            innerArr.push({
+                Date_Time: dayjs(i?.createdAt).format("hh:mm:ss A"), // No need to add the date again
+                value: i[k?.label] === true ? 1 : i[k?.label] === false ? 0 : i[k?.label],
+                Time: dayjs(i?.createdAt).format("hh:mm:ss A"),
+                label: k?.label,
+                DateTime: dayjs(i?.createdAt).format("YYYY-MM-DD hh:mm:ss A"),
+            });
+        }
+    }
+}
+
+            
           }
 
           // arr.push({ data: [...innerArr, k?.label], label: k?.label });
