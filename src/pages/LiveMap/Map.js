@@ -436,39 +436,38 @@ function Map({
           </div>
         )}
         <GoogleMap
-          mapContainerStyle={containerStyle}
-          zoom={8}
-          center={center}
-          clickableIcons={false}
-          options={{
-            clickableIcons: true,
-            disableDefaultUI: true,
-            zoomControl: true,
-            mapTypeControl: true,
-            scaleControl: true,
-            minZoom: 2,
-            maxZoom: 30,
-            styles: [
-              {
-                featureType: "road",
-                stylers: [{ visibility: "off" }],
-                elementType: "geometry.stroke",
-                stylers: [{ color: "#2A324A" }],
-              },
-              {
-                featureType: "poi",
-                stylers: [{ visibility: "off" }],
-              },
-              {
-                featureType: "transit",
-                stylers: [{ visibility: "off" }],
-              },
-              {
-                featureType: "water",
-                stylers: [{ visibility: "off" }],
-              },
-            ],
-          }}
+            mapContainerStyle={containerStyle}
+            zoom={10}
+            center={center}
+            clickableIcons={false}
+            options={{
+              clickableIcons: true,
+              disableDefaultUI: true,
+              zoomControl: true,
+              mapTypeControl: true,
+              scaleControl: true,
+              minZoom: 2,
+              maxZoom: 30,
+              styles: [
+                {
+                  featureType: "road",
+                  elementType: "geometry.stroke",
+                  stylers: [{ color: "#2A324A" }],
+                },
+                {
+                  featureType: "poi",
+                  stylers: [{ visibility: "on" }], // Set visibility to "on" for points of interest
+                },
+                {
+                  featureType: "transit",
+                  stylers: [{ visibility: "on" }], // Set visibility to "on" for transit lines
+                },
+                {
+                  featureType: "water",
+                  stylers: [{ visibility: "off" }], // Set visibility to "on" for water bodies
+                },
+              ],
+            }}
         >
           {/* Uncomment the following block to display markers based on locationData */}{" "}
           *

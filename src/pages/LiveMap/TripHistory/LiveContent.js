@@ -471,13 +471,13 @@ const LiveContent = ({
               styles: [
                 {
                   featureType: "road",
-                  stylers: [{ visibility: "off" }],
+                  // stylers: [{ visibility: "off" }],
                   elementType: "geometry.stroke",
                   stylers: [{ color: "#2A324A" }],
                 },
                 {
                   featureType: "poi",
-                  stylers: [{ visibility: "off" }],
+                  stylers: [{ visibility: "on" }],
                 },
                 {
                   featureType: "transit",

@@ -270,6 +270,7 @@ const MultiChart = ({ graphData, setGraphData }) => {
           margin: "auto",
           // marginTop: !analysis && '10%',
         }}
+        ref={graphContainerRef} id="graph-container" 
       >
         <div>
           <Button
@@ -297,8 +298,8 @@ const MultiChart = ({ graphData, setGraphData }) => {
           </button>
         <Button onClick={handleDownload} style={{ background: Theme.dark_color, color: "white" }}>Download Graph</Button>
         </div>
-        {/* <div  ref={graphContainerRef} id="graph-container"  > */}
-                <Line options={options} data={data} />
+        {/* <div  ref={graphContainerRef} id="graph-container"  style={{width:"100%"}}> */}
+                <Line options={options} data={data}/>
         {/* </div> */}
         <div
           style={{
