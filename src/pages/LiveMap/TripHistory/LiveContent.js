@@ -32,6 +32,7 @@ import AccessTimeSharpIcon from '@mui/icons-material/AccessTimeSharp';
 import BoltSharpIcon from '@mui/icons-material/BoltSharp';
 import './animation.css'
 import axios from "axios";
+import { Typography } from "antd";
 const filters = {
   harshBreak: "HB",
   harshAcceleration: "HA",
@@ -155,10 +156,12 @@ const LiveContent = ({
   const [showGraph, setShowGraph] = useState(false);
   const[EndAddress, setEndAddress]= useState()
   const[startAddress, setStartAddress]= useState()
+  const [acres, setAcres] = useState()
+  const [acres_boolean, setAcresBoolean] = useState(false)
 
   useEffect(()=>{
-    console.log(speed, "speed...livecontent")
-  },[speed])
+    console.log(acres, "acres...livecontent")
+  },[acres])
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
       setCenter({
@@ -223,6 +226,7 @@ const LiveContent = ({
     console.log(selectCheckParam, "selectCheckParam...");
     setAniActive(false);
     setShowGraph(false);
+    setAcresBoolean(false)
 }, [selectCheckParam]);
 
   console.log(selectedTrip, "SSelected Trip...........")
@@ -409,6 +413,29 @@ const LiveContent = ({
             }
             </b>
           </Box>
+          <Button  onClick={(()=>{setAcresBoolean(!acres_boolean)})} style={{backdropFilter: "blur(8px)",
+                background: "#800e0e",
+              color:"white",
+              padding: "10px",
+              borderRadius: "8px",
+              marginRight: "10px",}}>
+            M1 Calculate Area
+            </Button>
+
+            {
+              acres_boolean &&
+            <Typography style={{backdropFilter: "blur(8px)",
+            background: Theme.light_color,
+            color:"white",
+            padding: "10px",
+            borderRadius: "8px",
+            marginRight: "10px",}}>
+
+             {acres ? acres.toFixed(3) : 0} acres
+            </Typography>
+            }
+            
+
        
         <Button
           aria-describedby={id}
@@ -515,6 +542,8 @@ const LiveContent = ({
                   setDistance={setDistance}
                   setSpeed={setSpeed}
                   setAniActive={setAniActive}
+                  setAcres={setAcres}
+                  acres_boolean={acres_boolean}
                 />
 
                 {harshBreak &&

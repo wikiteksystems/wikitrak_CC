@@ -213,21 +213,36 @@ function Map({
     return "red";
   };
 
-  const calculateAngleFromEast = (lat, lng) => {
-    const latRadians = (lat * Math.PI) / 180;
-    const lngRadians = (lng * Math.PI) / 180;
+  // const calculateAngleFromEast = (lat, lng) => {
+  //   const latRadians = (lat * Math.PI) / 180;
+  //   const lngRadians = (lng * Math.PI) / 180;
 
-    // Calculate the angle from the East direction in radians
-    const angleRadians = Math.atan2(latRadians, lngRadians);
+  //   // Calculate the angle from the East direction in radians
+  //   const angleRadians = Math.atan2(latRadians, lngRadians);
 
-    // Convert the angle to degrees
-    const angleDegrees = (angleRadians * 180) / Math.PI;
+  //   // Convert the angle to degrees
+  //   const angleDegrees = (angleRadians * 180) / Math.PI;
 
-    // Ensure the angle is positive and between 0 and 360 degrees
-    const positiveAngle = (angleDegrees + 360) % 360;
+  //   // Ensure the angle is positive and between 0 and 360 degrees
+  //   const positiveAngle = (angleDegrees + 360) % 360;
 
-    return positiveAngle;
-  };
+  //   return positiveAngle;
+  // };
+  const calculateAngleFromEast = (heading) => {
+    console.log(heading, 'heading')
+    // Assuming heading is in degrees
+    // Convert heading to radians
+    const headingRadians = (heading * Math.PI) / 180;
+    // Calculate the angle from the North direction clockwise
+    // Adjust for the clockwise rotation by subtracting from 90 degrees
+    const angleFromNorthClockwise = (Math.PI / 2 - headingRadians + 2 * Math.PI) % (2 * Math.PI);
+    // Convert angle to degrees
+    const angleDegrees = (angleFromNorthClockwise * 180) / Math.PI;
+    // Return the angle in degrees
+    console.log(angleDegrees , "angleDegrees..")
+    return angleDegrees;
+};
+
 
   const startblinking = (data) => {
     let today = moment();
@@ -483,7 +498,7 @@ function Map({
                   lat: parseFloat(element?.location?.lat),
                   lng: parseFloat(element?.location?.lng),
                 }}
-                animation="BOUNCE"
+                // animation="BOUNCE"
                 icon={{
                   path: icon_path,
                   fillOpacity: 2,
@@ -503,7 +518,7 @@ function Map({
                   lat: parseFloat(item.latestDocument.lat),
                   lng: parseFloat(item.latestDocument.lng),
                 }}
-                animation="BOUNCE"
+                // animation="BOUNCE"
                 icon={{
                   // path: startblinking() && "M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679q.05.242.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.8.8 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM2.906 5.189a.51.51 0 0 0 .497.731c.91-.073 3.35-.17 4.597-.17s3.688.097 4.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 11.691 3H4.309a.5.5 0 0 0-.447.276L2.906 5.19Z",
 
@@ -518,11 +533,9 @@ function Map({
                   fillOpacity: 2,
                   strokeWeight: 1,
                   // rotation: item?.latestDocument?.heading,
-                  rotation: (item?.latestDocument?.heading * 180) / Math.PI,
-                  // rotation: calculateAngleFromEast(
-                  //   item?.latestDocument?.lat,
-                  //   item?.latestDocument?.lng
-                  // ),
+                  // rotation: (item?.latestDocument?.heading * 180) / Math.PI,
+                  rotation: 90,
+                  anchor: new google.maps.Point(16, 16),
                   scale: 1,
                 }}
               >
@@ -551,7 +564,7 @@ function Map({
                   lat: parseFloat(item.latestDocument.lat),
                   lng: parseFloat(item.latestDocument.lng),
                 }}
-                animation="BOUNCE"
+                // animation="BOUNCE"
                 icon={{
                   // path: startblinking() && "M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679q.05.242.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.8.8 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM2.906 5.189a.51.51 0 0 0 .497.731c.91-.073 3.35-.17 4.597-.17s3.688.097 4.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 11.691 3H4.309a.5.5 0 0 0-.447.276L2.906 5.19Z",
                   // path:"M8 0c-.787 0-1.292.592-1.572 1.151A4.35 4.35 0 0 0 6 3v3.691l-2 1V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.191l-1.17.585A1.5 1.5 0 0 0 0 10.618V12a.5.5 0 0 0 .582.493l1.631-.272.313.937a.5.5 0 0 0 .948 0l.405-1.214 2.21-.369.375 2.253-1.318 1.318A.5.5 0 0 0 5.5 16h5a.5.5 0 0 0 .354-.854l-1.318-1.318.375-2.253 2.21.369.405 1.214a.5.5 0 0 0 .948 0l.313-.937 1.63.272A.5.5 0 0 0 16 12v-1.382a1.5 1.5 0 0 0-.83-1.342L14 8.691V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v.191l-2-1V3c0-.568-.14-1.271-.428-1.849C9.292.591 8.787 0 8 0",
@@ -598,7 +611,7 @@ function Map({
                   lat: parseFloat(item.latestDocument.lat),
                   lng: parseFloat(item.latestDocument.lng),
                 }}
-                animation="BOUNCE"
+                // animation="BOUNCE"
                 icon={{
                   // path: startblinking() && "M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679q.05.242.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.8.8 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM2.906 5.189a.51.51 0 0 0 .497.731c.91-.073 3.35-.17 4.597-.17s3.688.097 4.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 11.691 3H4.309a.5.5 0 0 0-.447.276L2.906 5.19Z",
                   // path:"M8 0c-.787 0-1.292.592-1.572 1.151A4.35 4.35 0 0 0 6 3v3.691l-2 1V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.191l-1.17.585A1.5 1.5 0 0 0 0 10.618V12a.5.5 0 0 0 .582.493l1.631-.272.313.937a.5.5 0 0 0 .948 0l.405-1.214 2.21-.369.375 2.253-1.318 1.318A.5.5 0 0 0 5.5 16h5a.5.5 0 0 0 .354-.854l-1.318-1.318.375-2.253 2.21.369.405 1.214a.5.5 0 0 0 .948 0l.313-.937 1.63.272A.5.5 0 0 0 16 12v-1.382a1.5 1.5 0 0 0-.83-1.342L14 8.691V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v.191l-2-1V3c0-.568-.14-1.271-.428-1.849C9.292.591 8.787 0 8 0",
@@ -645,7 +658,7 @@ function Map({
                   lat: parseFloat(item.latestDocument.lat),
                   lng: parseFloat(item.latestDocument.lng),
                 }}
-                animation="BOUNCE"
+                // animation="BOUNCE"
                 icon={{
                   // path: startblinking() && "M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679q.05.242.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.8.8 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM2.906 5.189a.51.51 0 0 0 .497.731c.91-.073 3.35-.17 4.597-.17s3.688.097 4.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 11.691 3H4.309a.5.5 0 0 0-.447.276L2.906 5.19Z",
                   // path:"M8 0c-.787 0-1.292.592-1.572 1.151A4.35 4.35 0 0 0 6 3v3.691l-2 1V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.191l-1.17.585A1.5 1.5 0 0 0 0 10.618V12a.5.5 0 0 0 .582.493l1.631-.272.313.937a.5.5 0 0 0 .948 0l.405-1.214 2.21-.369.375 2.253-1.318 1.318A.5.5 0 0 0 5.5 16h5a.5.5 0 0 0 .354-.854l-1.318-1.318.375-2.253 2.21.369.405 1.214a.5.5 0 0 0 .948 0l.313-.937 1.63.272A.5.5 0 0 0 16 12v-1.382a1.5 1.5 0 0 0-.83-1.342L14 8.691V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v.191l-2-1V3c0-.568-.14-1.271-.428-1.849C9.292.591 8.787 0 8 0",
@@ -659,11 +672,10 @@ function Map({
                   fillOpacity: 2,
                   strokeWeight: 1,
                   // rotation: item?.latestDocument?.heading,
-                  rotation: (item?.latestDocument?.heading * 180) / Math.PI,
-                  // rotation: calculateAngleFromEast(
-                  //   item?.latestDocument?.lat,
-                  //   item?.latestDocument?.lng
-                  // ),
+                  // rotation: (item?.latestDocument?.heading * 180) / Math.PI,
+                  rotation: calculateAngleFromEast(
+                    item?.latestDocument?.heading
+                  ),
                   scale: 1,
                 }}
               >
@@ -703,7 +715,7 @@ function Map({
                                         lat: parseFloat(item.latestDocument.lat),
                                         lng: parseFloat(item.latestDocument.lng),
                                     }}
-                                    animation="BOUNCE"
+                                    // animation="BOUNCE"
                                     icon={{
                                         path: "M29.395,0H17.636c-3.117,0-5.643,3.467-5.643,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759c3.116,0,5.644-2.527,5.644-5.644V6.584C35.037,3.467,32.511,0,29.395,0z M34.05,14.188v11.665l-2.729,0.351v-4.806L34.05,14.188z M32.618,10.773c-1.016,3.9-2.219,8.51-2.219,8.51H16.631l-2.222-8.51C14.41,10.773,23.293,7.755,32.618,10.773z M15.741,21.713v4.492l-2.73-0.349V14.502L15.741,21.713z M13.011,37.938V27.579l2.73,0.343v8.196L13.011,37.938z M14.568,40.882l2.218-3.336h13.771l2.219,3.336H14.568z M31.321,35.805v-7.872l2.729-0.355v10.048L31.321,35.805",
                                         fillColor: apiData?.imeiList.includes(
@@ -713,7 +725,7 @@ function Map({
                                             : "grey",
                                         fillOpacity: 2,
                                         strokeWeight: 1,
-                                        rotation: (item?.latestDocument?.heading * 180) / Math.PI,
+                                        rotation: calculateAngleFromEast(item?.latestDocument?.heading),
                                         scale: 1,
                                     }}
                                 >

@@ -190,18 +190,18 @@ const DetailMenu = ({
                     label: (
                       <div className="w-full flex justify-between items-center">
                         <span
-                          className="w-5/6 overflow-hidden"
+                          className="overflow-hidden scroll-smooth"
                           style={{ textOverflow: "ellipsis" }}
                           onClick={() => handleCheckboxClick(index)}
                         >
-                          {item?.startAddress?.city &&
-                          item?.startAddress?.locality
-                            ? `${item.startAddress.full_address?.split(" ").slice(0, 4).join(" ")}`
+                          {item?.startAddress?.full_address &&
+                          item?.startAddress?.full_address
+                            ? `${item.startAddress.full_address?.split(" ").slice(0, 3).join(" ")}`
                             : `${item?.startAddress?.city},${item.startAddress.locality}`}
                           &nbsp;To&nbsp;
-                          {item?.endAddress?.city &&
-                          item?.startAddress?.locality
-                            ? `${item.startAddress.full_address?.split(" ").slice(0, 4).join(" ")}`
+                          {item?.endAddress?.full_address &&
+                          item?.startAddress?.full_address
+                            ? `${item?.endAddress?.city} ${item.endAddress.full_address?.split(" ").slice(0, 3).join(" ")}`
                             : `${item?.startAddress?.city},${item.startAddress.locality}`}
                         </span>
                         {/* <span className="w-5/6 overflow-hidden" style={{textOverflow: 'ellipsis'}} >{startAddress?.locality},{startAddress?.city}  to {endAddress?.locality}, {startAddress?.city}</span> */}
