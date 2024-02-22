@@ -178,7 +178,7 @@ export default function MapLine({
   setDistance,
   setSpeed, // Include setSpeed as a prop
   setAniActive,
-  setAcres,
+  setAcresM1,
   acres_boolean,
 }) {
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -251,13 +251,13 @@ useEffect(() => {
   if(acres_boolean === true){
 
     const areaInAcres = calculateAreaInAcres(item.data);
-    setAcres(areaInAcres/4)
+    setAcresM1(areaInAcres/4)
     console.log("Area in acres:", areaInAcres/4);
   }else{
-    setAcres(0)
+    setAcresM1(0)
 
   }
-}, [item]);
+}, [acres_boolean]);
 
 
 

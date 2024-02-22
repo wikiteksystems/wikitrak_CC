@@ -4,6 +4,7 @@ import {
   useJsApiLoader,
   Marker,
   InfoWindow,
+  Polygon 
 } from "@react-google-maps/api";
 import {
   Box,
@@ -156,12 +157,88 @@ const LiveContent = ({
   const [showGraph, setShowGraph] = useState(false);
   const[EndAddress, setEndAddress]= useState()
   const[startAddress, setStartAddress]= useState()
-  const [acres, setAcres] = useState()
+  const [acresM1, setAcresM1] = useState()
   const [acres_boolean, setAcresBoolean] = useState(false)
 
+
+  const [vertices, setVertices] = useState([]);
+  const [map, setMap] = useState(null);
+  const [acresM2, setAcresM2]  = useState()
+  const [acres_booleanM2, setAcresBooleanM2] = useState(false)
+  const [polygonInstance, setPolygonInstance] = useState(null);
+
+
+  const handleMapClick = (event) => {
+      const newVertices = [...vertices, event.latLng.toJSON()];
+      console.log(newVertices, "newVertices...")
+      setVertices(newVertices);
+  };
+
+  const handlePolygonClick = (polygon) => {  
+      const areaInAcres = calculatePolygonArea(vertices);
+      setAcresM2(areaInAcres)
+      setAcresBooleanM2(true)
+      console.log('Area of polygon:', areaInAcres, 'acres');
+  };
+
+  const calculatePolygonArea = (vertices) => {
+      // Convert vertices from lat/lng to meters
+      const metersPerLatLng = 111319.9; // Approximately, at equator
+      const metersVertices = vertices.map(({ lat, lng }) => ({
+          x: lng * metersPerLatLng * Math.cos((lat * Math.PI) / 180),
+          y: lat * metersPerLatLng
+      }));
+
+      // Calculate the area using the Shoelace formula
+      let area = 0;
+      for (let i = 0; i < metersVertices.length; i++) {
+          const j = (i + 1) % metersVertices.length;
+          area += (metersVertices[j].x + metersVertices[i].x) * (metersVertices[j].y - metersVertices[i].y);
+      }
+      area = Math.abs(area) / 2; // Absolute value and divide by 2
+
+      // Convert square meters to acres
+      const squareMetersInAcre = 4046.86;
+      const areaInAcres = area / squareMetersInAcre;
+      return areaInAcres;
+  };
+
+  const onLoad = (map) => {
+    // console.log(map)
+      setMap(map);
+  };
+ 
+
+
+  const onPolygonComplete = (polygon) => {
+    const path = polygon.getPath();
+    const newVertices = path.getArray().map((latLng) => latLng.toJSON());
+    setVertices(newVertices);
+    setPolygonInstance(polygon); // Save reference to the polygon instance
+    handlePolygonClick(); // Recalculate area when the polygon is completed
+};
+
+const onPolygonUpdate = () => {
+    if (polygonInstance) {
+        const path = polygonInstance.getPath();
+        const newVertices = path.getArray().map((latLng) => latLng.toJSON());
+        setVertices(newVertices);
+        handlePolygonClick(); // Recalculate area when the polygon is updated
+    }
+};
+
   useEffect(()=>{
-    console.log(acres, "acres...livecontent")
-  },[acres])
+    console.log(vertices, "vertices...livecontent")
+
+  },[vertices])
+
+
+
+
+
+  useEffect(()=>{
+    console.log(acresM1, "acresM1...livecontent")
+  },[acresM1])
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
       setCenter({
@@ -227,6 +304,10 @@ const LiveContent = ({
     setAniActive(false);
     setShowGraph(false);
     setAcresBoolean(false)
+    setVertices([])
+    setAcresM2(0)
+    setAcresBooleanM2(false)
+
 }, [selectCheckParam]);
 
   console.log(selectedTrip, "SSelected Trip...........")
@@ -413,37 +494,88 @@ const LiveContent = ({
             }
             </b>
           </Box>
-          <Button  onClick={(()=>{setAcresBoolean(!acres_boolean)})} style={{backdropFilter: "blur(8px)",
-                background: "#800e0e",
+          <Box sx={{display:"flex", flexDirection:"column"}}>
+
+
+            <Button  onClick={(()=>{setAcresBoolean(!acres_boolean)})} 
+            style={{
+              backdropFilter: "blur(8px)",
+                  background: "#800e0e",
+                color:"white",
+                padding: "10px",
+                borderRadius: "8px",
+                marginRight: "10px",}}
+                >
+                M1 Calculate Area
+              </Button>
+
+                {
+                acres_boolean  &&
+                <Typography style={{backdropFilter: "blur(8px)",
+                background: Theme.light_color,
+                color:"white",
+                padding: "10px",
+                borderRadius: "8px",
+                // marginRight: "10px",
+                position:"absolute",
+                marginTop:"40px"
+              }}
+                >
+
+                Result M1: { acresM1.toFixed(3)  } acres
+                </Typography>
+                }
+            </Box>
+            
+             
+            <Button disabled={vertices && vertices.length > 0 ? false : true} onClick={() => { setVertices([]); setAcresM2(0); }} style={{ backdropFilter: "blur(8px)",  background: "#800e0e", color: "white", padding: "10px", borderRadius: "8px", marginRight: "10px" }}>
+            Clear Shape
+          </Button>
+
+          {
+            
+          vertices?.length>0
+          &&
+            <Box>
+            
+              <Button 
+               disabled = {vertices && vertices.length>0 ? false : true}
+              onClick={(()=>{handlePolygonClick()})} 
+              style={{backdropFilter: "blur(8px)",
+              background: "#800e0e",
               color:"white",
               padding: "10px",
               borderRadius: "8px",
-              marginRight: "10px",}}>
-            M1 Calculate Area
-            </Button>
+              marginRight: "10px",}}
+              >
+                  M2 Calculate Area
+              </Button>
+              {
+                acres_booleanM2  &&
+                <Typography style={{backdropFilter: "blur(8px)",
+                background: Theme.light_color,
+                color:"white",
+                padding: "20px",
+                borderRadius: "8px",
+                // marginRight: "10px",
+                position:"absolute",
+                // marginTop:"40px"
+              }}
+                >
 
-            {
-              acres_boolean &&
-            <Typography style={{backdropFilter: "blur(8px)",
-            background: Theme.light_color,
-            color:"white",
-            padding: "10px",
-            borderRadius: "8px",
-            marginRight: "10px",}}>
-
-             {acres ? acres.toFixed(3) : 0} acres
-            </Typography>
-            }
-            
-
+                Result M2: {acresM2.toFixed(3) } acres
+                </Typography>
+                }
+            </Box>
+          }
        
         <Button
           aria-describedby={id}
           style={{
-            background: ThemeColor.light_color_2,
+            background: "#800e0e",
             color: 'white',
             fontSize: '12px',
-            width: '100px',
+            width: '115px',
           }}
           onClick={handleClick}
         >
@@ -516,7 +648,31 @@ const LiveContent = ({
                 },
               ],
             }}
+            // onClick={(event) => console.log(event.latLng.toJSON())} // Handle click event to capture vertices
+            onClick={handleMapClick}
+            onLoad={onLoad}
           >
+              {map && (
+                <Polygon
+                    path={vertices}
+                    onDragEnd={onPolygonUpdate} // Recalculate area when polygon is dragged
+                    onMouseUp={onPolygonUpdate} // Recalculate area when polygon is edited
+                    options={{
+                        fillColor: '#00FF00',
+                        fillOpacity: 0.35,
+                        strokeColor: '#000',
+                        strokeOpacity: 1,
+                        strokeWeight: 2,
+                        draggable: true,
+                        editable: true,
+                        zIndex: 1
+                    }}
+                    onLoad={(polygon) => {
+                        map.polygon = polygon; // Save reference to the polygon
+                        onPolygonComplete(polygon);
+                    }}
+                />
+            )}
             {selectCheckParam.map((item, index) => (
               <>
                 <Marker
@@ -542,7 +698,7 @@ const LiveContent = ({
                   setDistance={setDistance}
                   setSpeed={setSpeed}
                   setAniActive={setAniActive}
-                  setAcres={setAcres}
+                  setAcresM1={setAcresM1}
                   acres_boolean={acres_boolean}
                 />
 
