@@ -4,6 +4,7 @@ import {
   useJsApiLoader,
   Marker,
   InfoWindow,
+  Polygon,
 } from "@react-google-maps/api";
 import {
   Box,
@@ -25,13 +26,14 @@ import html2canvas from "html2canvas";
 import { GMAP_API_KEY, Theme, ThemeColor } from "../../../utils/constants";
 import "./animation.css";
 import MultiChart from "./MultiChart";
-import MovingIcon from '@mui/icons-material/Moving';
-import SpeedIcon from '@mui/icons-material/Speed';
-import SettingsPowerIcon from '@mui/icons-material/SettingsPower';
-import AccessTimeSharpIcon from '@mui/icons-material/AccessTimeSharp';
-import BoltSharpIcon from '@mui/icons-material/BoltSharp';
-import './animation.css'
+import MovingIcon from "@mui/icons-material/Moving";
+import SpeedIcon from "@mui/icons-material/Speed";
+import SettingsPowerIcon from "@mui/icons-material/SettingsPower";
+import AccessTimeSharpIcon from "@mui/icons-material/AccessTimeSharp";
+import BoltSharpIcon from "@mui/icons-material/BoltSharp";
+import "./animation.css";
 import axios from "axios";
+import { Typography } from "antd";
 const filters = {
   harshBreak: "HB",
   harshAcceleration: "HA",
@@ -118,11 +120,12 @@ const LiveContent = ({
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${totalDistance} km</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${maxVoltage}</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${minVoltage}</td>
-            <td style="border: 1px solid black; padding: 8px; text-align: center;">${travelTime.hours
-      } hours ${travelTime.minutes} minutes</td>
+            <td style="border: 1px solid black; padding: 8px; text-align: center;">${
+              travelTime.hours
+            } hours ${travelTime.minutes} minutes</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">${averageSpeed.toFixed(
-        2
-      )} km/h</td>
+              2
+            )} km/h</td>
             <td style="border: 1px solid black; padding: 8px; text-align: center;">TBD</td>
           </tr>
         </tbody>
@@ -153,12 +156,86 @@ const LiveContent = ({
   const [graphData, setGraphData] = useState([]);
   const [multiTrip, setMultiTrip] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
-  const[EndAddress, setEndAddress]= useState()
-  const[startAddress, setStartAddress]= useState()
+  const [EndAddress, setEndAddress] = useState();
+  const [startAddress, setStartAddress] = useState();
+  const [acresM1, setAcresM1] = useState();
+  const [acres_boolean, setAcresBoolean] = useState(false);
 
-  useEffect(()=>{
-    console.log(speed, "speed...livecontent")
-  },[speed])
+  const [vertices, setVertices] = useState([]);
+  const [map, setMap] = useState(null);
+  const [acresM2, setAcresM2] = useState();
+  const [acres_booleanM2, setAcresBooleanM2] = useState(false);
+  const [polygonInstance, setPolygonInstance] = useState(null);
+
+  const handleMapClick = (event) => {
+    if (vertices.length <= 2) {
+      const newVertices = [...vertices, event.latLng.toJSON()];
+      console.log(newVertices, "newVertices...");
+      setVertices(newVertices);
+     
+    }
+  };
+
+  const handlePolygonClick = (polygon) => {
+    const areaInAcres = calculatePolygonArea(vertices);
+    setAcresM2(areaInAcres);
+    setAcresBooleanM2(true);
+    console.log("Area of polygon:", areaInAcres, "acres");
+  };
+
+  const calculatePolygonArea = (vertices) => {
+    // Convert vertices from lat/lng to meters
+    const metersPerLatLng = 111319.9; // Approximately, at equator
+    const metersVertices = vertices.map(({ lat, lng }) => ({
+      x: lng * metersPerLatLng * Math.cos((lat * Math.PI) / 180),
+      y: lat * metersPerLatLng,
+    }));
+
+    // Calculate the area using the Shoelace formula
+    let area = 0;
+    for (let i = 0; i < metersVertices.length; i++) {
+      const j = (i + 1) % metersVertices.length;
+      area +=
+        (metersVertices[j].x + metersVertices[i].x) *
+        (metersVertices[j].y - metersVertices[i].y);
+    }
+    area = Math.abs(area) / 2; // Absolute value and divide by 2
+
+    // Convert square meters to acres
+    const squareMetersInAcre = 4046.86;
+    const areaInAcres = area / squareMetersInAcre;
+    return areaInAcres;
+  };
+
+  const onLoad = (map) => {
+    // console.log(map)
+    setMap(map);
+  };
+
+  const onPolygonComplete = (polygon) => {
+    const path = polygon.getPath();
+    const newVertices = path.getArray().map((latLng) => latLng.toJSON());
+    setVertices(newVertices);
+    setPolygonInstance(polygon); // Save reference to the polygon instance
+    handlePolygonClick(); // Recalculate area when the polygon is completed
+  };
+
+  const onPolygonUpdate = () => {
+    if (polygonInstance) {
+      const path = polygonInstance.getPath();
+      const newVertices = path.getArray().map((latLng) => latLng.toJSON());
+      setVertices(newVertices);
+      handlePolygonClick(); // Recalculate area when the polygon is updated
+    }
+  };
+
+  useEffect(() => {
+    console.log(vertices, "vertices...livecontent");
+  }, [vertices]);
+
+  useEffect(() => {
+    console.log(acresM1, "acresM1...livecontent");
+  }, [acresM1]);
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
       setCenter({
@@ -169,9 +246,9 @@ const LiveContent = ({
     }
   }, [selectCheckParam]);
 
-  useEffect(() => {
-    console.log(graphData[0]?.data?.length, "graphData....");
-  }, [graphData]);
+  // useEffect(() => {
+  //   console.log(graphData[0]?.data?.length, "graphData....");
+  // }, [graphData]);
   const getColor = () => {
     // Generate random intensity values for red, green, and blue components
     const red = Math.floor(Math.random() * 128); // 0-127
@@ -179,53 +256,61 @@ const LiveContent = ({
     const blue = Math.floor(Math.random() * 128); // 0-127
 
     // Convert the RGB components to a hexadecimal color code
-    const color = '#' + Math.floor(Math.random()*16777215).toString(16);;
+    const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
 
     return color;
-};
+  };
 
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
-        const speedData = selectCheckParam[0]?.data.map((item) => ({
-            Date: item.createdAt.substring(0, 10), // Extracting date part
-            Time: item.createdAt.substring(11, 23), // Extracting time part
-            value: item.speed,
-        }));
+      const speedData = selectCheckParam[0]?.data.map((item) => ({
+        Date: item.createdAt.substring(0, 10), // Extracting date part
+        Time: item.createdAt.substring(11, 23), // Extracting time part
+        value: item.speed,
+      }));
 
-        const voltageData = selectCheckParam[0]?.data.map((item) => ({
-            Date: item.createdAt.substring(0, 10), // Extracting date part
-            Time: item.createdAt.substring(11, 23), // Extracting time part
-            value: item.mainInputVoltage,
-        }));
-        const ignition = selectCheckParam[0]?.data.map((item) => ({
-            Date: item.createdAt.substring(0, 10), // Extracting date part
-            Time: item.createdAt.substring(11, 23), // Extracting time part
-            value: item.ignition,
-        }));
+      const voltageData = selectCheckParam[0]?.data.map((item) => ({
+        Date: item.createdAt.substring(0, 10), // Extracting date part
+        Time: item.createdAt.substring(11, 23), // Extracting time part
+        value: item.mainInputVoltage,
+      }));
+      const ignition = selectCheckParam[0]?.data.map((item) => ({
+        Date: item.createdAt.substring(0, 10), // Extracting date part
+        Time: item.createdAt.substring(11, 23), // Extracting time part
+        value: item.ignition,
+      }));
 
-        console.log(speedData, "speedData.."); // Logging speedData for debugging
-        console.log(voltageData, "voltageData.."); // Logging voltageData for debugging
-        console.log(ignition, "ignition.."); // Logging voltageData for debugging
+      // console.log(speedData, "speedData.."); // Logging speedData for debugging
+      // console.log(voltageData, "voltageData.."); // Logging voltageData for debugging
+      // console.log(ignition, "ignition.."); // Logging voltageData for debugging
 
-        // Update the state with the new data
-       
-        setGraphData([
-            { data: [...speedData], label: "Speed",randomColor: getColor() },
-            { data: [...voltageData], label: "MainInputVoltage",randomColor: getColor() },
-            { data: [...ignition], label: "Ignition",randomColor: getColor() }
-        ]);
+      // Update the state with the new data
+
+      setGraphData([
+        { data: [...speedData], label: "Speed", randomColor: getColor() },
+        {
+          data: [...voltageData],
+          label: "MainInputVoltage",
+          randomColor: getColor(),
+        },
+        { data: [...ignition], label: "Ignition", randomColor: getColor() },
+      ]);
     } else {
-        // Handle the case when selectCheckParam is empty
-        // Reset the graph data if necessary
-        setGraphData([]);
+      // Handle the case when selectCheckParam is empty
+      // Reset the graph data if necessary
+      setGraphData([]);
     }
 
-    console.log(selectCheckParam, "selectCheckParam...");
+    // console.log(selectCheckParam, "selectCheckParam...");
     setAniActive(false);
     setShowGraph(false);
-}, [selectCheckParam]);
+    setAcresBoolean(false);
+    setVertices([]);
+    setAcresM2(0);
+    setAcresBooleanM2(false);
+  }, [selectCheckParam]);
 
-  console.log(selectedTrip, "SSelected Trip...........")
+  console.log(selectedTrip, "SSelected Trip...........");
 
   useEffect(() => {
     const calculateSpeed = () => {
@@ -245,9 +330,9 @@ const LiveContent = ({
 
   const handleSelectTrip = (trip) => {
     setSelectedTrip(trip); // Set selected trip
-    setMultiTrip(prevState => [...prevState, trip]); // Add trip to multiTrip array
+    setMultiTrip((prevState) => [...prevState, trip]); // Add trip to multiTrip array
   };
-  console.log(multiTrip, "multitripp....................")
+  // console.log(multiTrip, "multitripp....................");
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -270,25 +355,24 @@ const LiveContent = ({
   const id = open ? "simple-popover" : undefined;
 
   const toggleInfoWindow = (markerId) => {
-    console.log(markerId, "markerId...")
-    console.log(selectedMarker, "selectedMarker...")
+    // console.log(markerId, "markerId...");
+    // console.log(selectedMarker, "selectedMarker...");
     if (selectedMarker === markerId) {
       setSelectedMarker(null);
     } else {
       setSelectedMarker(markerId);
     }
   };
-  const showLastInfo = ()=>{
-    setLastInfo(!showLast_info)
-
-  }
+  const showLastInfo = () => {
+    setLastInfo(!showLast_info);
+  };
   const getStartAddress = async (lat, lng) => {
     try {
       const result = await axios(
         `${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`
       );
-      console.log(result.data?.data, "result.data?.data..")
-      setStartAddress(result.data?.data)
+      // console.log(result.data?.data, "result.data?.data..");
+      setStartAddress(result.data?.data);
       return result.data?.data;
     } catch (err) {
       console.log(err);
@@ -300,14 +384,13 @@ const LiveContent = ({
       const result = await axios(
         `${process.env.REACT_APP_API3_URL}/ccServer/location/getAddressFromCoordinates?lat=${lat}&lng=${lng}`
       );
-      setEndAddress(result.data?.data)
+      setEndAddress(result.data?.data);
       return result.data?.data;
     } catch (err) {
       console.log(err);
       return null;
     }
   };
-
 
   return isLoaded ? (
     <Box
@@ -317,9 +400,7 @@ const LiveContent = ({
         flexDirection: "row",
       }}
     >
-      {
-        selectCheckParam.length > 0 &&
-
+      {selectCheckParam.length > 0 && (
         <Box
           sx={{
             position: "absolute",
@@ -346,26 +427,29 @@ const LiveContent = ({
               padding: "10px",
               borderRadius: "8px",
               marginRight: "10px",
-              color:"white",
-              
+              color: "white",
             }}
           >
-             <MovingIcon />{"  "}
+            <MovingIcon />
+            {"  "}
             <b>
-              Total Distance: {distance ? `${(distance / 1000).toFixed(2)} km` : "Calculating..."}
+              Total Distance:{" "}
+              {distance
+                ? `${(distance / 1000).toFixed(2)} km`
+                : "Calculating..."}
             </b>
           </Box>
           <Box
             sx={{
               backdropFilter: "blur(8px)",
               background: Theme.light_color,
-              color:"white",
+              color: "white",
               padding: "10px",
               borderRadius: "8px",
               marginRight: "10px",
             }}
           >
-             <SpeedIcon />
+            <SpeedIcon />
             <b className="ms-3">
               Speed: {speed !== null ? `${speed} km/h` : "Loading..."}
             </b>
@@ -374,7 +458,7 @@ const LiveContent = ({
             sx={{
               backdropFilter: "blur(8px)",
               background: Theme.light_color,
-              color:"white",
+              color: "white",
               padding: "10px",
               borderRadius: "8px",
               marginRight: "10px",
@@ -383,11 +467,11 @@ const LiveContent = ({
             <SettingsPowerIcon />
             <b className="ms-3">
               Ignition:{" "}
-              {selectCheckParam  && selectCheckParam[0].data.length > 0
-                && selectCheckParam[0]?.data[0]?.ignition
-                  ? "On"
-                  : "Off"
-               }
+              {selectCheckParam &&
+              selectCheckParam[0].data.length > 0 &&
+              selectCheckParam[0]?.data[0]?.ignition
+                ? "On"
+                : "Off"}
             </b>
           </Box>
 
@@ -395,52 +479,146 @@ const LiveContent = ({
             sx={{
               backdropFilter: "blur(8px)",
               background: Theme.light_color,
-              color:"white",
+              color: "white",
               padding: "10px",
               borderRadius: "8px",
               marginRight: "10px",
             }}
           >
             <BoltSharpIcon />
-            <b className="ms-3">Battery Voltage:
-            
-            {selectCheckParam  && selectCheckParam[0].data.length > 0
-                && selectCheckParam[0]?.data[0]?.mainInputVoltage
-            }
+            <b className="ms-3">
+              Battery Voltage:
+              {selectCheckParam &&
+                selectCheckParam[0].data.length > 0 &&
+                selectCheckParam[0]?.data[0]?.mainInputVoltage}
             </b>
           </Box>
-       
-        <Button
-          aria-describedby={id}
-          style={{
-            background: ThemeColor.light_color_2,
-            color: 'white',
-            fontSize: '12px',
-            width: '100px',
-          }}
-          onClick={handleClick}
-        >
-          Playback
-          {!aniActive ? (
-          <div onClick={() => setAniActive(true)} className="ps-1 pb-1">
-            <PlayCircleIcon sx={{ fontSize: '25px', cursor: 'pointer' }} />
-          </div>
-        ) : (
-          <div onClick={() => setAniActive(false)} className="ps-1 pb-1">
-            <PauseCircleIcon sx={{ fontSize: '25px', cursor: 'pointer' }} />
-          </div>
-        )}
-        </Button>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Button
+              onClick={() => {
+                setAcresBoolean(!acres_boolean);
+              }}
+              style={{
+                backdropFilter: "blur(8px)",
+                background: "#800e0e",
+                color: "white",
+                padding: "10px",
+                borderRadius: "8px",
+                marginRight: "10px",
+              }}
+            >
+              M1 Calculate Area
+            </Button>
 
-        <Button style={{
-          background: "#800e0e",
-          color: 'white',
-          marginLeft:"8px"
-        }} onClick={()=>{setShowGraph(!showGraph)}}>{!showGraph ? 'Show Graph' : "Hide Graph"}</Button>
-        
+            {acres_boolean && (
+              <Typography
+                style={{
+                  backdropFilter: "blur(8px)",
+                  background: Theme.light_color,
+                  color: "white",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  // marginRight: "10px",
+                  position: "absolute",
+                  marginTop: "40px",
+                }}
+              >
+                Result M1: {acresM1.toFixed(3)} acres
+              </Typography>
+            )}
+          </Box>
 
+          <Button
+            disabled={vertices && vertices.length > 0 ? false : true}
+            onClick={() => {
+              setVertices([]);
+              setAcresM2(0);
+            }}
+            style={{
+              backdropFilter: "blur(8px)",
+              background: "#800e0e",
+              color: "white",
+              padding: "10px",
+              borderRadius: "8px",
+              marginRight: "10px",
+            }}
+          >
+            Clear Shape
+          </Button>
+
+          {vertices?.length > 0 && (
+            <Box>
+              <Button
+                disabled={vertices && vertices.length > 0 ? false : true}
+                onClick={() => {
+                  handlePolygonClick();
+                }}
+                style={{
+                  backdropFilter: "blur(8px)",
+                  background: "#800e0e",
+                  color: "white",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  marginRight: "10px",
+                }}
+              >
+                M2 Calculate Area
+              </Button>
+              {acres_booleanM2 && (
+                <Typography
+                  style={{
+                    backdropFilter: "blur(8px)",
+                    background: Theme.light_color,
+                    color: "white",
+                    padding: "20px",
+                    borderRadius: "8px",
+                    // marginRight: "10px",
+                    position: "absolute",
+                    // marginTop:"40px"
+                  }}
+                >
+                  Result M2: {acresM2.toFixed(3)} acres
+                </Typography>
+              )}
+            </Box>
+          )}
+
+          <Button
+            aria-describedby={id}
+            style={{
+              background: "#800e0e",
+              color: "white",
+              fontSize: "12px",
+              width: "115px",
+            }}
+            onClick={handleClick}
+          >
+            Playback
+            {!aniActive ? (
+              <div onClick={() => setAniActive(true)} className="ps-1 pb-1">
+                <PlayCircleIcon sx={{ fontSize: "25px", cursor: "pointer" }} />
+              </div>
+            ) : (
+              <div onClick={() => setAniActive(false)} className="ps-1 pb-1">
+                <PauseCircleIcon sx={{ fontSize: "25px", cursor: "pointer" }} />
+              </div>
+            )}
+          </Button>
+
+          <Button
+            style={{
+              background: "#800e0e",
+              color: "white",
+              marginLeft: "8px",
+            }}
+            onClick={() => {
+              setShowGraph(!showGraph);
+            }}
+          >
+            {!showGraph ? "Show Graph" : "Hide Graph"}
+          </Button>
         </Box>
-      }
+      )}
       {selectCheckParam && selectCheckParam.length > 0 ? (
         <Box
           sx={{
@@ -471,13 +649,13 @@ const LiveContent = ({
               styles: [
                 {
                   featureType: "road",
-                  stylers: [{ visibility: "off" }],
+                  // stylers: [{ visibility: "off" }],
                   elementType: "geometry.stroke",
                   stylers: [{ color: "#2A324A" }],
                 },
                 {
                   featureType: "poi",
-                  stylers: [{ visibility: "off" }],
+                  stylers: [{ visibility: "on" }],
                 },
                 {
                   featureType: "transit",
@@ -489,14 +667,39 @@ const LiveContent = ({
                 },
               ],
             }}
+            // onClick={(event) => console.log(event.latLng.toJSON())} // Handle click event to capture vertices
+            onClick={handleMapClick}
+            onLoad={onLoad}
           >
+            {map && (
+              <Polygon
+                path={vertices}
+                onDragEnd={onPolygonUpdate} // Recalculate area when polygon is dragged
+                onMouseUp={onPolygonUpdate} // Recalculate area when polygon is edited
+                options={{
+                  fillColor: "#800e0e",
+                  fillOpacity: 0.35,
+                  strokeColor: "#000",
+                  strokeOpacity: 1,
+                  strokeWeight:2,
+                  draggable: true,
+                  editable: true,
+                  zIndex: 1,
+                  scale:5
+                }}
+                onLoad={(polygon) => {
+                  map.polygon = polygon; // Save reference to the polygon
+                  onPolygonComplete(polygon);
+                }}
+              />
+            )}
             {selectCheckParam.map((item, index) => (
               <>
                 <Marker
                   key={index}
                   onClick={() => {
-                    toggleInfoWindow(index)
-                    getStartAddress(item?.data[0]?.lat, item?.data[0]?.lng)
+                    toggleInfoWindow(index);
+                    getStartAddress(item?.data[0]?.lat, item?.data[0]?.lng);
                   }}
                   position={{
                     lat: parseFloat(item?.data[0]?.lat),
@@ -515,6 +718,8 @@ const LiveContent = ({
                   setDistance={setDistance}
                   setSpeed={setSpeed}
                   setAniActive={setAniActive}
+                  setAcresM1={setAcresM1}
+                  acres_boolean={acres_boolean}
                 />
 
                 {harshBreak &&
@@ -586,9 +791,12 @@ const LiveContent = ({
 
                 <Marker
                   key={index}
-                  onClick={()=>{
-                    showLastInfo()
-                    getEndAddress(item?.data[item?.data.length - 1]?.lat,item?.data[item?.data.length - 1]?.lng)
+                  onClick={() => {
+                    showLastInfo();
+                    getEndAddress(
+                      item?.data[item?.data.length - 1]?.lat,
+                      item?.data[item?.data.length - 1]?.lng
+                    );
                   }}
                   position={{
                     lat: parseFloat(item?.data[item?.data.length - 1]?.lat),
@@ -597,55 +805,69 @@ const LiveContent = ({
                   animation="BOUNCE"
                 />
 
-{selectedMarker === index && (
-    <InfoWindow
-        key={index}
-        position={{
-            lat: parseFloat(item?.data[0]?.lat),
-            lng: parseFloat(item?.data[0]?.lng),
-        }}
-        onCloseClick={() => setSelectedMarker(null)}
-        options={{ maxWidth: 300 }}
-        visible={selectedMarker === index}
-    >
-        <div>
-          <div>
-            {/* <AccessTimeSharpIcon /> */}
-            <b style={{fontSize:15, fontWeight:600}}>Start Date&Time: </b> {new Date(item?.data[0]?.createdAt.slice(0, 16)).toLocaleString()}
+                {selectedMarker === index && (
+                  <InfoWindow
+                    key={index}
+                    position={{
+                      lat: parseFloat(item?.data[0]?.lat),
+                      lng: parseFloat(item?.data[0]?.lng),
+                    }}
+                    onCloseClick={() => setSelectedMarker(null)}
+                    options={{ maxWidth: 300 }}
+                    visible={selectedMarker === index}
+                  >
+                    <div>
+                      <div>
+                        {/* <AccessTimeSharpIcon /> */}
+                        <b style={{ fontSize: 15, fontWeight: 600 }}>
+                          Start Date&Time:{" "}
+                        </b>{" "}
+                        {new Date(
+                          item?.data[0]?.createdAt.slice(0, 16)
+                        ).toLocaleString()}
+                      </div>
 
-          </div>
-          
-          <div>
-          <b style={{fontSize:15, fontWeight:600}}>Start Address: </b>
-            {startAddress?.full_address}
-          </div>
-           
-        </div>
-    </InfoWindow>
-)}
-{showLast_info && ( 
-    <InfoWindow
-        key={index}
-        position={{
-            lat: parseFloat(item?.data[item?.data?.length - 1]?.lat),
-            lng: parseFloat(item?.data[item?.data?.length - 1]?.lng),
-        }}
-        onCloseClick={() => showLastInfo()} // Call showLastInfo function here
-        options={{ maxWidth: 300 }}
-        // visible={selectedMarker === index} 
-    >
-        <div>
-            
-            <div>
-                <b style={{ fontSize: 15, fontWeight: 600 }}>End Date&Time: </b> {new Date(item?.data[item?.data.length - 1]?.createdAt.slice(0, 16)).toLocaleString()}
-            </div>
-            <div>
-            <b style={{ fontSize: 15, fontWeight: 600 }}>End Address: </b>
-            {EndAddress?.full_address}
-            </div>
-        </div>
-    </InfoWindow>
-)}
+                      <div>
+                        <b style={{ fontSize: 15, fontWeight: 600 }}>
+                          Start Address:{" "}
+                        </b>
+                        {startAddress?.full_address}
+                      </div>
+                    </div>
+                  </InfoWindow>
+                )}
+                {showLast_info && (
+                  <InfoWindow
+                    key={index}
+                    position={{
+                      lat: parseFloat(item?.data[item?.data?.length - 1]?.lat),
+                      lng: parseFloat(item?.data[item?.data?.length - 1]?.lng),
+                    }}
+                    onCloseClick={() => showLastInfo()} // Call showLastInfo function here
+                    options={{ maxWidth: 300 }}
+                    // visible={selectedMarker === index}
+                  >
+                    <div>
+                      <div>
+                        <b style={{ fontSize: 15, fontWeight: 600 }}>
+                          End Date&Time:{" "}
+                        </b>{" "}
+                        {new Date(
+                          item?.data[item?.data.length - 1]?.createdAt.slice(
+                            0,
+                            16
+                          )
+                        ).toLocaleString()}
+                      </div>
+                      <div>
+                        <b style={{ fontSize: 15, fontWeight: 600 }}>
+                          End Address:{" "}
+                        </b>
+                        {EndAddress?.full_address}
+                      </div>
+                    </div>
+                  </InfoWindow>
+                )}
               </>
             ))}
           </GoogleMap>
@@ -656,9 +878,10 @@ const LiveContent = ({
                 ignitionData={selectedTrip.data.map((item) => item.ignition)} // Pass ignition data of the selected trip
               />
             )} */}
-            {(graphData[0]?.data?.length > 0 && showGraph)&& <MultiChart item={graphData} />}
+            {graphData[0]?.data?.length > 0 && showGraph && (
+              <MultiChart item={graphData} />
+            )}
           </div>
-
         </Box>
       ) : (
         <Box
