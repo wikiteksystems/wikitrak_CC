@@ -78,23 +78,19 @@ const DetailMenu = ({
     setSearchedMenuList([...tripHis]);
   }, [tripHis]);
 
-  const handleCheckboxClick = (e, selectType, index) => {
-    if (selectType === "select-one") {
-      const list = searchedMenuList.map((item, innerIndex) =>
-        index === innerIndex
-          ? {
-              ...item,
-              checked: e.target.checked,
-            }
-          : { ...item ,
-            checked: false}
-      );
-
-      setSearchedMenuList(list);
-
-      let a = list.filter((item) => item?.checked);
-      setSelecCheckParam(a);
-    }
+  const handleCheckboxClick = (index) => {
+    const list = searchedMenuList.map((item, innerIndex) => {
+      const isChecked = index === innerIndex;
+      return {
+        ...item,
+        checked: isChecked,
+      };
+    });
+  
+    setSearchedMenuList(list);
+  
+    let a = list.filter((item) => item?.checked);
+    setSelecCheckParam(a);
   };
 
   return (
@@ -176,7 +172,7 @@ const DetailMenu = ({
                 flexGrow: 1,
                 height:'70vh',
               }}
-              selectable={false}
+              selectable={true}
                 items={
                   loading
                       ? [
@@ -194,26 +190,27 @@ const DetailMenu = ({
                     label: (
                       <div className="w-full flex justify-between items-center">
                         <span
-                          className="w-5/6 overflow-hidden"
+                          className="overflow-hidden scroll-smooth"
                           style={{ textOverflow: "ellipsis" }}
+                          onClick={() => handleCheckboxClick(index)}
                         >
-                          {item?.startAddress?.city &&
-                          item?.startAddress?.locality
-                            ? `${item.startAddress.city},${item.startAddress.locality}`
-                            : `${item?.startAddress?.city},${item.startAddress.locality}`}
+                          {item?.startAddress?.full_address &&
+                          item?.startAddress?.full_address
+                            ? `${item.startAddress.full_address?.split(" ").slice(0, 3).join(" ")}`
+                            : `${item?.startAddress?.city},${item.startAddress?.locality}`}
                           &nbsp;To&nbsp;
-                          {item?.endAddress?.city &&
-                          item?.startAddress?.locality
-                            ? `${item.endAddress.city},${item.endAddress.locality} `
-                            : `${item?.startAddress?.city},${item.startAddress.locality}`}
+                          {item?.endAddress?.full_address &&
+                          item?.startAddress?.full_address
+                            ? `${item?.endAddress?.city} ${item.endAddress.full_address?.split(" ").slice(0, 3).join(" ")}`
+                            : `${item?.startAddress?.city},${item.startAddress?.locality}`}
                         </span>
                         {/* <span className="w-5/6 overflow-hidden" style={{textOverflow: 'ellipsis'}} >{startAddress?.locality},{startAddress?.city}  to {endAddress?.locality}, {startAddress?.city}</span> */}
-                        <Checkbox
+                        {/* <Checkbox
                           checked={item.checked}
                           onClick={(e) =>
                             handleCheckboxClick(e, "select-one", index)
                           }
-                        />
+                        /> */}
                       </div>
                     ),
                   };
