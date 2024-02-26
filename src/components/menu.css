@@ -16,3 +16,7 @@
     color: white;
 
 }
+:where(.css-17a39f8).ant-menu-dark .ant-menu-item-selected{
+    background-color: #0C356A;
+    color: white;
+}
