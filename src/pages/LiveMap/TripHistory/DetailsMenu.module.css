@@ -1,0 +1,16 @@
+
+
+:where(.css-dev-only-do-not-override-17a39f8).ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover{
+    background-color: red;
+}
+
+:where(.css-dev-only-do-not-override-17a39f8).ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):active{
+    background-color: green;
+}
+
+:where(.css-dev-only-do-not-override-17a39f8).ant-menu-light .ant-menu-item-selected{
+    background-color: green;
+    color: white;
+
+}
+/* testing */
