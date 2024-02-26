@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { notification } from "../../../utils";
 import { Line } from "react-chartjs-2";
 import Analytics from "./Analytics.js";
 import RangeFilter from "./RangeFilter";
-import html2canvas from 'html2canvas';
 
 import {
   Chart,
@@ -47,7 +46,6 @@ const MultiChart = ({ graphData, setGraphData }) => {
 
   const [isEqu, setEqu] = useState(false);
   const [paramsValues, setParamsValues] = useState([]);
-  const graphContainerRef = useRef(null);
 
   useEffect(() => {
     console.log(graphData, typeof graphData, "in multi chart");
@@ -233,21 +231,6 @@ const MultiChart = ({ graphData, setGraphData }) => {
   useEffect(() => {
     console.log(paramsValues, "paramsValues");
   }, [paramsValues]);
-
-
-
-  const handleDownload = () => {
-      if (graphContainerRef.current) {
-          html2canvas(graphContainerRef.current).then(canvas => {
-              const imageData = canvas.toDataURL('image/png');
-              const downloadLink = document.createElement('a');
-              downloadLink.href = imageData;
-              downloadLink.download = 'graph.png';
-              downloadLink.click();
-          });
-      }
-  };
-
   return (
     <>
       {analysis && (
@@ -268,9 +251,7 @@ const MultiChart = ({ graphData, setGraphData }) => {
           justifyContent: "center",
           borderRadius: "5px",
           margin: "auto",
-          // marginTop: !analysis && '10%',
         }}
-        ref={graphContainerRef} id="graph-container" 
       >
         <div>
           <Button
@@ -296,11 +277,8 @@ const MultiChart = ({ graphData, setGraphData }) => {
           >
             Export Data
           </button>
-        <Button onClick={handleDownload} style={{ background: Theme.dark_color, color: "white" }}>Download Graph</Button>
         </div>
-        {/* <div  ref={graphContainerRef} id="graph-container"  style={{width:"100%"}}> */}
-                <Line options={options} data={data}/>
-        {/* </div> */}
+        <Line options={options} data={data} />
         <div
           style={{
             display: "flex",

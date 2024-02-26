@@ -177,9 +177,7 @@ export default function MapLine({
   distance,
   setDistance,
   setSpeed, // Include setSpeed as a prop
-  setAniActive,
-  setAcresM1,
-  acres_boolean,
+  setAniActive
 }) {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [directions, setDirections] = useState(null);
@@ -189,81 +187,11 @@ export default function MapLine({
   const [speedAtPoint, setSpeedAtPoint] = useState([]);
   const [totalDistance, setTotalDistance] = useState(0); // State variable to store total distance
   const [startToEndPath, setStartToEndPath] = useState([]); // Path from start to end location
-  // const [startToCurrentPath, setStartToCurrentPath] = useState([]); // Path from start to current location
-
-
-  function calculateAreaInAcres(coordinates) {
-    console.log(coordinates, "coordinates..")
-    if (!coordinates || coordinates.length < 3) {
-        console.error("Invalid or insufficient coordinates provided.");
-        return 0;
-    }
-
-    const toRadians = (angle) => angle * (Math.PI / 180);
-
-    // Function to calculate the haversine distance
-    const haversineDistance = (lat1, lon1, lat2, lon2) => {
-        const R = 6371e3; // Earth radius in meters
-        const φ1 = toRadians(lat1);
-        const φ2 = toRadians(lat2);
-        const Δφ = toRadians(lat2 - lat1);
-        const Δλ = toRadians(lon2 - lon1);
-
-        const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-                  Math.cos(φ1) * Math.cos(φ2) *
-                  Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return R * c;
-    };
-
-    let area = 0;
-
-    // Calculate the area using the coordinates
-    for (let i = 0; i < coordinates.length - 1; i++) {
-        const lat1 = coordinates[i].lat;
-        const lon1 = coordinates[i].lng;
-        const lat2 = coordinates[i + 1].lat;
-        const lon2 = coordinates[i + 1].lng;
-
-        // Calculate the haversine distance between consecutive points
-        const distance = haversineDistance(lat1, lon1, lat2, lon2);
-        // console.log(distance, "distance..")
-
-        // Calculate the area contribution of the current segment
-        area += lat1 * lon2 - lon1 * lat2 + lon1 * lat2 - lat1 * lon2 + lat1 * lon2;
-    }
-
-    // Calculate the absolute value of the area
-    area = Math.abs(area) / 2;
-
-    // Convert square meters to acres
-    const areaInAcres = area * 0.000247105;
-
-    return areaInAcres;
-}
-
-
-
-useEffect(() => {
-
-  if(acres_boolean === true){
-
-    const areaInAcres = calculateAreaInAcres(item.data);
-    setAcresM1(areaInAcres/4)
-    console.log("Area in acres:", areaInAcres/4);
-  }else{
-    setAcresM1(0)
-
-  }
-}, [acres_boolean]);
-
-
+  const [startToCurrentPath, setStartToCurrentPath] = useState([]); // Path from start to current location
 
   useEffect(() => {
     setAniActive(false)
-    // console.log(item, "MapLine Item data...............");
+    console.log(item, "MapLine Item data...............");
     const Speed = []
 
     if (item && item.data && item.data.length > 0) {
@@ -300,7 +228,7 @@ useEffect(() => {
       setStartToEndPath(routePath.slice(0));
 
       // Set initial path from start to current location
-      // setStartToCurrentPath([routePath[0]]);
+      setStartToCurrentPath([routePath[0]]);
 
     }
   }, [item]);
@@ -322,7 +250,7 @@ useEffect(() => {
           setSpeed(speedAtPoint[index]); // Update speed based on the index
   
           // Update path from start to current location
-          // setStartToCurrentPath(path.slice(0, index + 1));
+          setStartToCurrentPath(path.slice(0, index + 1));
   
           stepCount++;
         } else {
@@ -339,14 +267,14 @@ useEffect(() => {
       {startToEndPath.length > 0 && (
         <>
           {/* Blue line: Start to current location */}
-          {/* <Polyline
+          <Polyline
             path={startToCurrentPath}
             options={{
               strokeColor: "blue",
               strokeOpacity: 1,
               strokeWeight: 4,
             }}
-          /> */}
+          />
 
           {/* Red line: Entire trip */}
           <Polyline
