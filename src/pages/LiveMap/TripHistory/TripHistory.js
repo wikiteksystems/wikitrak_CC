@@ -39,6 +39,7 @@ const TripHistory = () => {
   const [acceleration, setAcceleration] = useState(false);
   const [speed, setSpeed] = useState(false);
   const [tripHistory, setTripHistory] = useState([]);
+  const [loading, setLoading] = useState(false); // State to manage loading
 
   const fetchTripHis = async (startDate, endDate) => {
     if (vehicle?.imei.length > 0 && startDate && endDate) {
@@ -47,6 +48,7 @@ const TripHistory = () => {
       let data = { imei: vehicle?.imei[0]?.mac_id, startDate, endDate };
 
       try {
+        setLoading(true)
         // Make the API request
         const result = await locationsApi.getTripHistory(data);
 
@@ -55,7 +57,7 @@ const TripHistory = () => {
           // Extract the trip history data from the response
           const tripData = result?.data?.documents;
           setTripHis([...tripData]); // Set the trip history state with the fetched data
-
+          setLoading(false)
           // Additional processing, if needed
           // ...
         } else {
@@ -152,6 +154,7 @@ const TripHistory = () => {
   useEffect(() => {
     // Fetch start and end addresses for each trip
     const fetchAddresses = async () => {
+      setLoading(true)
       const updatedTripHistory = await Promise.all(
         tripHis.map(async (trip) => {
           const startLocation = trip.data[0];
@@ -177,6 +180,8 @@ const TripHistory = () => {
       console.log("tripdata ", updatedTripHistory);
       // console.log("tripold",tripHis);
       setTripHistory(updatedTripHistory);
+      setLoading(false)
+
     };
 
     fetchAddresses();
@@ -250,6 +255,8 @@ const TripHistory = () => {
           setSelecCheckParam={setSelecCheckParam}
           startAddress={startAddress}
           endAddress={endAddress}
+          loading ={loading}
+          setLoading={setLoading}
         />
       </Layout>
 
