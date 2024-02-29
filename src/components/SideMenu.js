@@ -40,6 +40,7 @@ const SideMenu = ({ title, items, theme, menuCollapsed, activeMenu, handleItemSe
                     onClick={ handleItemSelect }
                     items={items}
                 />
+                
 
                 { footerVisible &&
                 <Footer style={footerStyle}>

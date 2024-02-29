@@ -44,6 +44,8 @@ const DetailMenu = ({
   setSelecCheckParam,
   startAddress,
   endAddress,
+  loading,
+  setLoading
 }) => {
   const history = useHistory();
   const { themeColor } = useSelector(({ User }) => User);
@@ -54,7 +56,7 @@ const DetailMenu = ({
   const [endDateValue, setendDateValue] = useState(
     dayjs(new moment().toDate())
   );
-  const [loading, setLoading] = useState(false); // State to manage loading
+ 
 
   const handleTrip = (newValue) => {
     setendDateValue(newValue.$d);
@@ -75,8 +77,8 @@ const DetailMenu = ({
   }, [endDateValue]);
 
   useEffect(() => {
-    setSearchedMenuList([...tripHis]);
-  }, [tripHis]);
+      setSearchedMenuList([...tripHis]);
+       }, [tripHis]);
 
   const handleCheckboxClick = (index) => {
     const list = searchedMenuList.map((item, innerIndex) => {
@@ -174,7 +176,7 @@ const DetailMenu = ({
               }}
               selectable={true}
                 items={
-                  loading
+                  (loading  )
                       ? [
                           {
                             key: 1,
@@ -197,7 +199,7 @@ const DetailMenu = ({
                           {item?.startAddress?.full_address &&
                           item?.startAddress?.full_address
                             ? `${item.startAddress.full_address?.split(" ").slice(0, 3).join(" ")}`
-                            : `${item?.startAddress?.city},${item.startAddress?.locality}`}
+                            : `${item?.startAddress?.city},${item?.startAddress?.locality}`}
                           &nbsp;To&nbsp;
                           {item?.endAddress?.full_address &&
                           item?.startAddress?.full_address
@@ -214,7 +216,11 @@ const DetailMenu = ({
                       </div>
                     ),
                   };
-                })}
+                }
+                
+                
+                )
+              }
               />
            
           </>

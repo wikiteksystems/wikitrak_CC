@@ -19,6 +19,11 @@ import Fab from "@mui/material/Fab";
 import { Button, Switch, Layout, message } from "antd";
 import AppMenu2 from "../../../components/Appmneu2";
 import LocationOnSharpIcon from "@mui/icons-material/LocationOnSharp";
+import {
+
+  TextField,
+
+} from "@mui/material";
 
 const { Content } = Layout;
 
@@ -112,6 +117,30 @@ const Geofence = () => {
       setGeofence({ ...geofence, [type]: checked ? "inward" : "outward" });
     }
   };
+
+
+  //Speed alerts//
+  const [textFieldValue, setTextFieldValue] = useState('');
+  const [switchValue, setSwitchValue] = useState(false);
+
+  const handleSwitchSpeed = (checked, e, fieldName) => {
+    setSwitchValue(checked);
+  };
+
+  const handlespeedSubmit = () => {
+    console.log('TextField Value:', textFieldValue);
+    console.log('Switch Value:', switchValue);
+    const data = {}
+    data.speed = textFieldValue
+    data.isActive_Speed = switchValue
+    data.id = vehicle.id
+    if (data)
+      dispatch(
+        GeofenceActions.saveGeofence(data, vehicle.imei)
+      );
+  };
+  // speed alert close //
+
   const handleSubmit = () => {
     const { status, isNew } = geofence;
     const { status: orgStatus, id } = geofences[activeMenu];
@@ -129,7 +158,7 @@ const Geofence = () => {
         dispatch(GeofenceActions.setGeofenceState(id, status));
       else if (modified) {
         dispatch(
-          GeofenceActions.saveGeofence({ ...geofence, vehicle: vehicle.id },vehicle.imei)
+          GeofenceActions.saveGeofence({ ...geofence, vehicle: vehicle.id }, vehicle.imei)
         );
       }
     }
@@ -198,29 +227,32 @@ const Geofence = () => {
             label: (
               <div className="flex justify-between items-center">
                 {
-                  item.geofence=== "geofence 1"
-                  && 
-                <>
-                <span className="w-full"> {item.geofence} </span>
-                <Button
-                  className="border-none bg-transparent"
-                  onClick={handleEdit}
-                  disabled={editable || item.key !== activeMenu}
-                  >
-                  <Icon icon="fa:edit" width="22" height="22" />
-                </Button>
-                 
-                <Switch
-                  disabled={item.key !== activeMenu}
-                  onChange={(checked, e) => handleSwitch(checked, e, "status")}
-                  checked={
-                    item.key === activeMenu
-                      ? geofence.status === "Active"
-                      : item.status === "Active"
-                  }
-                />
-                 </>
+                  item.geofence === "geofence 1"
+                  &&
+                  <>
+                    <span className="w-full"> {item.geofence} </span>
+                    <Button
+                      className="border-none bg-transparent"
+                      onClick={handleEdit}
+                      disabled={editable || item.key !== activeMenu}
+                    >
+                      <Icon icon="fa:edit" width="22" height="22" />
+                    </Button>
+
+                    <Switch
+                      disabled={item.key !== activeMenu}
+                      onChange={(checked, e) => handleSwitch(checked, e, "status")}
+                      checked={
+                        item.key === activeMenu
+                          ? geofence.status === "Active"
+                          : item.status === "Active"
+                      }
+                    />
+                  </>
                 }
+
+
+
               </div>
             ),
           }))}
@@ -228,60 +260,98 @@ const Geofence = () => {
           menuCollapsed={detailMenuCollapsed}
           handleItemSelect={handleMenuSelect}
           footerVisible={editable || circleSelected}
-          footerStyle={{ padding: "0", height: "50%" }}
+          footerStyle={{ padding: "0", height: "100%" }}
           footerChildren={
             <div className="w-full h-full flex flex-col items-center justify-between text-white">
-              <div className="w-full h-1/3 flex flex-col justify-center">
-                <p className=" font-bold" style={{ fontSize: 20 }}>
-                  {" "}
-                  Add / Edit {geofence.geofence}{" "}
-                </p>
+              <div className="w-full h-full flex flex-col items-center justify-between text-white">
+                <div className="w-full h-1/3 flex flex-col justify-center">
+                  <p className=" font-bold" style={{ fontSize: 20 }}>
+                    {" "}
+                    Add / Edit {geofence.geofence}{" "}
+                  </p>
+                </div>
+                <div className="w-full h-1/2 flex flex-col items-center justify-evenly">
+                  <div className="" style={{ fontSize: 19 }}>
+                    Center @ {geofence?.center?.lat?.toFixed(2)} /{" "}
+                    {geofence?.center?.lng?.toFixed(2)}
+                  </div>
+                  <div className="" style={{ fontSize: 19 }}>
+                    Radius - {(geofence.radius / 1000).toFixed(2)} km
+                  </div>
+                  <div className="w-full">
+                    <Switch
+                      className="custom-switch w-1/2"
+                      style={{ height: 30 }}
+                      checkedChildren="Inward"
+                      unCheckedChildren="Outward"
+                      onChange={(checked, e) => handleSwitch(checked, e, "type")}
+                      checked={geofence.type === "inward"}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <Switch
+                      className="custom-switch w-1/2"
+                      style={{ height: 30 }}
+                      checkedChildren="Active"
+                      unCheckedChildren="Inactive"
+                      onChange={(checked, e) =>
+                        handleSwitch(checked, e, "status")
+                      }
+                      checked={geofence.status === "Active"}
+                    />
+                  </div>
+                </div>
+                <div className="w-full h-1/3 flex flex-col justify-center items-center mt-3">
+                  <Button
+                    className="w-1/2 text-white"
+                    style={{
+                      background: ThemeColor.light_color_2,
+                      border: "1px solid " + ThemeColor.light_color_2,
+                      color: "white",
+                    }}
+                    hidden={!editable && circleSelected}
+                    onClick={handleSubmit}
+                    disabled={!modified}
+                  >
+                    Submit
+                  </Button>
+                </div>
               </div>
-              <div className="w-full h-1/2 flex flex-col items-center justify-evenly">
-                <div className="" style={{ fontSize: 19 }}>
-                  Center @ {geofence?.center?.lat?.toFixed(2)} /{" "}
-                  {geofence?.center?.lng?.toFixed(2)}
-                </div>
-                <div className="" style={{ fontSize: 19 }}>
-                  Radius - {(geofence.radius / 1000).toFixed(2)} km
-                </div>
-                <div className="w-full">
-                  <Switch
-                    className="custom-switch w-1/2"
-                    style={{ height: 30 }}
-                    checkedChildren="Inward"
-                    unCheckedChildren="Outward"
-                    onChange={(checked, e) => handleSwitch(checked, e, "type")}
-                    checked={geofence.type === "inward"}
+
+              {/* /speed alerts */}
+              <div className="w-full h-full flex flex-col items-center justify-between text-white">
+                <h3 className="text-white mb-1">_________________________</h3>
+                <h4 className="text-white mb-2">Add Speed Limit</h4>
+                <div className="w-full h-full items-center text-white">
+                  <TextField
+                    size="small"
+                    type="number"
+                    style={{ border: '1px solid white', color: 'white' }}
+                    value={textFieldValue}
+                    onChange={(e) => setTextFieldValue(e.target.value)}
                   />
-                </div>
-                <div className="w-full">
                   <Switch
                     className="custom-switch w-1/2"
                     style={{ height: 30 }}
                     checkedChildren="Active"
                     unCheckedChildren="Inactive"
-                    onChange={(checked, e) =>
-                      handleSwitch(checked, e, "status")
-                    }
-                    checked={geofence.status === "Active"}
+                    onChange={(checked, e) => handleSwitchSpeed(checked, e, 'status')}
                   />
+                  <div className="mt-1">
+                    <Button
+                      variant="outlined"
+                      style={{
+                        background: ThemeColor.light_color_2,
+                        border: '1px solid ' + ThemeColor.light_color_2,
+                        color: 'white',
+                      }}
+                      className="w-1/2 text-white"
+                      onClick={handlespeedSubmit}
+                    >
+                      Submit
+                    </Button>
+                  </div>
                 </div>
-              </div>
-              <div className="w-full h-1/3 flex flex-col justify-center items-center">
-                <Button
-                  className="w-1/2 text-white"
-                  style={{
-                    background: ThemeColor.light_color_2,
-                    border: "1px solid " + ThemeColor.light_color_2,
-                    color: "white",
-                  }}
-                  hidden={!editable && circleSelected}
-                  onClick={handleSubmit}
-                  disabled={!modified}
-                >
-                  Submit
-                </Button>
               </div>
             </div>
           }
