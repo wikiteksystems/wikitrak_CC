@@ -55,7 +55,18 @@ const LiveContent = ({
     id: "google-map-script",
     googleMapsApiKey: GMAP_API_KEY,
   });
-
+  const [area, setArea] = useState(null);
+  const calculateArea = (polygon) => {
+    if (!window.google || !window.google.maps.geometry){
+      console.log('hello')
+      return;
+    } 
+    const area = window.google.maps.geometry.spherical.computeArea(polygon.getPath());
+    // Convert square meters to acres (1 acre = 4046.86 square meters)
+    const areaInAcres = area / 4046.86;
+    console.log('areaInAcres', areaInAcres)
+    setArea(areaInAcres);
+  };
   const generatePDFReport = () => {
     if (!selectedTrip || !selectedTrip.data || selectedTrip.data.length === 0) {
       console.error("No trip data available.");
@@ -671,6 +682,24 @@ const LiveContent = ({
             onClick={handleMapClick}
             onLoad={onLoad}
           >
+          {
+            selectCheckParam.length>0 &&
+            <Polygon
+            paths={selectCheckParam[0].data}
+            options={{
+              strokeColor: 'red',
+              strokeOpacity: 0.8,
+              strokeWeight: 2,
+              fillColor: '#FF0000',
+              fillOpacity: 0.35,
+              editable: false, // Allow editing vertices
+            }}
+            onLoad={(polygon) => {
+              console.log('polygon loaded', polygon)
+            }}
+            onEdit={(polygon) => calculateArea(polygon)}
+          />
+          }
             {map && (
               <Polygon
                 path={vertices}
