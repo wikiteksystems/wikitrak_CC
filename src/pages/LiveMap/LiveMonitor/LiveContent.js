@@ -267,9 +267,9 @@ for (let innerK of location) {
             innerArr.push({
                 Date_Time: currentDate, // Add the date only once
                 value: i[k?.label] === true ? 1 : i[k?.label] === false ? 0 : i[k?.label],
-                Time: dayjs(i?.createdAt).format("hh:mm:ss A"),
+                Time: dayjs(i?.createdAt).toLocaleString('en-IN'),
                 label: k?.label,
-                DateTime: dayjs(i?.createdAt).format("YYYY-MM-DD hh:mm:ss A"),
+                DateTime: dayjs(i?.createdAt).toLocaleString('en-IN'),
             });
             prevDate = currentDate; // Update the previous date
         } else {
@@ -277,9 +277,9 @@ for (let innerK of location) {
             innerArr.push({
                 Date_Time: dayjs(i?.createdAt).format("hh:mm:ss A"), // No need to add the date again
                 value: i[k?.label] === true ? 1 : i[k?.label] === false ? 0 : i[k?.label],
-                Time: dayjs(i?.createdAt).format("hh:mm:ss A"),
+                Time: dayjs(i?.createdAt).toLocaleString('en-IN'),
                 label: k?.label,
-                DateTime: dayjs(i?.createdAt).format("YYYY-MM-DD hh:mm:ss A"),
+                DateTime: dayjs(i?.createdAt).toLocaleString('en-IN'),
             });
         }
     }

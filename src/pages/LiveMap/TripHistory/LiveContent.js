@@ -254,6 +254,7 @@ const LiveContent = ({
         lng: parseFloat(selectCheckParam[0]?.data[0]?.lng),
       });
       setMultiTrip(selectCheckParam);
+      // console.log(selectCheckParam, "selected")
     }
   }, [selectCheckParam]);
 
@@ -321,7 +322,7 @@ const LiveContent = ({
     setAcresBooleanM2(false);
   }, [selectCheckParam]);
 
-  console.log(selectedTrip, "SSelected Trip...........");
+  // console.log(selectedTrip, "SSelected Trip...........");
 
   useEffect(() => {
     const calculateSpeed = () => {
@@ -851,9 +852,7 @@ const LiveContent = ({
                         <b style={{ fontSize: 15, fontWeight: 600 }}>
                           Start Date&Time:{" "}
                         </b>{" "}
-                        {new Date(
-                          item?.data[0]?.createdAt.slice(0, 16)
-                        ).toLocaleString()}
+                        {item?.data[0]?.createdAt && new Date(item.data[0].createdAt).toLocaleString('en-IN')}
                       </div>
 
                       <div>
@@ -881,12 +880,15 @@ const LiveContent = ({
                         <b style={{ fontSize: 15, fontWeight: 600 }}>
                           End Date&Time:{" "}
                         </b>{" "}
-                        {new Date(
-                          item?.data[item?.data.length - 1]?.createdAt.slice(
-                            0,
-                            16
-                          )
-                        ).toLocaleString()}
+                        {
+                        // new Date(
+                        //   item?.data[item?.data.length - 1]?.createdAt.slice(
+                        //     0,
+                        //     16
+                        //   )
+                        // ).toLocaleString()
+                        item?.data[item?.data.length - 1]?.createdAt && new Date(item?.data[item?.data.length - 1]?.createdAt).toLocaleString('en-IN')
+                        }
                       </div>
                       <div>
                         <b style={{ fontSize: 15, fontWeight: 600 }}>

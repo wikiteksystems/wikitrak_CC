@@ -14,6 +14,7 @@ class LocationsApi {
 
     async getTripHistory(data) {
         try{
+          console.log(data, "get tripHistory")
           const result = await axios.post(`${process.env.REACT_APP_API2_URL}/ccServer/location/findTripHistory`,data);
         //   const result = await axios.post(`${process.env.REACT_APP_API2_URL}/ccServer/location/getTripOverspeedingData`,data);
 
