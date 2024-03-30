@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   GoogleMap,
   useJsApiLoader,
-  Marker,
+  MarkerF,
   InfoWindow,
   Polygon,
 } from "@react-google-maps/api";
@@ -276,19 +276,19 @@ const LiveContent = ({
   useEffect(() => {
     if (selectCheckParam && selectCheckParam.length > 0) {
       const speedData = selectCheckParam[0]?.data.map((item) => ({
-        Date: item.createdAt.substring(0, 10), // Extracting date part
-        Time: item.createdAt.substring(11, 23), // Extracting time part
+        Date: item.createdAt.toLocaleString("en-IN"), // Extracting date part
+        Time: item.createdAt.toLocaleString("en-IN"), // Extracting time part
         value: item.speed,
       }));
 
       const voltageData = selectCheckParam[0]?.data.map((item) => ({
-        Date: item.createdAt.substring(0, 10), // Extracting date part
-        Time: item.createdAt.substring(11, 23), // Extracting time part
+        Date: item.createdAt.toLocaleString("en-IN"), // Extracting date part
+        Time: item.createdAt.toLocaleString("en-IN"), // Extracting time part
         value: item.mainInputVoltage,
       }));
       const ignition = selectCheckParam[0]?.data.map((item) => ({
-        Date: item.createdAt.substring(0, 10), // Extracting date part
-        Time: item.createdAt.substring(11, 23), // Extracting time part
+        Date: item.createdAt.toLocaleString("en-IN"), // Extracting date part
+        Time: item.createdAt.toLocaleString("en-IN"), // Extracting time part
         value: item.ignition,
       }));
 
@@ -683,7 +683,7 @@ const LiveContent = ({
             onClick={handleMapClick}
             onLoad={onLoad}
           >
-          {
+          {/* {
             selectCheckParam.length>0 &&
             <Polygon
             paths={selectCheckParam[0].data}
@@ -700,7 +700,7 @@ const LiveContent = ({
             }}
             onEdit={(polygon) => calculateArea(polygon)}
           />
-          }
+          } */}
             {map && (
               <Polygon
                 path={vertices}
@@ -725,7 +725,7 @@ const LiveContent = ({
             )}
             {selectCheckParam.map((item, index) => (
               <>
-                <Marker
+                <MarkerF
                   key={index}
                   onClick={() => {
                     toggleInfoWindow(index);
@@ -739,7 +739,37 @@ const LiveContent = ({
                   icon={{
                     url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
                   }}
-                />
+                >
+                   {selectedMarker === index && (
+                  <InfoWindow
+                    key={index}
+                    position={{
+                      lat: parseFloat(item?.data[0]?.lat),
+                      lng: parseFloat(item?.data[0]?.lng),
+                    }}
+                    onMouseOut={() => setSelectedMarker(null)}
+                    options={{ maxWidth: 300 }}
+                    visible={selectedMarker === index}
+                  >
+                    <div>
+                      <div>
+                        {/* <AccessTimeSharpIcon /> */}
+                        <b style={{ fontSize: 15, fontWeight: 600 }}>
+                          Start Date&Time:{" "}
+                        </b>{" "}
+                        {item?.data[0]?.createdAt && new Date(item.data[0].createdAt).toLocaleString('en-IN')}
+                      </div>
+
+                      <div>
+                        <b style={{ fontSize: 15, fontWeight: 600 }}>
+                          Start Address:{" "}
+                        </b>
+                        {startAddress?.full_address}
+                      </div>
+                    </div>
+                  </InfoWindow>
+                )}
+                </MarkerF>
 
                 <MapLine
                   aniActive={aniActive}
@@ -755,7 +785,7 @@ const LiveContent = ({
                 {harshBreak &&
                   item?.data.map((innerItem, innerIndex) =>
                     innerItem.packetType === filters.harshBreak ? (
-                      <Marker
+                      <MarkerF
                         key={innerIndex}
                         title={innerItem.packetType}
                         position={{
@@ -777,7 +807,7 @@ const LiveContent = ({
                   item?.data.map((innerItem, innerIndex) => {
                     return innerItem.packetType ===
                       filters.harshAcceleration ? (
-                      <Marker
+                      <MarkerF
                         key={innerIndex}
                         title={innerItem.packetType}
                         position={{
@@ -800,7 +830,7 @@ const LiveContent = ({
                   item?.data.map((innerItem, innerIndex) => {
                     const threshold = 60; // Define your speed threshold here or retrieve it from your data
                     return innerItem.packetType === filters.overSpeed ? (
-                      <Marker
+                      <MarkerF
                         key={innerIndex}
                         title={innerItem.packetType}
                         position={{
@@ -819,7 +849,7 @@ const LiveContent = ({
                     ) : null;
                   })}
 
-                <Marker
+                <MarkerF
                   key={index}
                   onClick={() => {
                     showLastInfo();
@@ -832,39 +862,12 @@ const LiveContent = ({
                     lat: parseFloat(item?.data[item?.data.length - 1]?.lat),
                     lng: parseFloat(item?.data[item?.data.length - 1]?.lng),
                   }}
+                  icon={{
+                    url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                  }}
                   animation="BOUNCE"
-                />
-
-                {selectedMarker === index && (
-                  <InfoWindow
-                    key={index}
-                    position={{
-                      lat: parseFloat(item?.data[0]?.lat),
-                      lng: parseFloat(item?.data[0]?.lng),
-                    }}
-                    onCloseClick={() => setSelectedMarker(null)}
-                    options={{ maxWidth: 300 }}
-                    visible={selectedMarker === index}
-                  >
-                    <div>
-                      <div>
-                        {/* <AccessTimeSharpIcon /> */}
-                        <b style={{ fontSize: 15, fontWeight: 600 }}>
-                          Start Date&Time:{" "}
-                        </b>{" "}
-                        {item?.data[0]?.createdAt && new Date(item.data[0].createdAt).toLocaleString('en-IN')}
-                      </div>
-
-                      <div>
-                        <b style={{ fontSize: 15, fontWeight: 600 }}>
-                          Start Address:{" "}
-                        </b>
-                        {startAddress?.full_address}
-                      </div>
-                    </div>
-                  </InfoWindow>
-                )}
-                {showLast_info && (
+                >
+                  {showLast_info && (
                   <InfoWindow
                     key={index}
                     position={{
@@ -898,7 +901,10 @@ const LiveContent = ({
                       </div>
                     </div>
                   </InfoWindow>
-                )}
+                )} </MarkerF>
+
+               
+                
               </>
             ))}
           </GoogleMap>
