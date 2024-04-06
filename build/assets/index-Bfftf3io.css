@@ -1,0 +1,1 @@
+body{margin:0;padding:0;box-sizing:border-box;overflow:hidden}.app{display:flex;position:relative}:root.light{color:#213547;background-color:#fff}:root.dark{color:#ffffffde;background-color:#242424}@media (prefers-color-scheme: light){button{background-color:#f9f9f9}}
