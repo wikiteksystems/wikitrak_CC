@@ -1,1 +1,0 @@
-export { default as Geofence } from './Geofence';
