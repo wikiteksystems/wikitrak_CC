@@ -1,0 +1,1 @@
+import{j as e}from"./index-Bnd8CDa6.js";import{C as r}from"./CircularProgress-DQ-JXarh.js";const t=()=>e.jsx("div",{style:{position:"fixed",top:0,left:0,width:"100%",height:"100%",backgroundColor:"rgba(0, 0, 0, 0.5)",display:"flex",justifyContent:"center",alignItems:"center",zIndex:1050},children:e.jsx(r,{})}),i=t;export{i as N};
