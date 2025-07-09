@@ -1,1 +1,0 @@
-import{o as t,l as e}from"./index-Cjcv2yiw.js";function a(s){return e("MuiListItemIcon",s)}const n=t("MuiListItemIcon",["root","alignItemsFlexStart"]),o=n,l="/assets/menu2-4rP9n7Js.svg";export{a as g,o as l,l as m};
