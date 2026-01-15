@@ -1,1 +1,0 @@
-import{n as e,j as h}from"./index-ChiP6dVn.js";const t=e(h.jsx("path",{d:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"}),"Add"),o=e(h.jsx("path",{d:"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"}),"Delete"),a=e(h.jsx("path",{d:"M19 13H5v-2h14z"}),"Remove");export{t as A,o as D,a as R};
